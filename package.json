@@ -1,0 +1,31 @@
+{
+  "name": "genshin-tarot-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node ./src/index.ts",
+    "build": "tsc",
+    "start": "node ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FaetterP/Genshin-Tarot-Server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FaetterP/Genshin-Tarot-Server/issues"
+  },
+  "homepage": "https://github.com/FaetterP/Genshin-Tarot-Server#readme",
+  "dependencies": {
+    "config": "^3.3.9",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}
