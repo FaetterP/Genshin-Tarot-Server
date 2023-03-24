@@ -1,3 +1,4 @@
+import { Card } from "./storage/cards/Card";
 import { Enemy } from "./storage/enemies/Enemy";
 import { Event } from "./utils/Event";
 import { clamp } from "./utils/math";
@@ -10,6 +11,10 @@ export class Player {
 
   private enemies: Enemy[] = [];
   private wave: number = 0;
+
+  private hand: Card[] = [];
+  private discardDeck: Card[] = [];
+  private collectingDeck: Card[] = [];
 
   public applyDamage(damage: number) {
     if (this.shield >= damage) {
@@ -32,5 +37,13 @@ export class Player {
 
   public addShield(count: number) {
     this.shield = clamp(this.shield + count, 0, 12);
+  }
+
+  public drawCard() {
+    // TODO
+  }
+
+  public addCardToDiscard(card: Card) {
+    this.discardDeck.push(card);
   }
 }
