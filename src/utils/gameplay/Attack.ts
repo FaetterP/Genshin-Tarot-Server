@@ -1,7 +1,7 @@
 import { Player } from "../../Player";
 import { Element } from "../../storage/elements/Element";
 
-type constructorSetup = {
+export type constructorSetupAttack = {
   damage: number;
   isPiercing?: boolean;
   isRange?: boolean;
@@ -38,7 +38,7 @@ export class Attack {
     isRange,
     element,
     player,
-  }: constructorSetup) {
+  }: constructorSetupAttack) {
     this.damage = damage;
     this.isPiercing = isPiercing;
     this.isRange = isRange;

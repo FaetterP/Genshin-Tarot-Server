@@ -15,6 +15,13 @@ export abstract class Enemy {
   private shield: number;
   private elements: Element[] = [];
 
+  public get Health() {
+    return this.hp;
+  }
+  public get Shield() {
+    return this.shield;
+  }
+
   constructor({ hp, damage, mora, shield }: constructorSetup) {
     this.hp = hp;
     this.shield = shield;

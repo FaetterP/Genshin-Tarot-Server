@@ -35,6 +35,15 @@ export class Player {
     this.energy = clamp(this.energy + count, 0, 12);
   }
 
+  public trySpendEnergy(count: number): boolean {
+    if (this.energy < count) {
+      return false;
+    }
+
+    this.energy -= count;
+    return true;
+  }
+
   public addShield(count: number) {
     this.shield = clamp(this.shield + count, 0, 12);
   }
