@@ -1,15 +1,17 @@
+import { Element } from "../../storage/elements/Element";
+
 type constructorSetup = {
   damage: number;
   isPiercing: boolean;
   isRange: boolean;
-  elements: Element[];
+  element: Element;
 };
 
 export class Attack {
   private damage: number;
   private isPiercing: boolean;
   private isRange: boolean;
-  private elements: Element[];
+  private element: Element;
 
   public get Damage() {
     return this.damage;
@@ -20,14 +22,14 @@ export class Attack {
   public get IsRange() {
     return this.isRange;
   }
-  public get Elements() {
-    return this.elements;
+  public get Element() {
+    return this.element;
   }
 
-  constructor({ damage, isPiercing, isRange, elements }: constructorSetup) {
+  constructor({ damage, isPiercing, isRange, element }: constructorSetup) {
     this.damage = damage;
     this.isPiercing = isPiercing;
     this.isRange = isRange;
-    this.elements = elements;
+    this.element = element;
   }
 }

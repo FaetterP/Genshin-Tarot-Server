@@ -1,3 +1,4 @@
+import { Event } from "../../utils/Event";
 import { Attack } from "../../utils/gameplay/Attack";
 import { Element } from "../elements/Element";
 
@@ -23,6 +24,28 @@ export abstract class Enemy {
       this.hp -= attack.Damage;
     }
 
-    this.elements = [...this.elements, ...attack.Elements];
+    this.applyElement(attack.Element);
+
+    if (this.hp <= 0) {
+      this.onDeath.Invoke(null);
+    }
   }
+
+  applyElement(element: Element | null) {
+    if (!element) {
+      return;
+    }
+
+    this.elements = [...this.elements, element];
+
+    if (this.elements.length >= 2) {
+      this.elements.forEach((el) => {
+        el.reaction();
+      });
+
+      this.elements = [];
+    }
+  }
+
+  private onDeath = new Event();
 }
