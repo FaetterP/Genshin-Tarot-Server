@@ -8,6 +8,6 @@ export class Electro extends Element {
 
     ctx.enemy.applyAttack(attack);
 
-    // add 1 energy
+    ctx.player.addEnergy(1);
   }
 }
