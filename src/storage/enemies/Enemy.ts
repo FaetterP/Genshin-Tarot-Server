@@ -1,3 +1,4 @@
+import { Player } from "../../Player";
 import { Event } from "../../utils/Event";
 import { Attack } from "../../utils/gameplay/Attack";
 import { Element } from "../elements/Element";
@@ -24,14 +25,14 @@ export abstract class Enemy {
       this.hp -= attack.Damage;
     }
 
-    this.applyElement(attack.Element);
+    this.applyElement(attack.Element, attack.Player);
 
     if (this.hp <= 0) {
       this.onDeath.Invoke(null);
     }
   }
 
-  applyElement(element: Element | null) {
+  applyElement(element: Element | undefined, player: Player) {
     if (!element) {
       return;
     }
@@ -40,7 +41,8 @@ export abstract class Enemy {
 
     if (this.elements.length >= 2) {
       this.elements.forEach((el) => {
-        el.reaction();
+        const ctx = { enemy: this, player };
+        el.reaction(ctx);
       });
 
       this.elements = [];

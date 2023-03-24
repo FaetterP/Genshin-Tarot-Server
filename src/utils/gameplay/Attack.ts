@@ -1,17 +1,20 @@
+import { Player } from "../../Player";
 import { Element } from "../../storage/elements/Element";
 
 type constructorSetup = {
   damage: number;
-  isPiercing: boolean;
-  isRange: boolean;
-  element: Element;
+  isPiercing?: boolean;
+  isRange?: boolean;
+  element?: Element;
+  player: Player;
 };
 
 export class Attack {
   private damage: number;
-  private isPiercing: boolean;
-  private isRange: boolean;
-  private element: Element;
+  private isPiercing?: boolean;
+  private isRange?: boolean;
+  private element?: Element;
+  private player: Player;
 
   public get Damage() {
     return this.damage;
@@ -25,11 +28,21 @@ export class Attack {
   public get Element() {
     return this.element;
   }
+  public get Player() {
+    return this.player;
+  }
 
-  constructor({ damage, isPiercing, isRange, element }: constructorSetup) {
+  constructor({
+    damage,
+    isPiercing,
+    isRange,
+    element,
+    player,
+  }: constructorSetup) {
     this.damage = damage;
     this.isPiercing = isPiercing;
     this.isRange = isRange;
     this.element = element;
+    this.player = player;
   }
 }
