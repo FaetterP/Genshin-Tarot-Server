@@ -12,6 +12,6 @@ export class Event<T> {
   }
 
   public RemoveListener(fn: (arg: T) => void) {
-    this.functions.filter((item) => item !== fn);
+    this.functions = this.functions.filter((item) => item !== fn);
   }
 }
