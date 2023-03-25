@@ -1,4 +1,4 @@
-import { Attack } from "../../utils/gameplay/Attack";
+import { Attack } from "../../game/Attack";
 import { elementReactionContext } from "./Element";
 
 export class Electro extends Element {

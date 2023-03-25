@@ -1,4 +1,4 @@
-import { Player } from "../../Player";
+import { Player } from "../../game/Player";
 import { Card } from "./Card";
 
 type useContext = {

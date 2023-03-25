@@ -1,7 +1,7 @@
-import { Card } from "./storage/cards/Card";
-import { Enemy } from "./storage/enemies/Enemy";
-import { Event } from "./utils/Event";
-import { clamp } from "./utils/math";
+import { Card } from "../storage/cards/Card";
+import { Enemy } from "../storage/enemies/Enemy";
+import { Event } from "../utils/Event";
+import { clamp } from "../utils/math";
 
 export class Player {
   private hp: number = 0;

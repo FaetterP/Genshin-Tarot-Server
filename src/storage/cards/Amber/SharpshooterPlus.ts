@@ -1,5 +1,5 @@
-import { Player } from "../../../Player";
-import { Attack, constructorSetupAttack } from "../../../utils/gameplay/Attack";
+import { Player } from "../../../game/Player";
+import { Attack, constructorSetupAttack } from "../../../game/Attack";
 import { Pyro } from "../../elements/Pyro";
 import { Enemy } from "../../enemies/Enemy";
 import { AttackCard } from "../AttackCard";

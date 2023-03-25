@@ -1,5 +1,5 @@
-import { Player } from "../../Player";
-import { Element } from "../../storage/elements/Element";
+import { Player } from "./Player";
+import { Element } from "../storage/elements/Element";
 
 export type constructorSetupAttack = {
   damage: number;

@@ -1,6 +1,6 @@
-import { Player } from "../../Player";
+import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
-import { Attack } from "../../utils/gameplay/Attack";
+import { Attack } from "../../game/Attack";
 import { Element } from "../elements/Element";
 
 type constructorSetup = {

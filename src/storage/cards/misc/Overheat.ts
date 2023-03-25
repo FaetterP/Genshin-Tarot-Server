@@ -1,4 +1,4 @@
-import { Player } from "../../../Player";
+import { Player } from "../../../game/Player";
 import { UseableCard } from "../UseableCard";
 
 export class Overheat extends UseableCard {
