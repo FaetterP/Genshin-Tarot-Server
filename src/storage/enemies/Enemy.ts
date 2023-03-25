@@ -13,7 +13,9 @@ type constructorSetup = {
 export abstract class Enemy {
   private hp: number;
   private shield: number;
-  private elements: Element[] = [];
+  protected elements: Element[] = [];
+
+  private onDeath = new Event();
 
   public get Health() {
     return this.hp;
@@ -56,5 +58,5 @@ export abstract class Enemy {
     }
   }
 
-  private onDeath = new Event();
+  reveal() {}
 }

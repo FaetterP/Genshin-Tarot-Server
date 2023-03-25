@@ -16,6 +16,8 @@ export class Player {
   private discardDeck: Card[] = [];
   private collectingDeck: Card[] = [];
 
+  private onWavesDefeated = new Event();
+
   public applyDamage(damage: number) {
     if (this.shield >= damage) {
       this.shield -= damage;
@@ -46,6 +48,24 @@ export class Player {
 
   public addShield(count: number) {
     this.shield = clamp(this.shield + count, 0, 12);
+  }
+
+  public createWave() {
+    if (this.wave >= 5) {
+      this.onWavesDefeated.Invoke(null);
+      return;
+    }
+
+    if (this.enemies.length > 0) {
+      return;
+    }
+
+    const count = [1, 2, 3, 2, 3][this.wave];
+    for (let i = 0; i < count; i++) {
+      // TODO
+    }
+
+    this.wave++;
   }
 
   public drawCard() {
