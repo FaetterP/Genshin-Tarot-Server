@@ -13,12 +13,13 @@ export class Player {
   private wave: number = 0;
   private actionPoints: number = 0;
   private extraActionPoints: number = 0;
+  private isTurnEnds: boolean = true;
 
   private hand: Card[] = [];
   private discardDeck: Card[] = [];
   private collectingDeck: Card[] = [];
 
-  private onWavesDefeated = new Event();
+  private e_onWavesDefeated = new Event();
 
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
@@ -62,7 +63,7 @@ export class Player {
 
   public createWave() {
     if (this.wave >= 5) {
-      this.onWavesDefeated.Invoke(null);
+      this.e_onWavesDefeated.Invoke(null);
       return;
     }
 
@@ -91,6 +92,8 @@ export class Player {
   }
 
   public startCycle() {
+    this.isTurnEnds = false;
+
     this.shield = 0;
     this.actionPoints = 3;
     this.extraActionPoints = 0;
@@ -98,11 +101,19 @@ export class Player {
     for (let i = 0; i < 5; i++) {
       this.drawCard();
     }
+
+    for (const enemy of this.enemies) {
+      enemy.startCycle();
+    }
   }
 
   public endCycle() {
     for (let i = 0; i < this.hand.length; i++) {
       this.discardRandomCard();
+    }
+
+    for (const enemy of this.enemies) {
+      enemy.endCycle();
     }
   }
 }
