@@ -49,6 +49,8 @@ export abstract class Enemy {
     this.elements = [...this.elements, element];
 
     if (this.elements.length >= 2) {
+      this.addShields(-1);
+
       this.elements.forEach((el) => {
         const ctx = { enemy: this, player };
         el.reaction(ctx);
@@ -56,6 +58,10 @@ export abstract class Enemy {
 
       this.elements = [];
     }
+  }
+
+  addShields(count: number) {
+    this.shield = Math.max(0, this.shield + count);
   }
 
   reveal() {}
