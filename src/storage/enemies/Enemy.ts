@@ -59,4 +59,8 @@ export abstract class Enemy {
   }
 
   reveal() {}
+
+  startCycle() {}
+
+  endCycle() {}
 }
