@@ -2,6 +2,7 @@ import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
 import { Attack } from "../../game/Attack";
 import { Element } from "../elements/Element";
+import { EnemyDeathContext } from "../../../types/eventsContext";
 
 type constructorSetup = {
   hp: number;
@@ -15,13 +16,19 @@ export abstract class Enemy {
   private shield: number;
   protected elements: Element[] = [];
 
-  private onDeath = new Event();
+  private e_onDeath = new Event<EnemyDeathContext>();
 
   public get Health() {
     return this.hp;
   }
   public get Shield() {
     return this.shield;
+  }
+  public get OnDeath() {
+    return {
+      addListener: this.e_onDeath.AddListener.bind(this),
+      removeListener: this.e_onDeath.RemoveListener.bind(this),
+    };
   }
 
   constructor({ hp, damage, mora, shield }: constructorSetup) {
@@ -37,7 +44,7 @@ export abstract class Enemy {
     this.applyElement(attack.Element, attack.Player);
 
     if (this.hp <= 0) {
-      this.onDeath.Invoke(null);
+      this.e_onDeath.Invoke({ enemy: this });
     }
   }
 

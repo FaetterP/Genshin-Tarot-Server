@@ -1,5 +1,10 @@
+import {
+  EnemyDeathContext,
+  PlayerEndsWavesContext,
+} from "../../types/eventsContext";
 import { Card } from "../storage/cards/Card";
 import { Enemy } from "../storage/enemies/Enemy";
+import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 
@@ -19,7 +24,7 @@ export class Player {
   private discardDeck: Card[] = [];
   private collectingDeck: Card[] = [];
 
-  private e_onWavesDefeated = new Event();
+  private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
 
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
@@ -63,7 +68,7 @@ export class Player {
 
   public createWave() {
     if (this.wave >= 5) {
-      this.e_onWavesDefeated.Invoke(null);
+      this.e_onWavesDefeated.Invoke({ player: this });
       return;
     }
 
@@ -71,9 +76,13 @@ export class Player {
       return;
     }
 
+    this.enemies = [];
     const count = [1, 2, 3, 2, 3][this.wave];
     for (let i = 0; i < count; i++) {
       // TODO
+      const addedEnemy: Enemy = new SmallCryoSlime();
+      addedEnemy.OnDeath.addListener(this.enemyDeathHandler);
+      this.enemies.push();
     }
 
     this.wave++;
@@ -92,6 +101,10 @@ export class Player {
   }
 
   public startCycle() {
+    if (this.enemies.length === 0) {
+      this.createWave();
+    }
+
     this.isTurnEnds = false;
 
     this.shield = 0;
@@ -114,6 +127,16 @@ export class Player {
 
     for (const enemy of this.enemies) {
       enemy.endCycle();
+    }
+  }
+
+  /* Subscribes */
+
+  private enemyDeathHandler({ enemy }: EnemyDeathContext) {
+    this.enemies = this.enemies.filter((item) => item !== enemy);
+
+    if (this.enemies.length === 0) {
+      this.createWave();
     }
   }
 }
