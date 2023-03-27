@@ -1,8 +1,8 @@
 import { Attack } from "../../game/Attack";
-import { elementReactionContext } from "./Element";
+import { ElementReactionContext } from "../../../types/functionsContext";
 
 export class Electro extends Element {
-  reaction(ctx: elementReactionContext) {
+  reaction(ctx: ElementReactionContext) {
     const attackSetup = { damage: 2, isPiercing: true, player: ctx.player };
     const attack = new Attack(attackSetup);
 

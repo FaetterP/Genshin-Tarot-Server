@@ -1,4 +1,4 @@
-import { Player } from "../../../game/Player";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { UseableCard } from "../UseableCard";
 
 export class Dash extends UseableCard {
@@ -7,7 +7,7 @@ export class Dash extends UseableCard {
     super(cost);
   }
 
-  use(ctx: { player: Player }): void {
+  use(ctx: CardUseContext): void {
     ctx.player.drawCard();
     ctx.player.drawCard();
 

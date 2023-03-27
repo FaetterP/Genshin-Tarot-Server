@@ -1,8 +1,8 @@
 import { Overheat } from "../cards/misc/Overheat";
-import { elementReactionContext } from "./Element";
+import { ElementReactionContext } from "../../../types/functionsContext";
 
 export class Pyro extends Element {
-  reaction(ctx: elementReactionContext) {
+  reaction(ctx: ElementReactionContext) {
     ctx.player.addCardToDiscard(new Overheat());
   }
 }

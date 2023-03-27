@@ -1,10 +1,6 @@
-import { Player } from "../../game/Player";
+import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "./Card";
 
-type useContext = {
-  player: Player;
-};
-
 export abstract class UseableCard extends Card {
-  abstract use(ctx: useContext): void;
+  abstract use(ctx: CardUseContext): void;
 }

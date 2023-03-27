@@ -1,8 +1,8 @@
+import { ElementReactionContext } from "../../../types/functionsContext";
 import { Dash } from "../cards/misc/Dash";
-import { elementReactionContext } from "./Element";
 
 export class Anemo extends Element {
-  reaction(ctx: elementReactionContext) {
+  reaction(ctx: ElementReactionContext) {
     ctx.player.addCardToDiscard(new Dash());
   }
 }

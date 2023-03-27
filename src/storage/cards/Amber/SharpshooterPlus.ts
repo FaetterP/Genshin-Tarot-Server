@@ -1,7 +1,5 @@
-import { Player } from "../../../game/Player";
+import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack, constructorSetupAttack } from "../../../game/Attack";
-import { Pyro } from "../../elements/Pyro";
-import { Enemy } from "../../enemies/Enemy";
 import { AttackCard } from "../AttackCard";
 
 export class SharpshooterPlus extends AttackCard {
@@ -9,7 +7,7 @@ export class SharpshooterPlus extends AttackCard {
     super(0);
   }
 
-  attack(ctx: { attacker: Player; enemy: Enemy }): void {
+  attack(ctx: CardAttackContext): void {
     const attackSetup: constructorSetupAttack = {
       damage: 1,
       player: ctx.attacker,
