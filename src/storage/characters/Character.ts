@@ -3,10 +3,21 @@ import { Card } from "../cards/Card";
 
 export abstract class Character {
   private cards: Card[];
-  
-  constructor(cards: Card[]) {
+  private burstCost: number;
+
+  constructor({ cards, burstCost }: { cards: Card[]; burstCost: number }) {
     this.cards = cards;
+    this.burstCost = burstCost;
   }
 
-  abstract useBurst(ctx:CharacterUseBurstContext):void
+  public tryUseBurst(ctx: CharacterUseBurstContext) {
+    if (ctx.player.ActionPoints.total >= this.burstCost) {
+      ctx.player.addActionPoints(-this.burstCost);
+      this.useBurst(ctx);
+      return true;
+    }
+    return false;
+  }
+
+  abstract useBurst(ctx: CharacterUseBurstContext): void;
 }

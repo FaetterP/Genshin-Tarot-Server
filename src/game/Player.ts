@@ -29,6 +29,13 @@ export class Player {
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
   }
+  public get ActionPoints() {
+    return {
+      actionPoints: this.actionPoints,
+      extraActionPoints: this.extraActionPoints,
+      total: this.actionPoints + this.extraActionPoints,
+    };
+  }
 
   public applyDamage(damage: number) {
     if (this.shield >= damage) {
@@ -64,6 +71,9 @@ export class Player {
 
   public addExtraActionPoints(count: number) {
     this.extraActionPoints = clamp(this.extraActionPoints + count, 0, 3);
+  }
+  public addActionPoints(count: number) {
+    this.actionPoints = clamp(this.actionPoints + count, 0, 3);
   }
 
   public createWave() {
