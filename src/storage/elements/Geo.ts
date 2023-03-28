@@ -1,4 +1,5 @@
 import { ElementReactionContext } from "../../../types/functionsContext";
+import { Element } from "./Element";
 
 export class Geo extends Element {
   reaction(ctx: ElementReactionContext) {

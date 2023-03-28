@@ -22,12 +22,14 @@
   "homepage": "https://github.com/FaetterP/Genshin-Tarot-Server#readme",
   "dependencies": {
     "config": "^3.3.9",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/config": "^3.3.0",
     "@types/jest": "^29.5.0",
     "@types/uuid": "^9.0.1",
+    "@types/ws": "^8.5.4",
     "jest": "^29.5.0",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",

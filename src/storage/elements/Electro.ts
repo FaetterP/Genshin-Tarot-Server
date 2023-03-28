@@ -1,5 +1,6 @@
 import { Attack } from "../../game/Attack";
 import { ElementReactionContext } from "../../../types/functionsContext";
+import { Element } from "./Element";
 
 export class Electro extends Element {
   reaction(ctx: ElementReactionContext) {
