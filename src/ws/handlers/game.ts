@@ -6,6 +6,10 @@ async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
 }
 
+async function endTurn(ws: ExtWebSocket, payload: any) {
+  ws.cycleController.playerEndTurn(ws.player);
+}
+
 async function attackCard(ws: ExtWebSocket, payload: any) {
   const { enemyId, cardId } = payload as { enemyId: string; cardId: string };
   const enemy = ws.cycleController.getEnemyById(enemyId);
@@ -46,4 +50,4 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   useableCard.use(ctx);
 }
 
-export default { handlers: { startGame, attackCard, useCard } };
+export default { handlers: { startGame, attackCard, useCard, endTurn } };

@@ -47,6 +47,9 @@ export class Player {
   public get Hand(): ReadonlyArray<Card> {
     return this.hand;
   }
+  public get IsTurnEnds() {
+    return this.isTurnEnds;
+  }
 
   constructor() {
     this.ID = `player-${v4()}`;
@@ -173,6 +176,10 @@ export class Player {
     for (const enemy of this.enemies) {
       enemy.startCycle();
     }
+  }
+
+  public endTurn() {
+    this.isTurnEnds = true;
   }
 
   public endCycle() {

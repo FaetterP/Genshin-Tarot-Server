@@ -80,7 +80,14 @@ export class CycleController {
     this.cycle += 1;
   }
 
-  playerEndTurn(player: Player) {}
+  playerEndTurn(player: Player) {
+    player.endTurn();
+    if (this.players.find((player) => !player.IsTurnEnds)) {
+      return;
+    }
+    this.endCycle();
+    this.startCycle();
+  }
 
   getPlayerById(id: string) {
     return this.players.find((player) => player.ID === id);

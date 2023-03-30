@@ -64,3 +64,11 @@
   "cardId": "card-{uuid}"
 }
 ```
+
+- Игрок завершает ход
+
+```json
+{
+  "action": "game.endTurn"
+}
+```
