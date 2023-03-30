@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import {
   EnemyDeathContext,
   PlayerEndsWavesContext,
@@ -8,9 +9,9 @@ import { Enemy } from "../storage/enemies/Enemy";
 import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
-import characters from "../ws/handlers/characters";
 
 export class Player {
+  public readonly ID: string;
   private hp: number = 0;
   private energy: number = 0;
   private shield: number = 0;
@@ -42,6 +43,13 @@ export class Player {
   }
   public get Characters(): ReadonlyArray<Character> {
     return this.characters;
+  }
+  public get Hand(): ReadonlyArray<Card> {
+    return this.hand;
+  }
+
+  constructor() {
+    this.ID = `player-${v4()}`;
   }
 
   public addCharacter(character: Character) {

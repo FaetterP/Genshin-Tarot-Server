@@ -81,4 +81,22 @@ export class CycleController {
   }
 
   playerEndTurn(player: Player) {}
+
+  getPlayerById(id: string) {
+    return this.players.find((player) => player.ID === id);
+  }
+
+  getEnemyById(id: string) {
+    for (const player of this.players) {
+      for (const enemy of player.Enemies) {
+        if (enemy.ID === id) {
+          return enemy;
+        }
+      }
+    }
+  }
+
+  getPlayerCard(cardId: string, player: Player) {
+    return player.Hand.find((card) => card.ID === cardId);
+  }
 }

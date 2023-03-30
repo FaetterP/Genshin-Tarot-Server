@@ -45,3 +45,22 @@
   "action": "game.startGame"
 }
 ```
+
+- Игрок использует атакующую карту на враге
+
+```json
+{
+  "action": "game.attackCard",
+  "enemyId": "enemy-{uuid}",
+  "cardId": "card-{uuid}"
+}
+```
+
+- Игрок использует скилл
+
+```json
+{
+  "action": "game.useCard",
+  "cardId": "card-{uuid}"
+}
+```

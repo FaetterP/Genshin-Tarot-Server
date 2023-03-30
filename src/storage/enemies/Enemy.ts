@@ -3,6 +3,7 @@ import { Event } from "../../utils/Event";
 import { Attack } from "../../game/Attack";
 import { Element } from "../elements/Element";
 import { EnemyDeathContext } from "../../../types/eventsContext";
+import { v4 } from "uuid";
 
 type constructorSetup = {
   hp: number;
@@ -12,6 +13,7 @@ type constructorSetup = {
 };
 
 export abstract class Enemy {
+  public readonly ID: string;
   private hp: number;
   private shield: number;
   protected elements: Element[] = [];
@@ -35,6 +37,7 @@ export abstract class Enemy {
   }
 
   constructor({ hp, damage, mora, shield }: constructorSetup) {
+    this.ID = `enemy-${v4()}`;
     this.hp = hp;
     this.shield = shield;
   }
