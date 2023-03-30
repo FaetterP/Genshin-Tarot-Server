@@ -4,6 +4,10 @@ import { StarfellSword } from "../cards/Aether/StarfellSword";
 import { Character } from "./Character";
 
 export class Aether extends Character {
+  public get Name() {
+    return "Aether";
+  }
+
   constructor() {
     const cards = [
       new ForeignRockblade(),
@@ -12,7 +16,7 @@ export class Aether extends Character {
       new StarfellSword(),
       new StarfellSword(),
     ];
-    super({cards, burstCost:4});
+    super({ cards, burstCost: 4 });
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {

@@ -2,8 +2,13 @@ import { CharacterUseBurstContext } from "../../../types/functionsContext";
 import { Card } from "../cards/Card";
 
 export abstract class Character {
+  public abstract get Name(): string;
   private cards: Card[];
   private burstCost: number;
+
+  public get Cards(): ReadonlyArray<Card> {
+    return this.cards;
+  }
 
   constructor({ cards, burstCost }: { cards: Card[]; burstCost: number }) {
     this.cards = cards;

@@ -26,8 +26,8 @@ export abstract class Enemy {
   }
   public get OnDeath() {
     return {
-      addListener: this.e_onDeath.AddListener.bind(this),
-      removeListener: this.e_onDeath.RemoveListener.bind(this),
+      addListener: this.e_onDeath.AddListener.bind(this.e_onDeath),
+      removeListener: this.e_onDeath.RemoveListener.bind(this.e_onDeath),
     };
   }
 

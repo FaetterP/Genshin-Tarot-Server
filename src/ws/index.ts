@@ -23,7 +23,7 @@ async function onMessage(
     const handler = handlers[action];
     if (!handler) throw new Error(`Unsupported action ${action}`);
 
-    const res = await handler(req);
+    const res = await handler(ws, req);
     ws.send(JSON.stringify({ status: "ok", data: res }));
   } catch (e) {
     this.send(

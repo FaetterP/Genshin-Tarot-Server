@@ -39,6 +39,10 @@ export class CycleController {
       throw new Error("cannot start game without players");
     }
 
+    for (const player of this.players) {
+      player.startGame();
+    }
+
     this.cycle = 1;
     this.startCycle();
   }

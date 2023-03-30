@@ -3,10 +3,12 @@ import {
   PlayerEndsWavesContext,
 } from "../../types/eventsContext";
 import { Card } from "../storage/cards/Card";
+import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
+import characters from "../ws/handlers/characters";
 
 export class Player {
   private hp: number = 0;
@@ -24,6 +26,8 @@ export class Player {
   private discardDeck: Card[] = [];
   private collectingDeck: Card[] = [];
 
+  private characters: Character[] = [];
+
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
 
   public get Enemies(): ReadonlyArray<Enemy> {
@@ -35,6 +39,39 @@ export class Player {
       extraActionPoints: this.extraActionPoints,
       total: this.actionPoints + this.extraActionPoints,
     };
+  }
+  public get Characters(): ReadonlyArray<Character> {
+    return this.characters;
+  }
+
+  public addCharacter(character: Character) {
+    if (this.characters.map((item) => item.Name).includes(character.Name)) {
+      throw new Error("duplicate character");
+    }
+
+    if (this.characters.length >= 4) {
+      throw new Error("maximum characters");
+    }
+
+    this.characters.push(character);
+  }
+
+  public removeCharacter(character: Character) {
+    if (!this.characters.map((item) => item.Name).includes(character.Name)) {
+      throw new Error("no have character");
+    }
+
+    this.characters = this.characters.filter(
+      (item) => item.Name !== character.Name
+    );
+  }
+
+  public startGame() {
+    for (const character of this.characters) {
+      this.hand.push(...character.Cards);
+    }
+
+    this.hp = 12;
   }
 
   public applyDamage(damage: number) {
