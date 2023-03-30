@@ -1,3 +1,3 @@
-import { start } from "./ws";
+import { startWebsocketServer } from "./ws";
 
-start()
+startWebsocketServer()

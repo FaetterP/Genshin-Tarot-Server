@@ -37,3 +37,11 @@
   "character": "Aether"
 }
 ```
+
+- Запуск игры
+
+```json
+{
+  "action": "game.startGame"
+}
+```

@@ -4,6 +4,7 @@ import { Player } from "./Player";
 export class CycleController {
   private players: Player[] = [];
   private cycle: number = 0;
+  private isGameStart: boolean = false;
 
   private e_onCyclesEnd = new Event();
 
@@ -12,6 +13,9 @@ export class CycleController {
   }
   public get CycleNumber() {
     return this.cycle;
+  }
+  public get IsGameStart() {
+    return this.isGameStart;
   }
   public get OnCyclesEnd() {
     return {
@@ -35,13 +39,25 @@ export class CycleController {
   }
 
   startGame() {
+    if (this.isGameStart) {
+      throw new Error("game already started");
+    }
+
     if (this.players.length === 0) {
       throw new Error("cannot start game without players");
     }
 
     for (const player of this.players) {
+      if (player.Characters.length < 4) {
+        throw new Error("player doesn't have 4 characters");
+      }
+    }
+
+    for (const player of this.players) {
       player.startGame();
     }
+
+    this.isGameStart = true;
 
     this.cycle = 1;
     this.startCycle();

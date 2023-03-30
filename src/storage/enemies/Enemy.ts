@@ -24,6 +24,9 @@ export abstract class Enemy {
   public get Shield() {
     return this.shield;
   }
+  public get Elements(): ReadonlyArray<Element> {
+    return this.elements;
+  }
   public get OnDeath() {
     return {
       addListener: this.e_onDeath.AddListener.bind(this.e_onDeath),

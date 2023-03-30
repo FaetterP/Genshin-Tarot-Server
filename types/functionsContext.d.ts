@@ -20,5 +20,6 @@ export type CharacterUseBurstContext = {
   character: Character;
   player: Player;
   allPlayers: Player[];
-  data: any;
+  selectedEnemy?: Enemy;
+  selectedPlayer?: Player;
 };

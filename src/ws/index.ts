@@ -1,6 +1,7 @@
 import config from "config";
 import WebSocket from "ws";
 import { ExtWebSocket } from "../../types/wsTypes";
+import { CycleController } from "../game/CycleController";
 import { Player } from "../game/Player";
 import { buildHandlers } from "./handlers";
 
@@ -9,6 +10,7 @@ const SERVER_PORT = config.get<number>("server.port");
 
 const handlers = buildHandlers();
 let wss: WebSocket.Server;
+const cycleController = new CycleController();
 
 async function onMessage(
   this: WebSocket,
@@ -48,13 +50,16 @@ async function onConnect(ws: ExtWebSocket, req: any) {
     ws.on("close", onDisconnect);
     ws.on("pong", heartbeat);
 
-    ws.player = new Player();
+    const player = new Player();
+    cycleController.connectPlayer(player);
+    ws.player = player;
+    ws.cycleController = cycleController;
   } catch (e) {
     ws.terminate();
   }
 }
 
-export async function start() {
+export async function startWebsocketServer() {
   await new Promise<void>((resolve, reject) => {
     //@ts-ignore
     wss = new WebSocket.Server({ port: SERVER_PORT }, (err: any) =>
