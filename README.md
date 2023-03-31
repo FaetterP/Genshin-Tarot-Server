@@ -72,3 +72,14 @@
   "action": "game.endTurn"
 }
 ```
+
+- Клиент завершил выполнение задачи
+
+```json
+{
+  "action": "task.completeTask",
+  "taskId": "task-{uuid}"
+}
+```
+
+## Ответы от wss
