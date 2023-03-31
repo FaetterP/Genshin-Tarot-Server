@@ -83,3 +83,55 @@
 ```
 
 ## Ответы от wss
+
+- Игрок добавил себе персонажа
+
+```json
+{
+  "action": "characters.addCharacter",
+  "player": "player-{uuid}",
+  "character": "Aether"
+}
+```
+
+- Игрок удалил у себя персонажа
+
+```json
+{
+  "action": "characters.removeCharacter",
+  "player": "player-{uuid}",
+  "character": "Aether"
+}
+```
+
+- Игра началась
+
+```json
+{
+  "action": "game.startGame"
+}
+```
+
+- Начало цикла
+
+```json
+{
+  "action": "game.startCycle",
+  "cycle": 1,
+  "players": [
+    {
+      "playerId": "player-{uuid}",
+      "hp": 10,
+      "wave": 1,
+      "enemies": [
+        {
+          "name": "SmallCryoSlime",
+          "hp": 5,
+          "shield": 0,
+          "elements": ["Cryo"]
+        }
+      ]
+    }
+  ]
+}
+```

@@ -13,6 +13,7 @@ type constructorSetup = {
 };
 
 export abstract class Enemy {
+  abstract get Name(): string;
   public readonly ID: string;
   private hp: number;
   private shield: number;

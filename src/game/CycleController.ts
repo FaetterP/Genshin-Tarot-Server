@@ -60,7 +60,6 @@ export class CycleController {
     this.isGameStart = true;
 
     this.cycle = 1;
-    this.startCycle();
   }
 
   startCycle() {

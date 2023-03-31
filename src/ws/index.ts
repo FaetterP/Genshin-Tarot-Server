@@ -12,6 +12,10 @@ const handlers = buildHandlers();
 let wss: WebSocket.Server;
 const cycleController = new CycleController();
 
+export function getAllClients() {
+  return wss.clients;
+}
+
 async function onMessage(
   this: WebSocket,
   data: WebSocket.RawData,

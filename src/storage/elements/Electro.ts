@@ -3,6 +3,10 @@ import { ElementReactionContext } from "../../../types/functionsContext";
 import { Element } from "./Element";
 
 export class Electro extends Element {
+  public get Name() {
+    return "Electro";
+  }
+
   reaction(ctx: ElementReactionContext) {
     const attackSetup = { damage: 2, isPiercing: true, player: ctx.player };
     const attack = new Attack(attackSetup);

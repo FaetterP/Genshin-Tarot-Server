@@ -31,6 +31,12 @@ export class Player {
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
 
+  public get Health() {
+    return this.hp;
+  }
+  public get Wave() {
+    return this.wave;
+  }
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
   }

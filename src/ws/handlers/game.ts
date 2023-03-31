@@ -1,9 +1,64 @@
+import { getAllClients } from "..";
 import { ExtWebSocket } from "../../../types/wsTypes";
 import { AttackCard } from "../../storage/cards/AttackCard";
 import { UseableCard } from "../../storage/cards/UseableCard";
+import { sendToAllAndWait } from "../../utils/wsUtils";
+
+type EnemyReturn = {
+  name: string;
+  hp: number;
+  shield: number;
+  elements: string[];
+};
+
+type PlayerReturn = {
+  playerId: string;
+  hp: number;
+  wave: number;
+  enemies: EnemyReturn[];
+};
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
+  await sendToAllAndWait({ action: "game.startGame" });
+
+  ws.cycleController.startCycle();
+  const ret: {
+    cycle: number;
+    players: PlayerReturn[];
+  } = {
+    cycle: ws.cycleController.CycleNumber,
+    players: [],
+  };
+
+  for (const ws of getAllClients()) {
+    const player = (ws as ExtWebSocket).player;
+    const playerInfo: PlayerReturn = {
+      playerId: player.ID,
+      hp: player.Health,
+      wave: player.Wave,
+      enemies: [],
+    };
+
+    for (const enemy of player.Enemies) {
+      const enemyInfo: EnemyReturn = {
+        name: enemy.Name,
+        hp: enemy.Health,
+        shield: enemy.Shield,
+        elements: [],
+      };
+
+      for (const element of enemy.Elements) {
+        enemyInfo.elements.push(element.Name);
+      }
+
+      playerInfo.enemies.push(enemyInfo);
+    }
+
+    ret.players.push(playerInfo);
+  }
+
+  await sendToAllAndWait({ ...ret, action: "game.startCycle" });
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
