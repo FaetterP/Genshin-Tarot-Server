@@ -13,12 +13,7 @@ export class LetTheShowBegin extends AttackCard {
   }
 
   attack(ctx: CardAttackContext): void {
-    const attack: Attack = {
-      damage: 0,
-      element: new Hydro(),
-      player: ctx.attacker,
-    };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemy.applyElement(new Hydro(), ctx.attacker);
 
     let healCount = 1;
     if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(2)) {

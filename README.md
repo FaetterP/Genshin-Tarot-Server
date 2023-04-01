@@ -54,7 +54,9 @@
 {
   "action": "game.attackCard",
   "enemyId": "enemy-{uuid}",
-  "cardId": "card-{uuid}"
+  "cardId": "card-{uuid}",
+  "selectedPlayer": "player-{uuid}",
+  "isUseAlternative": true
 }
 ```
 
@@ -63,7 +65,8 @@
 ```json
 {
   "action": "game.useCard",
-  "cardId": "card-{uuid}"
+  "cardId": "card-{uuid}",
+  "selectedPlayer": "player-{uuid}"
 }
 ```
 

@@ -3,13 +3,11 @@ import {
   CardUseContext,
 } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
 import { UseableCard } from "../UseableCard";
 
-export class LetTheShowBeginPlus extends UseableCard {
+export class OceanbornPlus extends UseableCard {
   public get Name(): string {
-    return "LetTheShowBeginPlus";
+    return "OceanbornPlus";
   }
 
   constructor() {
@@ -18,8 +16,12 @@ export class LetTheShowBeginPlus extends UseableCard {
 
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
-      enemy.applyElement(new Hydro(), ctx.player);
+      const attack: Attack = {
+        damage: 2,
+        player: ctx.player,
+      };
+      // TODO 4 damage
+      enemy.applyAttack(attack);
     }
-    // TODO all attacks heal 1
   }
 }

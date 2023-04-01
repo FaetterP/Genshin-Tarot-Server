@@ -24,13 +24,6 @@ export class Lisa extends Character {
       throw new Error("player not selected");
     }
 
-    const attack: Attack = {
-      damage: 0,
-      element: new Electro(),
-      player: ctx.player,
-      isRange: true,
-    };
-
-    ctx.selectedEnemy.applyAttack(attack);
+    ctx.selectedEnemy.applyElement(new Electro(), ctx.player);
   }
 }

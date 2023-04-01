@@ -66,14 +66,16 @@ export abstract class Enemy {
       this.hp -= attack.damage;
     }
 
-    this.applyElement(attack.element, attack.player);
+    if (attack.element) {
+      this.applyElement(attack.element, attack.player);
+    }
 
     if (this.hp <= 0) {
       this.e_onDeath.Invoke({ enemy: this });
     }
   }
 
-  applyElement(element: Element | undefined, player: Player) {
+  applyElement(element: Element, player: Player) {
     if (!element) {
       return;
     }
