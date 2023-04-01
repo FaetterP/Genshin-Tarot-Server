@@ -1,26 +1,26 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { Pyro } from "../../elements/Pyro";
+import { Hydro } from "../../elements/Hydro";
 import { AttackCard } from "../AttackCard";
 
-export class ExplosivePuppet extends AttackCard {
+export class LetTheShowBeginPlus extends AttackCard {
   public get Name(): string {
-    return "ExplosivePuppet";
+    return "LetTheShowBeginPlus";
   }
 
-
+  constructor() {
+    super(1);
+  }
 
   attack(ctx: CardAttackContext): void {
-    ctx.enemy.addStun();
-
     for (const enemy of ctx.attacker.Enemies) {
       const attack: Attack = {
-        damage: 2,
-        element: new Pyro(),
+        damage: 0,
+        element: new Hydro(),
         player: ctx.attacker,
       };
-
-      enemy.applyAttack(attack);
+      ctx.enemy.applyAttack(attack);
     }
+    // TODO all attacks heal 1
   }
 }

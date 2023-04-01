@@ -65,8 +65,8 @@ export class Player {
   public getPrimitiveStats(): PlayerPrimitive {
     const enemies: EnemyPrimitive[] = [];
 
-    for(const enemy of this.enemies){
-      enemies.push(enemy.getPrimitiveStats())
+    for (const enemy of this.enemies) {
+      enemies.push(enemy.getPrimitiveStats());
     }
 
     return {
@@ -133,6 +133,14 @@ export class Player {
 
     this.energy -= count;
     return true;
+  }
+
+  public addHealth(count: number) {
+    if (count < 0) {
+      throw new Error("to do damage use applyAttack");
+    }
+
+    this.hp = clamp(this.hp + count, 0, 12);
   }
 
   public addShield(count: number) {
