@@ -4,6 +4,7 @@ import { Attack } from "../../game/Attack";
 import { Element } from "../elements/Element";
 import { EnemyDeathContext } from "../../../types/eventsContext";
 import { v4 } from "uuid";
+import { EnemyPrimitive } from "../../../types/general";
 
 type constructorSetup = {
   hp: number;
@@ -41,6 +42,22 @@ export abstract class Enemy {
     this.ID = `enemy-${v4()}`;
     this.hp = hp;
     this.shield = shield;
+  }
+
+  getPrimitiveStats(): EnemyPrimitive {
+    const elements: string[] = [];
+
+    for (const element of this.elements) {
+      elements.push(element.Name);
+    }
+
+    return {
+      id: this.ID,
+      name: this.Name,
+      hp: this.hp,
+      shield: this.shield,
+      elements,
+    };
   }
 
   applyAttack(attack: Attack) {

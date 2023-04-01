@@ -125,6 +125,7 @@
       "wave": 1,
       "enemies": [
         {
+          "id": "enemy-{uuid}",
           "name": "SmallCryoSlime",
           "hp": 5,
           "shield": 0,
@@ -133,5 +134,67 @@
       ]
     }
   ]
+}
+```
+
+- Игрок завершил ход
+
+```json
+{
+  "action": "game.endTurn",
+  "player": "player-{uuid}"
+}
+```
+
+- Игрок атаковал врага
+
+```json
+{
+  "action": "game.attackCard",
+  "player": {
+    "playerId": "player-{uuid}",
+    "hp": 10,
+    "wave": 1,
+    "enemies": [
+      {
+        "id": "enemy-{uuid}",
+        "name": "SmallCryoSlime",
+        "hp": 5,
+        "shield": 0,
+        "elements": ["Cryo"]
+      }
+    ]
+  },
+  "card": "card-{uuid}",
+  "enemy": {
+    "id": "enemy-{uuid}",
+    "name": "SmallCryoSlime",
+    "hp": 5,
+    "shield": 0,
+    "elements": ["Cryo"]
+  }
+}
+```
+
+- Игрок использовал скилл
+
+```json
+{
+  "action": "game.useCard",
+  "cardId": "card-{uuid}",
+  "player": {
+    "playerId": "player-{uuid}",
+    "hp": 10,
+    "wave": 1,
+    "enemies": [
+      {
+        "id": "enemy-{uuid}",
+        "name": "SmallCryoSlime",
+        "hp": 5,
+        "shield": 0,
+        "elements": ["Cryo"]
+      }
+    ]
+  }
 }
 ```

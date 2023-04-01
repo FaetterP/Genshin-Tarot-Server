@@ -1,22 +1,9 @@
 import { getAllClients } from "..";
+import { PlayerPrimitive } from "../../../types/general";
 import { ExtWebSocket } from "../../../types/wsTypes";
 import { AttackCard } from "../../storage/cards/AttackCard";
 import { UseableCard } from "../../storage/cards/UseableCard";
-import { sendToAllAndWait } from "../../utils/wsUtils";
-
-type EnemyReturn = {
-  name: string;
-  hp: number;
-  shield: number;
-  elements: string[];
-};
-
-type PlayerReturn = {
-  playerId: string;
-  hp: number;
-  wave: number;
-  enemies: EnemyReturn[];
-};
+import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
@@ -25,7 +12,7 @@ async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startCycle();
   const ret: {
     cycle: number;
-    players: PlayerReturn[];
+    players: PlayerPrimitive[];
   } = {
     cycle: ws.cycleController.CycleNumber,
     players: [],
@@ -33,29 +20,7 @@ async function startGame(ws: ExtWebSocket, payload: any) {
 
   for (const ws of getAllClients()) {
     const player = (ws as ExtWebSocket).player;
-    const playerInfo: PlayerReturn = {
-      playerId: player.ID,
-      hp: player.Health,
-      wave: player.Wave,
-      enemies: [],
-    };
-
-    for (const enemy of player.Enemies) {
-      const enemyInfo: EnemyReturn = {
-        name: enemy.Name,
-        hp: enemy.Health,
-        shield: enemy.Shield,
-        elements: [],
-      };
-
-      for (const element of enemy.Elements) {
-        enemyInfo.elements.push(element.Name);
-      }
-
-      playerInfo.enemies.push(enemyInfo);
-    }
-
-    ret.players.push(playerInfo);
+    ret.players.push(player.getPrimitiveStats());
   }
 
   await sendToAllAndWait({ ...ret, action: "game.startCycle" });
@@ -63,6 +28,9 @@ async function startGame(ws: ExtWebSocket, payload: any) {
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
   ws.cycleController.playerEndTurn(ws.player);
+
+  const ret = { action: "game.endTurn", player: ws.player.ID };
+  sendToAll(ret);
 }
 
 async function attackCard(ws: ExtWebSocket, payload: any) {
@@ -85,6 +53,15 @@ async function attackCard(ws: ExtWebSocket, payload: any) {
 
   const ctx = { attacker: ws.player, enemy };
   attackCard.attack(ctx);
+
+  const ret = {
+    action: "game.attackCard",
+    player: ws.player.getPrimitiveStats(),
+    card: attackCard.ID,
+    enemy: enemy.getPrimitiveStats(),
+  };
+
+  sendToAll(ret);
 }
 
 async function useCard(ws: ExtWebSocket, payload: any) {
@@ -103,6 +80,13 @@ async function useCard(ws: ExtWebSocket, payload: any) {
 
   const ctx = { player: ws.player };
   useableCard.use(ctx);
+
+  const ret = {
+    action: "game.useCard",
+    cardId: card.ID,
+    player: ws.player.getPrimitiveStats(),
+  };
+  sendToAll(ret);
 }
 
 export default { handlers: { startGame, attackCard, useCard, endTurn } };

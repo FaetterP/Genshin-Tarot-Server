@@ -9,6 +9,7 @@ import { Enemy } from "../storage/enemies/Enemy";
 import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
+import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
 
 export class Player {
   public readonly ID: string;
@@ -59,6 +60,21 @@ export class Player {
 
   constructor() {
     this.ID = `player-${v4()}`;
+  }
+
+  public getPrimitiveStats(): PlayerPrimitive {
+    const enemies: EnemyPrimitive[] = [];
+
+    for(const enemy of this.enemies){
+      enemies.push(enemy.getPrimitiveStats())
+    }
+
+    return {
+      playerId: this.ID,
+      hp: this.hp,
+      wave: this.wave,
+      enemies,
+    };
   }
 
   public addCharacter(character: Character) {
