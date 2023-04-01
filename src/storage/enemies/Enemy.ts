@@ -4,6 +4,8 @@ import { Element } from "../elements/Element";
 import { EnemyDeathContext } from "../../../types/eventsContext";
 import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../../types/general";
+import { Cryo } from "../elements/Cryo";
+import { Hydro } from "../elements/Hydro";
 
 type constructorSetup = {
   hp: number;
@@ -76,8 +78,9 @@ export abstract class Enemy {
   }
 
   applyElement(element: Element, player: Player) {
-    if (!element) {
-      return;
+
+    if(element instanceof Cryo||element instanceof Hydro){
+      // TODO player drop all Burn cards
     }
 
     this.elements = [...this.elements, element];

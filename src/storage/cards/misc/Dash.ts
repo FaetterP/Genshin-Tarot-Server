@@ -7,14 +7,13 @@ export class Dash extends UseableCard {
   }
 
   constructor() {
-    const cost = 0;
-    super(cost);
+    super(0);
   }
 
   use(ctx: CardUseContext): void {
     ctx.player.drawCard();
     ctx.player.drawCard();
 
-    // TODO add 1 extra action point
+    ctx.player.addActionPoints(1);
   }
 }

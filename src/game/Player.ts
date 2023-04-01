@@ -10,6 +10,7 @@ import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
+import { Freeze } from "../storage/cards/misc/Freeze";
 
 export class Player {
   public readonly ID: string;
@@ -123,11 +124,19 @@ export class Player {
   }
 
   public addEnergy(count: number) {
+    if (this.hand.map((card) => card.Name).includes(new Freeze().Name)) {
+      return;
+    }
+
     this.energy = clamp(this.energy + count, 0, 12);
   }
 
   public trySpendEnergy(count: number): boolean {
     if (this.energy < count) {
+      return false;
+    }
+
+    if (this.hand.map((card) => card.Name).includes(new Freeze().Name)) {
       return false;
     }
 

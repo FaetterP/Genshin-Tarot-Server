@@ -1,19 +1,16 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { UseableCard } from "../UseableCard";
 
-export class Overheat extends UseableCard {
+export class Freeze extends UseableCard {
   public get Name(): string {
-    return "Overheat";
+    return "Freeze";
   }
 
   constructor() {
-    super(0);
+    super(1);
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.drawCard();
-    ctx.player.drawCard();
-
-    // TODO
+    // TODO drop all Freeze in hand
   }
 }
