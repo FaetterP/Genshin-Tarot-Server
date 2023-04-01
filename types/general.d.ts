@@ -1,3 +1,5 @@
+import { Element } from "../src/storage/elements/Element";
+
 export type EnemyPrimitive = {
   id: string;
   name: string;
@@ -11,4 +13,12 @@ export type PlayerPrimitive = {
   hp: number;
   wave: number;
   enemies: EnemyPrimitive[];
+};
+
+export type Attack = {
+  damage: number;
+  isPiercing?: boolean;
+  isRange?: boolean;
+  element?: Element;
+  player: Player;
 };

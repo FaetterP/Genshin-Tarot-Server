@@ -1,5 +1,5 @@
-import { Attack } from "../../game/Attack";
 import { ElementReactionContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { Element } from "./Element";
 
 export class Electro extends Element {
@@ -8,8 +8,7 @@ export class Electro extends Element {
   }
 
   reaction(ctx: ElementReactionContext) {
-    const attackSetup = { damage: 2, isPiercing: true, player: ctx.player };
-    const attack = new Attack(attackSetup);
+    const attack: Attack = { damage: 2, isPiercing: true, player: ctx.player };
 
     ctx.enemy.applyAttack(attack);
 

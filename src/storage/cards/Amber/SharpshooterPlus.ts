@@ -1,5 +1,5 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
-import { Attack, constructorSetupAttack } from "../../../game/Attack";
+import { Attack } from "../../../../types/general";
 import { AttackCard } from "../AttackCard";
 
 export class SharpshooterPlus extends AttackCard {
@@ -8,7 +8,7 @@ export class SharpshooterPlus extends AttackCard {
   }
 
   attack(ctx: CardAttackContext): void {
-    const attackSetup: constructorSetupAttack = {
+    const attack: Attack = {
       damage: 1,
       player: ctx.attacker,
       isRange: true,
@@ -16,10 +16,8 @@ export class SharpshooterPlus extends AttackCard {
     };
 
     if (ctx.enemy.Shield === 0) {
-      attackSetup.damage = 3;
+      attack.damage = 3;
     }
-
-    const attack = new Attack(attackSetup);
 
     ctx.enemy.applyAttack(attack);
   }

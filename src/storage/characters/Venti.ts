@@ -1,5 +1,5 @@
 import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../game/Attack";
+import { Attack } from "../../../types/general";
 import { Card } from "../cards/Card";
 import { Cryo } from "../elements/Cryo";
 import { Electro } from "../elements/Electro";
@@ -28,12 +28,11 @@ export class Venti extends Character {
           enemy.Elements[0] instanceof Cryo ||
           enemy.Elements[0] instanceof Electro
         ) {
-          const attackSetup = {
+          const attack: Attack = {
             damage: 4,
             isPiercing: true,
             player: ctx.player,
           };
-          const attack = new Attack(attackSetup);
 
           enemy.applyAttack(attack);
         }

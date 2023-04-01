@@ -1,5 +1,5 @@
 import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../game/Attack";
+import { Attack } from "../../../types/general";
 import { Card } from "../cards/Card";
 import { Electro } from "../elements/Electro";
 import { Character } from "./Character";
@@ -24,13 +24,12 @@ export class Lisa extends Character {
       throw new Error("player not selected");
     }
 
-    const attackSetup = {
+    const attack: Attack = {
       damage: 0,
       element: new Electro(),
       player: ctx.player,
       isRange: true,
     };
-    const attack = new Attack(attackSetup);
 
     ctx.selectedEnemy.applyAttack(attack);
   }

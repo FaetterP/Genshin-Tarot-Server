@@ -1,5 +1,5 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../game/Attack";
+import { Attack } from "../../../../types/general";
 import { AttackCard } from "../AttackCard";
 
 export class ForeignRockblade extends AttackCard {
@@ -8,8 +8,7 @@ export class ForeignRockblade extends AttackCard {
   }
 
   attack(ctx: CardAttackContext): void {
-    const attackSetup = { damage: 3, player: ctx.attacker };
-    const attack = new Attack(attackSetup);
+    const attack: Attack = { damage: 3, player: ctx.attacker };
 
     ctx.enemy.applyAttack(attack);
   }

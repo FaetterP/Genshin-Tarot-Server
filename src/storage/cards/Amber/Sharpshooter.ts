@@ -1,7 +1,7 @@
-import { Attack, constructorSetupAttack } from "../../../game/Attack";
 import { Pyro } from "../../elements/Pyro";
 import { AttackCard } from "../AttackCard";
 import { CardAttackContext } from "../../../../types/functionsContext";
+import { Attack } from "../../../../types/general";
 
 export class Sharpshooter extends AttackCard {
   constructor() {
@@ -9,7 +9,7 @@ export class Sharpshooter extends AttackCard {
   }
 
   attack(ctx: CardAttackContext): void {
-    const attackSetup: constructorSetupAttack = {
+    const attack: Attack = {
       damage: 1,
       player: ctx.attacker,
       isRange: true,
@@ -17,10 +17,8 @@ export class Sharpshooter extends AttackCard {
     };
 
     if (ctx.attacker.trySpendEnergy(1)) {
-      attackSetup.element = new Pyro();
+      attack.element = new Pyro();
     }
-
-    const attack = new Attack(attackSetup);
 
     ctx.enemy.applyAttack(attack);
   }

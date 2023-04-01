@@ -1,10 +1,9 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
-import { Attack } from "../../game/Attack";
 import { Element } from "../elements/Element";
 import { EnemyDeathContext } from "../../../types/eventsContext";
 import { v4 } from "uuid";
-import { EnemyPrimitive } from "../../../types/general";
+import { Attack, EnemyPrimitive } from "../../../types/general";
 
 type constructorSetup = {
   hp: number;
@@ -61,11 +60,11 @@ export abstract class Enemy {
   }
 
   applyAttack(attack: Attack) {
-    if (this.shield <= 0 || attack.IsPiercing) {
-      this.hp -= attack.Damage;
+    if (this.shield <= 0 || attack.isPiercing) {
+      this.hp -= attack.damage;
     }
 
-    this.applyElement(attack.Element, attack.Player);
+    this.applyElement(attack.element, attack.player);
 
     if (this.hp <= 0) {
       this.e_onDeath.Invoke({ enemy: this });
