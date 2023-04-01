@@ -3,6 +3,10 @@ import { AttackCard } from "../AttackCard";
 import { Attack } from "../../../../types/general";
 
 export class StarfellSword extends AttackCard {
+  public get Name(): string {
+    return "StarfellSword";
+  }
+
   constructor() {
     super(2);
   }

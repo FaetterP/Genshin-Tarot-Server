@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 
 export abstract class Card {
+  public abstract get Name(): string;
   public readonly ID: string;
   public readonly Cost: number;
 

@@ -4,6 +4,10 @@ import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 
 export class Sharpshooter extends AttackCard {
+  public get Name(): string {
+    return "Sharpshooter";
+  }
+
   constructor() {
     super(0);
   }

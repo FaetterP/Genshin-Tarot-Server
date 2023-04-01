@@ -131,7 +131,8 @@
           "name": "SmallCryoSlime",
           "hp": 5,
           "shield": 0,
-          "elements": ["Cryo"]
+          "elements": ["Cryo"],
+          "isStunned": false
         }
       ]
     }
@@ -163,7 +164,8 @@
         "name": "SmallCryoSlime",
         "hp": 5,
         "shield": 0,
-        "elements": ["Cryo"]
+        "elements": ["Cryo"],
+        "isStunned": false
       }
     ]
   },
@@ -173,7 +175,8 @@
     "name": "SmallCryoSlime",
     "hp": 5,
     "shield": 0,
-    "elements": ["Cryo"]
+    "elements": ["Cryo"],
+    "isStunned": false
   }
 }
 ```

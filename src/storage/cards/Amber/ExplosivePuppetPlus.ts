@@ -1,10 +1,11 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { Pyro } from "../../elements/Pyro";
 import { AttackCard } from "../AttackCard";
 
-export class StarfellSwordPlus extends AttackCard {
+export class ExplosivePuppetPlus extends AttackCard {
   public get Name(): string {
-    return "StarfellSwordPlus"
+    return "ExplosivePuppetPlus";
   }
 
   constructor() {
@@ -12,10 +13,12 @@ export class StarfellSwordPlus extends AttackCard {
   }
 
   attack(ctx: CardAttackContext): void {
+    ctx.enemy.addStun();
+
     for (const enemy of ctx.attacker.Enemies) {
       const attack: Attack = {
         damage: 2,
-        isPiercing: true,
+        element: new Pyro(),
         player: ctx.attacker,
       };
 

@@ -4,6 +4,10 @@ import { Geo } from "../../elements/Geo";
 import { AttackCard } from "../AttackCard";
 
 export class ForeignRockbladePlus extends AttackCard {
+  public get Name(): string {
+    return "ForeignRockbladePlus";
+  }
+
   constructor() {
     super(1);
   }

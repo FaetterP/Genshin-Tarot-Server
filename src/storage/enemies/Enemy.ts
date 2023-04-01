@@ -18,6 +18,7 @@ export abstract class Enemy {
   private hp: number;
   private shield: number;
   protected elements: Element[] = [];
+  private isStunned: boolean = false;
 
   private e_onDeath = new Event<EnemyDeathContext>();
 
@@ -56,6 +57,7 @@ export abstract class Enemy {
       hp: this.hp,
       shield: this.shield,
       elements,
+      isStunned: this.isStunned,
     };
   }
 
@@ -94,9 +96,15 @@ export abstract class Enemy {
     this.shield = Math.max(0, this.shield + count);
   }
 
+  addStun() {
+    this.isStunned = true;
+  }
+
   reveal() {}
 
-  startCycle() {}
+  startCycle() {
+    this.isStunned = false;
+  }
 
   endCycle() {}
 }

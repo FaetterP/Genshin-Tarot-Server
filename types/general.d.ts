@@ -6,6 +6,7 @@ export type EnemyPrimitive = {
   hp: number;
   shield: number;
   elements: string[];
+  isStunned: boolean;
 };
 
 export type PlayerPrimitive = {
