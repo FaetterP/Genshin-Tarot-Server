@@ -37,6 +37,9 @@ export class Player {
   public get Health() {
     return this.hp;
   }
+  public get Energy() {
+    return this.energy;
+  }
   public get Wave() {
     return this.wave;
   }

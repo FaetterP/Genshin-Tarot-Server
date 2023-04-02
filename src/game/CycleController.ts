@@ -1,5 +1,6 @@
 import { Event } from "../utils/Event";
 import { Player } from "./Player";
+import { useRandomEffect } from "./leyLine";
 
 export class CycleController {
   private players: Player[] = [];
@@ -58,17 +59,29 @@ export class CycleController {
     }
 
     this.isGameStart = true;
-
     this.cycle = 1;
   }
 
   startCycle() {
-    if (this.cycle === 13) {
+    if (this.cycle === 12) {
       this.e_onCyclesEnd.Invoke(null);
+      return;
     }
 
     for (const player of this.players) {
       player.startCycle();
+    }
+
+    let countEffects = 0;
+    if (this.cycle === 3) {
+      countEffects = 1;
+    } else if (this.cycle === 6) {
+      countEffects = 2;
+    } else if (this.cycle === 9) {
+      countEffects = 2;
+    }
+    for (let i = 0; i < countEffects; i++) {
+      useRandomEffect(this.players);
     }
   }
 
