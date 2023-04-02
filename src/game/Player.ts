@@ -11,6 +11,7 @@ import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
+import { Dash } from "../storage/cards/misc/Dash";
 
 export class Player {
   public readonly ID: string;
@@ -185,8 +186,9 @@ export class Player {
     this.wave++;
   }
 
-  public drawCard() {
+  public drawCard(): Card {
     // TODO
+    return new Dash();
   }
 
   public discardRandomCard() {

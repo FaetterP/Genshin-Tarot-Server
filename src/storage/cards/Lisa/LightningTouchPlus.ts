@@ -1,11 +1,11 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { Anemo } from "../../elements/Anemo";
+import { Electro } from "../../elements/Electro";
 import { AttackCard } from "../AttackCard";
 
-export class DivineArchery extends AttackCard {
+export class LightningTouchPlus extends AttackCard {
   public get Name(): string {
-    return "DivineArchery";
+    return "LightningTouchPlus";
   }
 
   constructor() {
@@ -17,13 +17,11 @@ export class DivineArchery extends AttackCard {
       damage: 1,
       isPiercing: true,
       isRange: true,
+      element: new Electro(),
       player: ctx.attacker,
     };
-
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
-      attack.element = new Anemo();
-    }
-
     ctx.enemy.applyAttack(attack);
+
+    ctx.attacker.drawCard();
   }
 }

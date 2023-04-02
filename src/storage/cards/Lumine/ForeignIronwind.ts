@@ -1,29 +1,21 @@
 import { CardAttackContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { Anemo } from "../../elements/Anemo";
 import { AttackCard } from "../AttackCard";
 
-export class DivineArchery extends AttackCard {
+export class ForeignIronwind extends AttackCard {
   public get Name(): string {
-    return "DivineArchery";
+    return "ForeignIronwind";
   }
 
   constructor() {
-    super(0);
+    super(1);
   }
 
   attack(ctx: CardAttackContext): void {
     const attack: Attack = {
-      damage: 1,
-      isPiercing: true,
-      isRange: true,
+      damage: 3,
       player: ctx.attacker,
     };
-
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
-      attack.element = new Anemo();
-    }
-
     ctx.enemy.applyAttack(attack);
   }
 }

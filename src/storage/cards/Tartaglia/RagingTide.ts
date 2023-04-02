@@ -15,6 +15,6 @@ export class RagingTide extends UseableCard {
     ctx.player.drawCard();
     ctx.player.drawCard();
 
-    // TODO may drop 3 cards and apply Hydro to one enemy
+    // TODO may drop 3 cards and apply Hydro to one enemy per card
   }
 }
