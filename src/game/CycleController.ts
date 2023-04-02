@@ -72,14 +72,7 @@ export class CycleController {
       player.startCycle();
     }
 
-    let countEffects = 0;
-    if (this.cycle === 3) {
-      countEffects = 1;
-    } else if (this.cycle === 6) {
-      countEffects = 2;
-    } else if (this.cycle === 9) {
-      countEffects = 2;
-    }
+    const countEffects = Math.floor(this.cycle / 3);
     for (let i = 0; i < countEffects; i++) {
       useRandomEffect(this.players);
     }
