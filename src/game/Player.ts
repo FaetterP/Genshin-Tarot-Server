@@ -145,6 +145,12 @@ export class Player {
     return true;
   }
 
+  public trySpendActonPoints(count: number): boolean {
+    // TODO
+    // TODO fix anywhere spending energy to action points
+    return false;
+  }
+
   public addHealth(count: number) {
     if (count < 0) {
       throw new Error("to do damage use applyAttack");
