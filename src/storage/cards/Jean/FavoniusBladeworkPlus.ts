@@ -13,11 +13,15 @@ export class FavoniusBladeworkPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 2,
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
 
     ctx.player.addEnergy(2);
     ctx.player.addHealth(2);

@@ -12,10 +12,14 @@ export class SteelFangPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.addShields(-1);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].addShields(-1);
 
     const attack: Attack = { damage: 2, player: ctx.player };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
 
     // TODO
   }

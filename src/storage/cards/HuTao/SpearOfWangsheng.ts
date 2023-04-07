@@ -12,6 +12,10 @@ export class SpearOfWangsheng extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
@@ -22,6 +26,6 @@ export class SpearOfWangsheng extends Card {
       attack.damage = 2;
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

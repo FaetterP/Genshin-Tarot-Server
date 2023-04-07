@@ -13,8 +13,12 @@ export class CeremonialBladeworkPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = { damage: 2, player: ctx.player };
     attack.damage += getRandomInteger(1, 7);
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

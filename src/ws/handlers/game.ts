@@ -46,13 +46,10 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     throw new Error("card not Card");
   }
 
-  const useableCard = card as Card;
-
   const ctx: CardUseContext = {
     player: ws.player,
-    enemy: new SmallCryoSlime(),
   };
-  useableCard.use(ctx);
+  card.use(ctx);
 
   const ret = {
     action: "game.useCard",

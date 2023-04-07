@@ -13,7 +13,11 @@ export class MirrorReflections extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.addStun();
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].addStun();
 
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {

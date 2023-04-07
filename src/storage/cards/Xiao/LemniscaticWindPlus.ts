@@ -13,6 +13,10 @@ export class LemniscaticWindPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
@@ -20,6 +24,6 @@ export class LemniscaticWindPlus extends Card {
       player: ctx.player,
     };
     // if last played card is Dash, 5 damage
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

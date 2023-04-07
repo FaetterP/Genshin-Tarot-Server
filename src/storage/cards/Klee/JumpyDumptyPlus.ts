@@ -13,12 +13,16 @@ export class JumpyDumptyPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 2,
       element: new Pyro(),
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
     // TODO attack two enemies
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {

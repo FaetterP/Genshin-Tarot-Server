@@ -12,8 +12,17 @@ export class RavagingConfession extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    const attack:Attack={damage:1, isPiercing:true, isRange:true, player:ctx.player}
-    ctx.enemy.applyAttack(attack)
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    const attack: Attack = {
+      damage: 1,
+      isPiercing: true,
+      isRange: true,
+      player: ctx.player,
+    };
+    ctx.enemies[0].applyAttack(attack);
 
     // TODO
   }

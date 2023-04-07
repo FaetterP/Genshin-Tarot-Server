@@ -12,6 +12,10 @@ export class SharpshooterPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 1,
       player: ctx.player,
@@ -19,10 +23,10 @@ export class SharpshooterPlus extends Card {
       isPiercing: true,
     };
 
-    if (ctx.enemy.Shield === 0) {
+    if (ctx.enemies[0].Shield === 0) {
       attack.damage = 3;
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

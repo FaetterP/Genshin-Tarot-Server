@@ -12,6 +12,10 @@ export class KatzleinStylePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
@@ -23,6 +27,6 @@ export class KatzleinStylePlus extends Card {
       attack.damage = 5;
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

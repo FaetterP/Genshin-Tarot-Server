@@ -13,16 +13,20 @@ export class AncientSwordArtPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     if (
-      ctx.enemy.Elements.map((element) => element.Name).includes(
+      ctx.enemies[0].Elements.map((element) => element.Name).includes(
         new Cryo().Name
       )
     ) {
       const attack: Attack = { damage: 5, player: ctx.player };
-      ctx.enemy.applyAttack(attack);
+      ctx.enemies[0].applyAttack(attack);
     } else {
       const attack: Attack = { damage: 2, player: ctx.player };
-      ctx.enemy.applyAttack(attack);
+      ctx.enemies[0].applyAttack(attack);
       ctx.player.addEnergy(2);
     }
   }

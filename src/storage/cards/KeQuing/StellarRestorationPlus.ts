@@ -12,7 +12,11 @@ export class StellarRestorationPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.applyElement(new Electro(), ctx.player);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].applyElement(new Electro(), ctx.player);
     // TODO attack extra 2 enemies
 
     ctx.player.addEnergy(2);

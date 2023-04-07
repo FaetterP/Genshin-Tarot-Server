@@ -13,6 +13,10 @@ export class SealOfApproval extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
@@ -20,6 +24,6 @@ export class SealOfApproval extends Card {
       element: new Pyro(),
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

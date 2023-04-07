@@ -9,7 +9,7 @@ export type ElementReactionContext = {
 
 export type CardUseContext = {
   player: Player;
-  enemy: Enemy;
+  enemies?: Enemy[];
   selectedPlayer?: Player;
   isUseAlternative?: boolean;
 };

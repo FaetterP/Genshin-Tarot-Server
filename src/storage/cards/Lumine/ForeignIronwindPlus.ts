@@ -13,12 +13,16 @@ export class ForeignIronwindPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 3,
       element: new Anemo(),
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
 
     ctx.player.addEnergy(2);
   }

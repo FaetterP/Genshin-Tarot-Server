@@ -12,7 +12,11 @@ export class FatalRainscreenPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.applyElement(new Hydro(), ctx.player);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].applyElement(new Hydro(), ctx.player);
     ctx.player.addShield(4);
 
     if (ctx.selectedPlayer) {

@@ -13,7 +13,11 @@ export class LetTheShowBegin extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.applyElement(new Hydro(), ctx.player);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].applyElement(new Hydro(), ctx.player);
 
     let healCount = 1;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {

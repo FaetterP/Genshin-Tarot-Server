@@ -13,16 +13,20 @@ export class GuhuaStylePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = { damage: 3, player: ctx.player };
 
     if (
-      ctx.enemy.Elements.map((element) => element.Name).includes(
+      ctx.enemies[0].Elements.map((element) => element.Name).includes(
         new Hydro().Name
       )
     ) {
       attack.damage = 5;
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

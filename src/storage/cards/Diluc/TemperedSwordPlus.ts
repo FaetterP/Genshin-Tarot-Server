@@ -12,14 +12,18 @@ export class TemperedSwordPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (ctx.enemy.Shield > 0) {
-      ctx.enemy.addShields(-Number.MAX_VALUE);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    if (ctx.enemies[0].Shield > 0) {
+      ctx.enemies[0].addShields(-Number.MAX_VALUE);
     } else {
       const attack: Attack = {
         damage: 4,
         player: ctx.player,
       };
-      ctx.enemy.applyAttack(attack);
+      ctx.enemies[0].applyAttack(attack);
     }
   }
 }

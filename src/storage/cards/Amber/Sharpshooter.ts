@@ -13,6 +13,10 @@ export class Sharpshooter extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 1,
       player: ctx.player,
@@ -24,6 +28,6 @@ export class Sharpshooter extends Card {
       attack.element = new Pyro();
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

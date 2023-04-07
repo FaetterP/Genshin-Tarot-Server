@@ -13,6 +13,10 @@ export class LiutianArchery extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 2,
       isRange: true,
@@ -24,6 +28,6 @@ export class LiutianArchery extends Card {
       attack.damage = 6;
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

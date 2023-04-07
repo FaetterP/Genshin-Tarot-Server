@@ -12,8 +12,11 @@ export class ForeignRockblade extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    const attack: Attack = { damage: 3, player: ctx.player };
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
 
-    ctx.enemy.applyAttack(attack);
+    const attack: Attack = { damage: 3, player: ctx.player };
+    ctx.enemies[0].applyAttack(attack);
   }
 }

@@ -12,6 +12,10 @@ export class StellarRestoration extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.applyElement(new Electro(), ctx.player);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].applyElement(new Electro(), ctx.player);
   }
 }

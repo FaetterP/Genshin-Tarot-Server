@@ -13,6 +13,10 @@ export class StrikeOfFortunePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 3,
       player: ctx.player,
@@ -23,6 +27,6 @@ export class StrikeOfFortunePlus extends Card {
       ctx.player.addEnergy(3);
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

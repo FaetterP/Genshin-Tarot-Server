@@ -13,12 +13,16 @@ export class JumpyDumpty extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+    
     const attack: Attack = {
       damage: 1,
       element: new Pyro(),
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
     // TODO attack two enemies
     // TODO place card to top of deck
   }

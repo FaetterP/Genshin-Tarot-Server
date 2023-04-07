@@ -13,6 +13,10 @@ export class DivineArchery extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
@@ -24,6 +28,6 @@ export class DivineArchery extends Card {
       attack.element = new Anemo();
     }
 
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
   }
 }

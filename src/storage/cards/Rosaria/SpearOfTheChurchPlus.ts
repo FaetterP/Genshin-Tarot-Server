@@ -13,12 +13,16 @@ export class SpearOfTheChurchPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
     const attack: Attack = {
       damage: 3,
       element: new Cryo(),
       player: ctx.player,
     };
-    ctx.enemy.applyAttack(attack);
+    ctx.enemies[0].applyAttack(attack);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.player.addActionPoints(1);

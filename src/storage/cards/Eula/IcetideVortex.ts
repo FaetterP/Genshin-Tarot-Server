@@ -12,7 +12,11 @@ export class IcetideVortex extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.enemy.applyElement(new Cryo(), ctx.player);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    ctx.enemies[0].applyElement(new Cryo(), ctx.player);
     // TODO
   }
 }

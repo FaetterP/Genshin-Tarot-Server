@@ -12,11 +12,15 @@ export class SteelFang extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (ctx.enemy.Shield > 0) {
-      ctx.enemy.addShields(-1);
+    if (!ctx.enemies?.length) {
+      throw new Error("no enemies");
+    }
+
+    if (ctx.enemies[0].Shield > 0) {
+      ctx.enemies[0].addShields(-1);
     } else {
       const attack: Attack = { damage: 2, player: ctx.player };
-      ctx.enemy.applyAttack(attack);
+      ctx.enemies[0].applyAttack(attack);
     }
 
     // TODO

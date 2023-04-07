@@ -55,7 +55,7 @@
   "action": "game.useCard",
   "cardId": "card-{uuid}",
   "selectedPlayer": "player-{uuid}",
-  "enemyId": "enemy-{uuid}",
+  "enemies": ["enemy-{uuid}"],
   "selectedPlayer": "player-{uuid}",
   "isUseAlternative": true
 }
