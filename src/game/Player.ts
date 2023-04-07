@@ -40,6 +40,9 @@ export class Player {
   public get Energy() {
     return this.energy;
   }
+  public get Shields() {
+    return this.shield;
+  }
   public get Wave() {
     return this.wave;
   }
