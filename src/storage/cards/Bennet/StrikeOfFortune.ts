@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class StrikeOfFortune extends AttackCard {
+export class StrikeOfFortune extends Card {
   public get Name(): string {
     return "StrikeOfFortune";
   }
@@ -12,10 +12,10 @@ export class StrikeOfFortune extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 2,
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
@@ -24,7 +24,7 @@ export class StrikeOfFortune extends AttackCard {
         new Pyro().Name
       )
     ) {
-      ctx.attacker.addEnergy(2);
+      ctx.player.addEnergy(2);
     }
   }
 }

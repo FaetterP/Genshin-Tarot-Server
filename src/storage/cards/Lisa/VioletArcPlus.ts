@@ -1,9 +1,9 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class VioletArc extends UseableCard {
+export class VioletArc extends Card {
   public get Name(): string {
     return "VioletArcPlus";
   }

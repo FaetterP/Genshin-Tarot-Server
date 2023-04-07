@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class OriginPlus extends AttackCard {
+export class OriginPlus extends Card {
   public get Name(): string {
     return "OriginPlus";
   }
@@ -12,10 +12,10 @@ export class OriginPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.attacker.addEnergy(2);
+  use(ctx: CardUseContext): void {
+    ctx.player.addEnergy(2);
 
-    const attack: Attack = { damage: 2, player: ctx.attacker };
+    const attack: Attack = { damage: 2, player: ctx.player };
 
     if (
       ctx.enemy.Elements.map((element) => element.Name).includes(

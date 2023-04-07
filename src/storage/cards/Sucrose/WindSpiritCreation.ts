@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class WindSpiritCreation extends AttackCard {
+export class WindSpiritCreation extends Card {
   public get Name(): string {
     return "WindSpiritCreation";
   }
@@ -12,16 +12,16 @@ export class WindSpiritCreation extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
       element: new Anemo(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.addEnergy(1);
+    ctx.player.addEnergy(1);
   }
 }

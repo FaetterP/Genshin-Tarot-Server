@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class DanceOfFirePlus extends AttackCard {
+export class DanceOfFirePlus extends Card {
   public get Name(): string {
     return "DanceOfFirePlus";
   }
@@ -11,10 +11,10 @@ export class DanceOfFirePlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    for (const enemy of ctx.attacker.Enemies) {
-      const attack: Attack = { damage: 1, player: ctx.attacker };
-      if (ctx.attacker.Shields > 0) {
+  use(ctx: CardUseContext): void {
+    for (const enemy of ctx.player.Enemies) {
+      const attack: Attack = { damage: 1, player: ctx.player };
+      if (ctx.player.Shields > 0) {
         attack.damage = 3;
       }
       enemy.applyAttack(attack);

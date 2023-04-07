@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class TrailOfTheQilinPlus extends AttackCard {
+export class TrailOfTheQilinPlus extends Card {
   public get Name(): string {
     return "TrailOfTheQilinPlus";
   }
@@ -12,14 +12,14 @@ export class TrailOfTheQilinPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     ctx.enemy.addStun();
 
-    for (const enemy of ctx.attacker.Enemies) {
+    for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
         damage: 2,
         element: new Cryo(),
-        player: ctx.attacker,
+        player: ctx.player,
       };
       enemy.applyAttack(attack);
     }

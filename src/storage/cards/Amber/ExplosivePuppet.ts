@@ -1,23 +1,23 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class ExplosivePuppet extends AttackCard {
+export class ExplosivePuppet extends Card {
   public get Name(): string {
     return "ExplosivePuppet";
   }
 
 
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     ctx.enemy.addStun();
 
-    for (const enemy of ctx.attacker.Enemies) {
+    for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
         damage: 2,
         element: new Pyro(),
-        player: ctx.attacker,
+        player: ctx.player,
       };
 
       enemy.applyAttack(attack);

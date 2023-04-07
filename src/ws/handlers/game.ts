@@ -1,8 +1,9 @@
 import { getAllClients } from "..";
+import { CardUseContext } from "../../../types/functionsContext";
 import { PlayerPrimitive } from "../../../types/general";
 import { ExtWebSocket } from "../../../types/wsTypes";
-import { AttackCard } from "../../storage/cards/AttackCard";
-import { UseableCard } from "../../storage/cards/UseableCard";
+import { Card } from "../../storage/cards/Card";
+import { SmallCryoSlime } from "../../storage/enemies/normal/SmallCryoSlime";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
@@ -33,37 +34,6 @@ async function endTurn(ws: ExtWebSocket, payload: any) {
   sendToAll(ret);
 }
 
-async function attackCard(ws: ExtWebSocket, payload: any) {
-  const { enemyId, cardId } = payload as { enemyId: string; cardId: string };
-  const enemy = ws.cycleController.getEnemyById(enemyId);
-  if (!enemy) {
-    throw new Error("enemy not found");
-  }
-
-  const card = ws.cycleController.getPlayerCard(cardId, ws.player);
-  if (!card) {
-    throw new Error("card not found");
-  }
-
-  if (card instanceof AttackCard === false) {
-    throw new Error("card not AttackCard");
-  }
-
-  const attackCard = card as AttackCard;
-
-  const ctx = { attacker: ws.player, enemy };
-  attackCard.attack(ctx);
-
-  const ret = {
-    action: "game.attackCard",
-    player: ws.player.getPrimitiveStats(),
-    card: attackCard.ID,
-    enemy: enemy.getPrimitiveStats(),
-  };
-
-  sendToAll(ret);
-}
-
 async function useCard(ws: ExtWebSocket, payload: any) {
   const { cardId } = payload as { cardId: string };
 
@@ -72,13 +42,16 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     throw new Error("card not found");
   }
 
-  if (card instanceof UseableCard === false) {
-    throw new Error("card not UseableCard");
+  if (card instanceof Card === false) {
+    throw new Error("card not Card");
   }
 
-  const useableCard = card as UseableCard;
+  const useableCard = card as Card;
 
-  const ctx = { player: ws.player };
+  const ctx: CardUseContext = {
+    player: ws.player,
+    enemy: new SmallCryoSlime(),
+  };
   useableCard.use(ctx);
 
   const ret = {
@@ -89,4 +62,4 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   sendToAll(ret);
 }
 
-export default { handlers: { startGame, attackCard, useCard, endTurn } };
+export default { handlers: { startGame, useCard, endTurn } };

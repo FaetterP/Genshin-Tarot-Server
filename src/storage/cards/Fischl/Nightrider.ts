@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class Nightrider extends AttackCard {
+export class Nightrider extends Card {
   public get Name(): string {
     return "Nightrider";
   }
@@ -12,12 +12,12 @@ export class Nightrider extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       element: new Electro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 

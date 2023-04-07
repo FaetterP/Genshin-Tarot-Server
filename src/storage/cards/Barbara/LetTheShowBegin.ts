@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class LetTheShowBegin extends AttackCard {
+export class LetTheShowBegin extends Card {
   public get Name(): string {
     return "LetTheShowBegin";
   }
@@ -12,18 +12,18 @@ export class LetTheShowBegin extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Hydro(), ctx.attacker);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Hydro(), ctx.player);
 
     let healCount = 1;
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(2)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       healCount = 3;
     }
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(healCount);
     } else {
-      ctx.attacker.addHealth(healCount);
+      ctx.player.addHealth(healCount);
     }
   }
 }

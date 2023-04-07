@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class SparklingScatter extends AttackCard {
+export class SparklingScatter extends Card {
   public get Name(): string {
     return "SparklingScatter";
   }
@@ -11,15 +11,15 @@ export class SparklingScatter extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.drawCard();
+    ctx.player.drawCard();
   }
 }

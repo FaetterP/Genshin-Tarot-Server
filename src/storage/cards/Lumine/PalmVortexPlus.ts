@@ -4,9 +4,9 @@ import { Cryo } from "../../elements/Cryo";
 import { Electro } from "../../elements/Electro";
 import { Hydro } from "../../elements/Hydro";
 import { Pyro } from "../../elements/Pyro";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class PalmVortexPlus extends UseableCard {
+export class PalmVortexPlus extends Card {
   public get Name(): string {
     return "PalmVortexPlus";
   }

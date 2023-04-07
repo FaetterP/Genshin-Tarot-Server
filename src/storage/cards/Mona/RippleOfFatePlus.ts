@@ -1,15 +1,10 @@
-import {
-  CardAttackContext,
-  CardUseContext,
-} from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
-import { Hydro } from "../../elements/Hydro";
-import { UseableCard } from "../UseableCard";
+import { CardUseContext } from "../../../../types/functionsContext";
+import { Card } from "../Card";
 import { MirrorReflections } from "./MirrorReflections";
 import { MirrorReflectionsPlus } from "./MirrorReflectionsPlus";
 import { RippleOfFate } from "./RippleOfFate";
 
-export class RippleOfFatePlus extends UseableCard {
+export class RippleOfFatePlus extends Card {
   public get Name(): string {
     return "RippleOfFatePlus";
   }

@@ -7,16 +7,11 @@ export type ElementReactionContext = {
   enemy: Enemy;
 };
 
-export type CardAttackContext = {
-  attacker: Player;
+export type CardUseContext = {
+  player: Player;
   enemy: Enemy;
   selectedPlayer?: Player;
   isUseAlternative?: boolean;
-};
-
-export type CardUseContext = {
-  player: Player;
-  selectedPlayer?: Player;
 };
 
 export type CharacterUseBurstContext = {

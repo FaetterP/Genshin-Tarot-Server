@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class BoltsOfDownfallPlus extends AttackCard {
+export class BoltsOfDownfallPlus extends Card {
   public get Name(): string {
     return "BoltsOfDownfallPlus";
   }
@@ -12,12 +12,12 @@ export class BoltsOfDownfallPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 

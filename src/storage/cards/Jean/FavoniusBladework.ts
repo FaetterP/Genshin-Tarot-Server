@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class FavoniusBladework extends AttackCard {
+export class FavoniusBladework extends Card {
   public get Name(): string {
     return "FavoniusBladework";
   }
@@ -12,18 +12,18 @@ export class FavoniusBladework extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     if (
       ctx.enemy.Elements.map((element) => element.Name).includes(
         new Anemo().Name
       )
     ) {
-      ctx.attacker.addEnergy(2);
+      ctx.player.addEnergy(2);
     }
 
     const attack: Attack = {
       damage: 2,
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
   }

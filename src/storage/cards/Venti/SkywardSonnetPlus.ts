@@ -1,8 +1,8 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Anemo } from "../../elements/Anemo";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class SkywardSonnetPlus extends UseableCard {
+export class SkywardSonnetPlus extends Card {
   public get Name(): string {
     return "SkywardSonnetPlus";
   }

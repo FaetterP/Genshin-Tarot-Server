@@ -1,8 +1,8 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Cryo } from "../../elements/Cryo";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class Frostgnaw extends UseableCard {
+export class Frostgnaw extends Card {
   public get Name(): string {
     return "Frostgnaw";
   }

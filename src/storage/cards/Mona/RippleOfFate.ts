@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class RippleOfFate extends AttackCard {
+export class RippleOfFate extends Card {
   public get Name(): string {
     return "RippleOfFate";
   }
@@ -12,16 +12,16 @@ export class RippleOfFate extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
       element: new Hydro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.drawCard();
+    ctx.player.drawCard();
   }
 }

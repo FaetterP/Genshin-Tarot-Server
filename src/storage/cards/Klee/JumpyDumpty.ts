@@ -1,12 +1,9 @@
-import {
-  CardAttackContext,
-  CardUseContext,
-} from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class JumpyDumpty extends AttackCard {
+export class JumpyDumpty extends Card {
   public get Name(): string {
     return "JumpyDumpty";
   }
@@ -15,11 +12,11 @@ export class JumpyDumpty extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       element: new Pyro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
     // TODO attack two enemies

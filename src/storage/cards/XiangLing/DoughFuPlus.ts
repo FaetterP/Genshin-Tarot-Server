@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class DoughFuPlus extends AttackCard {
+export class DoughFuPlus extends Card {
   public get Name(): string {
     return "DoughFuPlus";
   }
@@ -12,17 +12,17 @@ export class DoughFuPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
       element: new Pyro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
-      ctx.attacker.addActionPoints(1);
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+      ctx.player.addActionPoints(1);
     }
   }
 }

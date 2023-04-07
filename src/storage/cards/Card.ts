@@ -1,4 +1,5 @@
 import { v4 } from "uuid";
+import { CardUseContext } from "../../../types/functionsContext";
 
 export abstract class Card {
   public abstract get Name(): string;
@@ -9,4 +10,6 @@ export abstract class Card {
     this.Cost = cost;
     this.ID = `card-${v4()}`;
   }
+
+  abstract use(ctx: CardUseContext): void;
 }

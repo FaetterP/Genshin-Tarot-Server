@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class GuhuaStylePlus extends AttackCard {
+export class GuhuaStylePlus extends Card {
   public get Name(): string {
     return "GuhuaStylePlus";
   }
@@ -12,8 +12,8 @@ export class GuhuaStylePlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    const attack: Attack = { damage: 3, player: ctx.attacker };
+  use(ctx: CardUseContext): void {
+    const attack: Attack = { damage: 3, player: ctx.player };
 
     if (
       ctx.enemy.Elements.map((element) => element.Name).includes(

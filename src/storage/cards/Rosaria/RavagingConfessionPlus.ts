@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class RavagingConfessionPlus extends AttackCard {
+export class RavagingConfessionPlus extends Card {
   public get Name(): string {
     return "RavagingConfessionPlus";
   }
@@ -12,12 +12,12 @@ export class RavagingConfessionPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 3,
       isRange: true,
       element: new Cryo(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 

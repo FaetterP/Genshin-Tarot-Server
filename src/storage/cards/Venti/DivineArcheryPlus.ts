@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class DivineArcheryPlus extends AttackCard {
+export class DivineArcheryPlus extends Card {
   public get Name(): string {
     return "DivineArcheryPlus";
   }
@@ -12,15 +12,15 @@ export class DivineArcheryPlus extends AttackCard {
     super(0);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       attack.damage = 3;
     }
 

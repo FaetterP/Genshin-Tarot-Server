@@ -48,25 +48,16 @@
 }
 ```
 
-- Игрок использует атакующую карту на враге
-
-```json
-{
-  "action": "game.attackCard",
-  "enemyId": "enemy-{uuid}",
-  "cardId": "card-{uuid}",
-  "selectedPlayer": "player-{uuid}",
-  "isUseAlternative": true
-}
-```
-
-- Игрок использует скилл
+- Игрок использует карту
 
 ```json
 {
   "action": "game.useCard",
   "cardId": "card-{uuid}",
-  "selectedPlayer": "player-{uuid}"
+  "selectedPlayer": "player-{uuid}",
+  "enemyId": "enemy-{uuid}",
+  "selectedPlayer": "player-{uuid}",
+  "isUseAlternative": true
 }
 ```
 

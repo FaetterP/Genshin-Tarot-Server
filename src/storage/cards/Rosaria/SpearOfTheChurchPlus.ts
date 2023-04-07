@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class SpearOfTheChurchPlus extends AttackCard {
+export class SpearOfTheChurchPlus extends Card {
   public get Name(): string {
     return "SpearOfTheChurchPlus";
   }
@@ -12,16 +12,16 @@ export class SpearOfTheChurchPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 3,
       element: new Cryo(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
-      ctx.attacker.addActionPoints(1);
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+      ctx.player.addActionPoints(1);
     }
   }
 }

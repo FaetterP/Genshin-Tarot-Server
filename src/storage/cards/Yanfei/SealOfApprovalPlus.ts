@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class SealOfApprovalPlus extends AttackCard {
+export class SealOfApprovalPlus extends Card {
   public get Name(): string {
     return "SealOfApprovalPlus";
   }
@@ -12,13 +12,13 @@ export class SealOfApprovalPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
       isRange: true,
       element: new Pyro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 

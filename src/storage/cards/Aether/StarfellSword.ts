@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
-import { AttackCard } from "../AttackCard";
+import { CardUseContext } from "../../../../types/functionsContext";
+import { Card } from "../Card";
 import { Attack } from "../../../../types/general";
 
-export class StarfellSword extends AttackCard {
+export class StarfellSword extends Card {
   public get Name(): string {
     return "StarfellSword";
   }
@@ -11,12 +11,12 @@ export class StarfellSword extends AttackCard {
     super(2);
   }
 
-  attack(ctx: CardAttackContext): void {
-    for (const enemy of ctx.attacker.Enemies) {
+  use(ctx: CardUseContext): void {
+    for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
         damage: 2,
         isPiercing: true,
-        player: ctx.attacker,
+        player: ctx.player,
       };
 
       enemy.applyAttack(attack);

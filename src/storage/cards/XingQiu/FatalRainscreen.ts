@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class FatalRainscreen extends AttackCard {
+export class FatalRainscreen extends Card {
   public get Name(): string {
     return "FatalRainscreen";
   }
@@ -11,9 +11,9 @@ export class FatalRainscreen extends AttackCard {
     super(2);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Hydro(), ctx.attacker);
-    ctx.attacker.addShield(4);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Hydro(), ctx.player);
+    ctx.player.addShield(4);
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(2);

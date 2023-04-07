@@ -1,7 +1,7 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
-import { AttackCard } from "../AttackCard";
+import { CardUseContext } from "../../../../types/functionsContext";
+import { Card } from "../Card";
 
-export class WeissBladeworkPlus extends AttackCard {
+export class WeissBladeworkPlus extends Card {
   public get Name(): string {
     return "WeissBladeworkPlus";
   }
@@ -10,7 +10,7 @@ export class WeissBladeworkPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     // TODO
   }
 }

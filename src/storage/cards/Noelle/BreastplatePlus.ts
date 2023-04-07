@@ -1,8 +1,8 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Geo } from "../../elements/Geo";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class BreastplatePlus extends UseableCard {
+export class BreastplatePlus extends Card {
   public get Name(): string {
     return "BreastplatePlus";
   }

@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class PassionOverloadPlus extends AttackCard {
+export class PassionOverloadPlus extends Card {
   public get Name(): string {
     return "PassionOverloadPlus";
   }
@@ -12,11 +12,11 @@ export class PassionOverloadPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 4,
       element: new Pyro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     // TODO
   }

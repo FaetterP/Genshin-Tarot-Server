@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class FireworkFlareUp extends AttackCard {
+export class FireworkFlareUp extends Card {
   public get Name(): string {
     return "FireworkFlareUp";
   }
@@ -12,8 +12,8 @@ export class FireworkFlareUp extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    const attack: Attack = { damage: 2, isRange: true, player: ctx.attacker };
+  use(ctx: CardUseContext): void {
+    const attack: Attack = { damage: 2, isRange: true, player: ctx.player };
     ctx.enemy.applyAttack(attack);
 
     if (
@@ -21,7 +21,7 @@ export class FireworkFlareUp extends AttackCard {
         new Pyro().Name
       )
     ) {
-      ctx.attacker.addActionPoints(1);
+      ctx.player.addActionPoints(1);
     }
   }
 }

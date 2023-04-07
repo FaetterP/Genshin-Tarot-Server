@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class SpearOfWangsheng extends AttackCard {
+export class SpearOfWangsheng extends Card {
   public get Name(): string {
     return "SpearOfWangsheng";
   }
@@ -11,16 +11,16 @@ export class SpearOfWangsheng extends AttackCard {
     super(0);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.attacker.applyDamage(1);
+  use(ctx: CardUseContext): void {
+    ctx.player.applyDamage(1);
 
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
 
-    if (ctx.attacker.Health <= 7) {
+    if (ctx.player.Health <= 7) {
       attack.damage = 4;
     }
 

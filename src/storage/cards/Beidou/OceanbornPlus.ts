@@ -1,11 +1,8 @@
-import {
-  CardAttackContext,
-  CardUseContext,
-} from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class OceanbornPlus extends UseableCard {
+export class OceanbornPlus extends Card {
   public get Name(): string {
     return "OceanbornPlus";
   }

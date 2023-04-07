@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class TemperedSword extends AttackCard {
+export class TemperedSword extends Card {
   public get Name(): string {
     return "TemperedSword";
   }
@@ -11,24 +11,24 @@ export class TemperedSword extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     if (ctx.enemy.Shield > 0) {
       ctx.enemy.addShields(-1);
     } else {
       const attack: Attack = {
         damage: 2,
-        player: ctx.attacker,
+        player: ctx.player,
       };
       ctx.enemy.applyAttack(attack);
     }
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendActonPoints(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (ctx.enemy.Shield > 0) {
         ctx.enemy.addShields(-1);
       } else {
         const attack: Attack = {
           damage: 2,
-          player: ctx.attacker,
+          player: ctx.player,
         };
         ctx.enemy.applyAttack(attack);
       }

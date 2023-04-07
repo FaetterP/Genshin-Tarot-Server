@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Electro } from "../../elements/Electro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class StellarRestorationPlus extends AttackCard {
+export class StellarRestorationPlus extends Card {
   public get Name(): string {
     return "StellarRestorationPlus";
   }
@@ -11,10 +11,10 @@ export class StellarRestorationPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Electro(), ctx.attacker);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Electro(), ctx.player);
     // TODO attack extra 2 enemies
 
-    ctx.attacker.addEnergy(2);
+    ctx.player.addEnergy(2);
   }
 }

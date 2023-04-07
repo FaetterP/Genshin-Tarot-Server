@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class LiutianArchery extends AttackCard {
+export class LiutianArchery extends Card {
   public get Name(): string {
     return "LiutianArchery";
   }
@@ -12,15 +12,15 @@ export class LiutianArchery extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       attack.element = new Cryo();
     }
 

@@ -1,7 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class MaidsBladeworkPlus extends UseableCard {
+export class MaidsBladeworkPlus extends Card {
   public get Name(): string {
     return "MaidsBladeworkPlus";
   }

@@ -1,7 +1,7 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
-import { AttackCard } from "../AttackCard";
+import { CardUseContext } from "../../../../types/functionsContext";
+import { Card } from "../Card";
 
-export class LayeredFrost extends AttackCard {
+export class LayeredFrost extends Card {
   public get Name(): string {
     return "LayeredFrost";
   }
@@ -10,8 +10,8 @@ export class LayeredFrost extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.attacker.drawCard();
+  use(ctx: CardUseContext): void {
+    ctx.player.drawCard();
     // TODO
   }
 }

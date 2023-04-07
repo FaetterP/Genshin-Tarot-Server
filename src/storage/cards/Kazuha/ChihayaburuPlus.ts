@@ -1,11 +1,8 @@
-import {
-  CardAttackContext,
-  CardUseContext,
-} from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Anemo } from "../../elements/Anemo";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class ChihayaburuPlus extends UseableCard {
+export class ChihayaburuPlus extends Card {
   public get Name(): string {
     return "ChihayaburuPlus";
   }

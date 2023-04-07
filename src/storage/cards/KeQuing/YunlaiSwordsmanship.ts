@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class YunlaiSwordsmanship extends AttackCard {
+export class YunlaiSwordsmanship extends Card {
   public get Name(): string {
     return "YunlaiSwordsmanship";
   }
@@ -11,8 +11,8 @@ export class YunlaiSwordsmanship extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    const attack: Attack = { damage: 3, player: ctx.attacker };
+  use(ctx: CardUseContext): void {
+    const attack: Attack = { damage: 3, player: ctx.player };
     ctx.enemy.applyAttack(attack);
   }
 }

@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class HeraldOfFrost extends AttackCard {
+export class HeraldOfFrost extends Card {
   public get Name(): string {
     return "HeraldOfFrost";
   }
@@ -11,8 +11,8 @@ export class HeraldOfFrost extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Cryo(), ctx.attacker);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Cryo(), ctx.player);
     // TODO следующий, кто ударит этого же врага, отрегенит 2 хп
   }
 }

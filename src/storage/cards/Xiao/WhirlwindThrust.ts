@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class WhirlwindThrust extends AttackCard {
+export class WhirlwindThrust extends Card {
   public get Name(): string {
     return "WhirlwindThrust";
   }
@@ -11,19 +11,19 @@ export class WhirlwindThrust extends AttackCard {
     super(0);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       const attack: Attack = {
         damage: 1,
         isPiercing: true,
-        player: ctx.attacker,
+        player: ctx.player,
       };
       // TODO
     }

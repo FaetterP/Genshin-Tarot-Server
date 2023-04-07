@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class SteelFangPlus extends AttackCard {
+export class SteelFangPlus extends Card {
   public get Name(): string {
     return "SteelFangPlus";
   }
@@ -11,10 +11,10 @@ export class SteelFangPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     ctx.enemy.addShields(-1);
 
-    const attack: Attack = { damage: 2, player: ctx.attacker };
+    const attack: Attack = { damage: 2, player: ctx.player };
     ctx.enemy.applyAttack(attack);
 
     // TODO

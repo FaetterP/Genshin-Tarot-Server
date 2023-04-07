@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class MirrorReflectionsPlus extends AttackCard {
+export class MirrorReflectionsPlus extends Card {
   public get Name(): string {
     return "MirrorReflectionsPlus";
   }
@@ -12,14 +12,14 @@ export class MirrorReflectionsPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     ctx.enemy.addStun();
 
-    for (const enemy of ctx.attacker.Enemies) {
+    for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
         damage: 2,
         element: new Hydro(),
-        player: ctx.attacker,
+        player: ctx.player,
       };
       enemy.applyAttack(attack);
     }

@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class CuttingTorrent extends AttackCard {
+export class CuttingTorrent extends Card {
   public get Name(): string {
     return "CuttingTorrent";
   }
@@ -12,12 +12,12 @@ export class CuttingTorrent extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isRange: true,
       isPiercing: true,
-      player: ctx.attacker,
+      player: ctx.player,
     };
 
     if (ctx.isUseAlternative) {

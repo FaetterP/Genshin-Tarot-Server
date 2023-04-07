@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Anemo } from "../../elements/Anemo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class AnemoHypostatis extends AttackCard {
+export class AnemoHypostatis extends Card {
   public get Name(): string {
     return "AnemoHypostatis";
   }
@@ -11,8 +11,8 @@ export class AnemoHypostatis extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Anemo(), ctx.attacker);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Anemo(), ctx.player);
     // TODO
   }
 }

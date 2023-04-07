@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class AncientSwordArt extends AttackCard {
+export class AncientSwordArt extends Card {
   public get Name(): string {
     return "AncientSwordArt";
   }
@@ -12,8 +12,8 @@ export class AncientSwordArt extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    const attack: Attack = { damage: 2, player: ctx.attacker };
+  use(ctx: CardUseContext): void {
+    const attack: Attack = { damage: 2, player: ctx.player };
     ctx.enemy.applyAttack(attack);
 
     if (
@@ -21,7 +21,7 @@ export class AncientSwordArt extends AttackCard {
         new Cryo().Name
       )
     ) {
-      ctx.attacker.addEnergy(2);
+      ctx.player.addEnergy(2);
     }
   }
 }

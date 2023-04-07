@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Geo } from "../../elements/Geo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class ForeignRockbladePlus extends AttackCard {
+export class ForeignRockbladePlus extends Card {
   public get Name(): string {
     return "ForeignRockbladePlus";
   }
@@ -12,14 +12,14 @@ export class ForeignRockbladePlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 3,
-      player: ctx.attacker,
+      player: ctx.player,
       element: new Geo(),
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.addEnergy(2);
+    ctx.player.addEnergy(2);
   }
 }

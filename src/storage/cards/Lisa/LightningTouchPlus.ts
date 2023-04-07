@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class LightningTouchPlus extends AttackCard {
+export class LightningTouchPlus extends Card {
   public get Name(): string {
     return "LightningTouchPlus";
   }
@@ -12,16 +12,16 @@ export class LightningTouchPlus extends AttackCard {
     super(0);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
       element: new Electro(),
-      player: ctx.attacker,
+      player: ctx.player,
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.drawCard();
+    ctx.player.drawCard();
   }
 }

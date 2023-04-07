@@ -1,13 +1,8 @@
-import {
-  CardAttackContext,
-  CardUseContext,
-} from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
-import { AttackCard } from "../AttackCard";
-import { UseableCard } from "../UseableCard";
+import { Card } from "../Card";
 
-export class LetTheShowBeginPlus extends UseableCard {
+export class LetTheShowBeginPlus extends Card {
   public get Name(): string {
     return "LetTheShowBeginPlus";
   }

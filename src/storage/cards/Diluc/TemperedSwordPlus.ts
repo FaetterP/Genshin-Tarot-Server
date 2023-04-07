@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class TemperedSwordPlus extends AttackCard {
+export class TemperedSwordPlus extends Card {
   public get Name(): string {
     return "TemperedSwordPlus";
   }
@@ -11,13 +11,13 @@ export class TemperedSwordPlus extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     if (ctx.enemy.Shield > 0) {
       ctx.enemy.addShields(-Number.MAX_VALUE);
     } else {
       const attack: Attack = {
         damage: 4,
-        player: ctx.attacker,
+        player: ctx.player,
       };
       ctx.enemy.applyAttack(attack);
     }

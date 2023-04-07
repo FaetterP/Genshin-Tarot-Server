@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Cryo } from "../../elements/Cryo";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class IcetideVortex extends AttackCard {
+export class IcetideVortex extends Card {
   public get Name(): string {
     return "IcetideVortex";
   }
@@ -11,8 +11,8 @@ export class IcetideVortex extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    ctx.enemy.applyElement(new Cryo(), ctx.attacker);
+  use(ctx: CardUseContext): void {
+    ctx.enemy.applyElement(new Cryo(), ctx.player);
     // TODO
   }
 }

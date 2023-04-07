@@ -1,8 +1,8 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class Origin extends AttackCard {
+export class Origin extends Card {
   public get Name(): string {
     return "Origin";
   }
@@ -11,12 +11,12 @@ export class Origin extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
-    const attack: Attack = { damage: 2, player: ctx.attacker };
+  use(ctx: CardUseContext): void {
+    const attack: Attack = { damage: 2, player: ctx.player };
     ctx.enemy.applyAttack(attack);
 
-    if (ctx.isUseAlternative && ctx.attacker.trySpendEnergy(2)) {
-      ctx.attacker.addActionPoints(1);
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+      ctx.player.addActionPoints(1);
     }
   }
 }

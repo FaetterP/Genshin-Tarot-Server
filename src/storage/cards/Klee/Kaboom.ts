@@ -1,9 +1,9 @@
-import { CardAttackContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
-import { AttackCard } from "../AttackCard";
+import { Card } from "../Card";
 
-export class Kaboom extends AttackCard {
+export class Kaboom extends Card {
   public get Name(): string {
     return "Kaboom";
   }
@@ -12,16 +12,16 @@ export class Kaboom extends AttackCard {
     super(1);
   }
 
-  attack(ctx: CardAttackContext): void {
+  use(ctx: CardUseContext): void {
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.attacker,
+      player: ctx.player,
       element: new Pyro(),
     };
     ctx.enemy.applyAttack(attack);
 
-    ctx.attacker.addEnergy(1);
+    ctx.player.addEnergy(1);
   }
 }
