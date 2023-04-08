@@ -248,6 +248,14 @@ export class Player {
     }
   }
 
+  public useAttackEffects(enemy: Enemy) {
+    for (const effect of this.effects) {
+      if (effect.onAttack(this, enemy)) {
+        this.effects = this.effects.filter((eff) => eff !== effect);
+      }
+    }
+  }
+
   public endTurn() {
     this.isTurnEnds = true;
   }

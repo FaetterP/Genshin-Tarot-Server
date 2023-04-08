@@ -5,7 +5,7 @@ export abstract class PlayerEffect {
   public abstract get Name(): string;
 
   public onStartCycle(player: Player): boolean {
-    return false;
+    return true;
   }
   public onAttack(player: Player, enemy: Enemy): boolean {
     return false;

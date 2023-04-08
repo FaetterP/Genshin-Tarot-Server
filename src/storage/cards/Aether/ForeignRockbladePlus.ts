@@ -19,8 +19,8 @@ export class ForeignRockbladePlus extends Card {
 
     const attack: Attack = {
       damage: 3,
-      player: ctx.player,
       element: new Geo(),
+      player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
 

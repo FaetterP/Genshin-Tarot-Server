@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
@@ -17,6 +16,10 @@ export class LetTheShowBegin extends Card {
       throw new Error("no enemies");
     }
 
+    if (!ctx.selectedPlayer) {
+      throw new Error("no selected player");
+    }
+
     ctx.enemies[0].applyElement(new Hydro(), ctx.player);
 
     let healCount = 1;
@@ -24,10 +27,6 @@ export class LetTheShowBegin extends Card {
       healCount = 3;
     }
 
-    if (ctx.selectedPlayer) {
-      ctx.selectedPlayer.addHealth(healCount);
-    } else {
-      ctx.player.addHealth(healCount);
-    }
+    ctx.selectedPlayer.addHealth(healCount);
   }
 }

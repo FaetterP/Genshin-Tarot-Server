@@ -19,9 +19,9 @@ export class Sharpshooter extends Card {
 
     const attack: Attack = {
       damage: 1,
-      player: ctx.player,
       isRange: true,
       isPiercing: true,
+      player: ctx.player,
     };
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {

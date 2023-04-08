@@ -1,6 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
-import { Pyro } from "../../elements/Pyro";
+import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
 import { Card } from "../Card";
 
 export class ExplosivePuppetPlus extends Card {
@@ -19,14 +18,6 @@ export class ExplosivePuppetPlus extends Card {
 
     ctx.enemies[0].addStun();
 
-    for (const enemy of ctx.player.Enemies) {
-      const attack: Attack = {
-        damage: 2,
-        element: new Pyro(),
-        player: ctx.player,
-      };
-
-      enemy.applyAttack(attack);
-    }
+    ctx.player.addEffect(new ExplosivePuppetEffect());
   }
 }

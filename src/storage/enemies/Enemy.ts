@@ -76,6 +76,8 @@ export abstract class Enemy {
       this.applyElement(attack.element, attack.player);
     }
 
+    attack.player.useAttackEffects(this);
+
     if (this.hp <= 0) {
       this.e_onDeath.Invoke({ enemy: this });
     }

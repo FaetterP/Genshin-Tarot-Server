@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
 export class WhisperOfWater extends Card {
@@ -20,6 +21,7 @@ export class WhisperOfWater extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
+      element: new Hydro(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
