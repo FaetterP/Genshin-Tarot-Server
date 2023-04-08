@@ -1,4 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
+import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class SolarIsotoma extends Card {
@@ -11,6 +13,12 @@ export class SolarIsotoma extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    // TODO
+    for (const enemy of ctx.player.Enemies) {
+      enemy.applyElement(new Geo(), ctx.player);
+    }
+
+    // TODO discard card
+
+    ctx.player.addEffect(new SolarIsotomaEffect());
   }
 }

@@ -128,7 +128,8 @@
           "elements": ["Cryo"],
           "isStunned": false
         }
-      ]
+      ],
+      "effects": ["SolarIsotoma"]
     }
   ]
 }

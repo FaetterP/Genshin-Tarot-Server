@@ -14,6 +14,7 @@ export type PlayerPrimitive = {
   hp: number;
   wave: number;
   enemies: EnemyPrimitive[];
+  effects: string[];
 };
 
 export type Attack = {

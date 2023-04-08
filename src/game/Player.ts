@@ -12,6 +12,7 @@ import { clamp } from "../utils/math";
 import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
 import { Dash } from "../storage/cards/misc/Dash";
+import { PlayerEffect } from "../storage/effects/PlayerEffect";
 
 export class Player {
   public readonly ID: string;
@@ -31,6 +32,7 @@ export class Player {
   private collectingDeck: Card[] = [];
 
   private characters: Character[] = [];
+  private effects: PlayerEffect[] = [];
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
 
@@ -72,9 +74,13 @@ export class Player {
 
   public getPrimitiveStats(): PlayerPrimitive {
     const enemies: EnemyPrimitive[] = [];
-
     for (const enemy of this.enemies) {
       enemies.push(enemy.getPrimitiveStats());
+    }
+
+    const effects: string[] = [];
+    for (const effect of this.effects) {
+      effects.push(effect.Name);
     }
 
     return {
@@ -82,6 +88,7 @@ export class Player {
       hp: this.hp,
       wave: this.wave,
       enemies,
+      effects,
     };
   }
 
@@ -128,6 +135,10 @@ export class Player {
     if (this.hp <= 0) {
       // TODO
     }
+  }
+
+  public addEffect(effect: PlayerEffect) {
+    this.effects.push(effect);
   }
 
   public addEnergy(count: number) {
@@ -224,6 +235,12 @@ export class Player {
 
     for (let i = 0; i < 5; i++) {
       this.drawCard();
+    }
+
+    for (const effect of this.effects) {
+      if (effect.onStartCycle(this)) {
+        this.effects = this.effects.filter((eff) => eff !== effect);
+      }
     }
 
     for (const enemy of this.enemies) {
