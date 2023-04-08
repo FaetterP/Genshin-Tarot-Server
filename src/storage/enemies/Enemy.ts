@@ -79,9 +79,12 @@ export abstract class Enemy {
     attack.player.useAttackEffects(this);
 
     if (this.hp <= 0) {
+      this.death();
       this.e_onDeath.Invoke({ enemy: this });
     }
   }
+
+  death() {}
 
   applyElement(element: Element, player: Player) {
     if (element instanceof Cryo || element instanceof Hydro) {

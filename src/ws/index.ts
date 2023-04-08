@@ -16,6 +16,13 @@ export function getAllClients() {
   return wss.clients;
 }
 
+export function getAllPlayers() {
+  const players: Player[] = [];
+  wss.clients.forEach((ws) => players.push((ws as ExtWebSocket).player));
+
+  return players;
+}
+
 async function onMessage(
   this: WebSocket,
   data: WebSocket.RawData,
