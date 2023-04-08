@@ -1,3 +1,4 @@
+import { Player } from "../src/game/Player";
 import { Element } from "../src/storage/elements/Element";
 
 export type EnemyPrimitive = {

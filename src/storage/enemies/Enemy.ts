@@ -64,6 +64,10 @@ export abstract class Enemy {
   }
 
   applyAttack(attack: Attack) {
+    if (!attack.isRange && !attack.player.Enemies.includes(this)) {
+      throw new Error("attack not range");
+    }
+
     if (this.shield <= 0 || attack.isPiercing) {
       this.hp -= attack.damage;
     }
@@ -78,8 +82,7 @@ export abstract class Enemy {
   }
 
   applyElement(element: Element, player: Player) {
-
-    if(element instanceof Cryo||element instanceof Hydro){
+    if (element instanceof Cryo || element instanceof Hydro) {
       // TODO player drop all Burn cards
     }
 
