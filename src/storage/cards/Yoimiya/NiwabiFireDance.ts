@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { NiwabiFireDanceEffect } from "../../effects/NiwabiFireDanceEffect";
 import { Card } from "../Card";
 
 export class NiwabiFireDance extends Card {
@@ -11,6 +12,6 @@ export class NiwabiFireDance extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    // TODO
+    ctx.player.addEffect(new NiwabiFireDanceEffect());
   }
 }

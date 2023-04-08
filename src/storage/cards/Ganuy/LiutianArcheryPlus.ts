@@ -25,7 +25,7 @@ export class LiutianArchery extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       attack.element = new Cryo();
-      attack.damage = 6;
+      attack.damage *= 3;
     }
 
     ctx.enemies[0].applyAttack(attack);

@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { GuobaFireEffect } from "../../effects/GuobaFireEffect";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
@@ -22,6 +23,6 @@ export class GuobaFirePlus extends Card {
       enemy.applyAttack(attack);
     }
 
-    // TODO
+    ctx.player.addEffect(new GuobaFireEffect());
   }
 }

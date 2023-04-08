@@ -16,8 +16,7 @@ export abstract class Character {
   }
 
   public tryUseBurst(ctx: CharacterUseBurstContext) {
-    if (ctx.player.ActionPoints.total >= this.burstCost) {
-      ctx.player.addActionPoints(-this.burstCost);
+    if (ctx.player.trySpendEnergy(this.burstCost)) {
       this.useBurst(ctx);
       return true;
     }

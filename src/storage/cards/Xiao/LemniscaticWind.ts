@@ -24,5 +24,9 @@ export class LemniscaticWind extends Card {
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+
+    if (ctx.isUseAlternative) {
+      // TODO return card to hand
+    }
   }
 }

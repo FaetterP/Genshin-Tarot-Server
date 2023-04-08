@@ -8,14 +8,14 @@ export class SpearOfTheChurch extends Card {
   }
 
   constructor() {
-    super(1);
+    super(0);
   }
 
   use(ctx: CardUseContext): void {
     if (!ctx.enemies?.length) {
       throw new Error("no enemies");
     }
-    
+
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
@@ -24,13 +24,21 @@ export class SpearOfTheChurch extends Card {
     ctx.enemies[0].applyAttack(attack);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+      if (ctx.enemies.length <= 2) {
+        throw new Error("need 2 enemies");
+      }
+
+      if (ctx.enemies[0] === ctx.enemies[1]) {
+        throw new Error("need 2 different enemies");
+      }
+
       const attack: Attack = {
         damage: 1,
         isPiercing: true,
         isRange: true,
         player: ctx.player,
       };
-      // TODO attack any enemy
+      ctx.enemies[1].applyAttack(attack);
     }
   }
 }

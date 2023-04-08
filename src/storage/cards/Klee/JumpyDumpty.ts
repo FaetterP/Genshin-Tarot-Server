@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { removeDuplicates } from "../../../utils/arrays";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
@@ -16,14 +17,23 @@ export class JumpyDumpty extends Card {
     if (!ctx.enemies?.length) {
       throw new Error("no enemies");
     }
-    
-    const attack: Attack = {
-      damage: 1,
-      element: new Pyro(),
-      player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
-    // TODO attack two enemies
-    // TODO place card to top of deck
+
+    const enemies = removeDuplicates(ctx.enemies);
+    if (enemies.length <= 2) {
+      throw new Error("need 2 different enemies");
+    }
+
+    for (let i = 0; i < 2; i++) {
+      const attack: Attack = {
+        damage: 1,
+        element: new Pyro(),
+        player: ctx.player,
+      };
+      enemies[i].applyAttack(attack);
+    }
+
+    if (ctx.isUseAlternative) {
+      // TODO place card to top of deck
+    }
   }
 }

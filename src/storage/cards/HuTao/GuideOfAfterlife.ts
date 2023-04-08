@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
 import { Card } from "../Card";
 
 export class GuideOfAfterlife extends Card {
@@ -11,12 +12,15 @@ export class GuideOfAfterlife extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.applyDamage(1)
-    // TODO or
-    ctx.player.addEnergy(1)
-    ctx.player.drawCard()
-    ctx.player.drawCard()
+    ctx.player.applyDamage(1);
 
-    // TODO
+    if (ctx.isUseAlternative) {
+      ctx.player.drawCard();
+      ctx.player.drawCard();
+    } else {
+      ctx.player.addEnergy(1);
+    }
+
+    ctx.player.addEffect(new GuideOfAfterlifeEffect());
   }
 }

@@ -17,7 +17,7 @@ export class TemperedSwordPlus extends Card {
     }
 
     if (ctx.enemies[0].Shield > 0) {
-      ctx.enemies[0].addShields(-Number.MAX_VALUE);
+      ctx.enemies[0].addShields(-Infinity);
     } else {
       const attack: Attack = {
         damage: 4,

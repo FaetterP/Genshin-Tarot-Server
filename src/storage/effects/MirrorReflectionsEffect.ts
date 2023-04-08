@@ -1,21 +1,20 @@
 import { Attack } from "../../../types/general";
 import { Player } from "../../game/Player";
-import { Pyro } from "../elements/Pyro";
+import { Hydro } from "../elements/Hydro";
 import { PlayerEffect } from "./PlayerEffect";
 
-export class ExplosivePuppetEffect extends PlayerEffect {
+export class MirrorReflectionsEffect extends PlayerEffect {
   public get Name(): string {
-    return "ExplosivePuppet";
+    return "MirrorReflections";
   }
 
   public override onStartCycle(player: Player): boolean {
     for (const enemy of player.Enemies) {
       const attack: Attack = {
         damage: 2,
-        element: new Pyro(),
-        player: player,
+        element: new Hydro(),
+        player,
       };
-
       enemy.applyAttack(attack);
     }
 

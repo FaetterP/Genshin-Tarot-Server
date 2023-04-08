@@ -26,7 +26,7 @@ export class MaidsBladework extends Card {
       ctx.enemies[0].applyAttack(attack);
     }
 
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (ctx.enemies[0].Shield > 0) {
         ctx.enemies[0].addShields(-1);
       } else {

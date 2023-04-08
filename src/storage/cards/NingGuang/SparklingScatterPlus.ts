@@ -1,5 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { removeDuplicates } from "../../../utils/arrays";
+import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class SparklingScatterPlus extends Card {
@@ -16,14 +18,20 @@ export class SparklingScatterPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 2,
-      isPiercing: true,
-      isRange: true,
-      player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
+    const enemies = removeDuplicates(ctx.enemies);
+    if (enemies.length <= 2) {
+      throw new Error("need 2 enemies");
+    }
 
-    // TODO attack two enemies
+    for (let i = 0; i < 2; i++) {
+      const attack: Attack = {
+        damage: 2,
+        isPiercing: true,
+        isRange: true,
+        element: new Geo(),
+        player: ctx.player,
+      };
+      enemies[i].applyAttack(attack);
+    }
   }
 }

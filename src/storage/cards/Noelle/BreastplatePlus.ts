@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { BreastplateEffect } from "../../effects/BreastplateEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
@@ -16,6 +17,6 @@ export class BreastplatePlus extends Card {
       enemy.applyElement(new Geo(), ctx.player);
     }
 
-    // TODO normal attacks heal
+    ctx.player.addEffect(new BreastplateEffect());
   }
 }

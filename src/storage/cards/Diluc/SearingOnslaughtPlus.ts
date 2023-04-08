@@ -17,13 +17,16 @@ export class SearingOnslaughtPlus extends Card {
       throw new Error("no enemies");
     }
 
+    const enemies = [...ctx.enemies, ...ctx.enemies, ...ctx.enemies];
+    enemies.length = 3;
+
     for (let i = 0; i < 3; i++) {
       const attack: Attack = {
         damage: 2,
         element: new Pyro(),
         player: ctx.player,
       };
-      ctx.enemies[0].applyAttack(attack); // TODO three different enemies
+      enemies[i].applyAttack(attack);
     }
   }
 }

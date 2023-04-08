@@ -23,7 +23,7 @@ export class LemniscaticWindPlus extends Card {
       element: new Anemo(),
       player: ctx.player,
     };
-    // if last played card is Dash, 5 damage
+    // TODO if last played card is Dash, 5 damage
     ctx.enemies[0].applyAttack(attack);
   }
 }

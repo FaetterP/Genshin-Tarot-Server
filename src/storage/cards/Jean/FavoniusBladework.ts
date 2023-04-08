@@ -17,6 +17,12 @@ export class FavoniusBladework extends Card {
       throw new Error("no enemies");
     }
 
+    const attack: Attack = {
+      damage: 2,
+      player: ctx.player,
+    };
+    ctx.enemies[0].applyAttack(attack);
+
     if (
       ctx.enemies[0].Elements.map((element) => element.Name).includes(
         new Anemo().Name
@@ -24,11 +30,5 @@ export class FavoniusBladework extends Card {
     ) {
       ctx.player.addEnergy(2);
     }
-
-    const attack: Attack = {
-      damage: 2,
-      player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
   }
 }

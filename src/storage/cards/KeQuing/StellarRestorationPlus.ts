@@ -16,8 +16,12 @@ export class StellarRestorationPlus extends Card {
       throw new Error("no enemies");
     }
 
-    ctx.enemies[0].applyElement(new Electro(), ctx.player);
-    // TODO attack extra 2 enemies
+    const enemies = [...ctx.enemies, ...ctx.enemies, ...ctx.enemies];
+    enemies.length = 3;
+
+    for (let i = 0; i < 3; i++) {
+      ctx.enemies[0].applyElement(new Electro(), ctx.player);
+    }
 
     ctx.player.addEnergy(2);
   }

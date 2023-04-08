@@ -14,6 +14,6 @@ export class Dash extends Card {
     ctx.player.drawCard();
     ctx.player.drawCard();
 
-    ctx.player.addActionPoints(1);
+    ctx.player.addExtraActionPoints(1);
   }
 }

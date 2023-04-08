@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
@@ -13,6 +14,7 @@ export class DominusLapidis extends Card {
 
   use(ctx: CardUseContext): void {
     ctx.player.addShield(3);
+
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addShield(3);
     }
@@ -20,5 +22,7 @@ export class DominusLapidis extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
     }
+
+    ctx.player.addEffect(new DominusLapidisEffect());
   }
 }

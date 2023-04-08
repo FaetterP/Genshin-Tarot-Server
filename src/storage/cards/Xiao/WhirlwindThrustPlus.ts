@@ -26,7 +26,7 @@ export class WhirlwindThrustPlus extends Card {
     ctx.enemies[0].applyAttack(attack);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      ctx.player.addActionPoints(1);
+      ctx.player.addExtraActionPoints(1);
     }
   }
 }

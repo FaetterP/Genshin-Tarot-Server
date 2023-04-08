@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class SparklingScatter extends Card {
@@ -20,6 +21,7 @@ export class SparklingScatter extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
+      element:new Geo(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);

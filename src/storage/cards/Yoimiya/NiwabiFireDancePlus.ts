@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { NiwabiFireDanceEffect } from "../../effects/NiwabiFireDanceEffect";
 import { Card } from "../Card";
 
 export class NiwabiFireDancePlus extends Card {
@@ -11,9 +12,10 @@ export class NiwabiFireDancePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.drawCard()
-    ctx.player.drawCard()
-    ctx.player.drawCard()
-    // TODO
+    ctx.player.drawCard();
+    ctx.player.drawCard();
+    ctx.player.drawCard();
+
+    ctx.player.addEffect(new NiwabiFireDanceEffect());
   }
 }

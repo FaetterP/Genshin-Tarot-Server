@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { LayeredFrostEffect } from "../../effects/LayeredFrostEffect";
 import { Card } from "../Card";
 
 export class LayeredFrost extends Card {
@@ -12,6 +13,7 @@ export class LayeredFrost extends Card {
 
   use(ctx: CardUseContext): void {
     ctx.player.drawCard();
-    // TODO
+
+    ctx.player.addEffect(new LayeredFrostEffect());
   }
 }

@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -25,6 +26,6 @@ export class Nightrider extends Card {
     };
     ctx.enemies[0].applyAttack(attack);
 
-    // TODO
+    ctx.player.addEffect(new NightriderEffect(ctx.enemies[0]));
   }
 }

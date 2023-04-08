@@ -17,5 +17,7 @@ export class StellarRestoration extends Card {
     }
 
     ctx.enemies[0].applyElement(new Electro(), ctx.player);
+
+    // TODO
   }
 }

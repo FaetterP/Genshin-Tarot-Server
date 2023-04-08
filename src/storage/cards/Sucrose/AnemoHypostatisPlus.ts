@@ -12,11 +12,10 @@ export class AnemoHypostatisPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (!ctx.enemies?.length) {
-      throw new Error("no enemies");
+    for (const enemy of ctx.player.Enemies) {
+      enemy.applyElement(new Anemo(), ctx.player);
     }
-
-    ctx.enemies[0].applyElement(new Anemo(), ctx.player);
+    
     // TODO
   }
 }

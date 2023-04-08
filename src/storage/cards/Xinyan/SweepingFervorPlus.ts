@@ -13,6 +13,7 @@ export class SweepingFervorPlus extends Card {
 
   use(ctx: CardUseContext): void {
     ctx.player.addShield(3);
+
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Pyro(), ctx.player);
     }

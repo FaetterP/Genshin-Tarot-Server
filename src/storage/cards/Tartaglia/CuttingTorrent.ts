@@ -9,7 +9,7 @@ export class CuttingTorrent extends Card {
   }
 
   constructor() {
-    super(1);
+    super(0);
   }
 
   use(ctx: CardUseContext): void {
@@ -24,7 +24,7 @@ export class CuttingTorrent extends Card {
       player: ctx.player,
     };
 
-    if (ctx.isUseAlternative) {
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       attack.element = new Hydro();
     }
 

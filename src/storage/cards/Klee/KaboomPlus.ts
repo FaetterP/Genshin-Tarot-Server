@@ -21,11 +21,12 @@ export class KaboomPlus extends Card {
       damage: 2,
       isPiercing: true,
       isRange: true,
-      player: ctx.player,
       element: new Pyro(),
+      player: ctx.player,
     };
+
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      attack.damage = 4;
+      attack.damage *= 2;
     }
 
     ctx.enemies[0].applyAttack(attack);

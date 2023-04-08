@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { removeDuplicates } from "../../../utils/arrays";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -17,15 +18,20 @@ export class WindSpiritCreationPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 1,
-      isPiercing: true,
-      isRange: true,
-      element: new Anemo(),
-      player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
+    const enemies = removeDuplicates(ctx.enemies);
+    if (enemies.length <= 2) {
+      throw new Error("need 2 different enemies");
+    }
 
-    // TODO attack two enemies
+    for (let i = 0; i < 2; i++) {
+      const attack: Attack = {
+        damage: 2,
+        isPiercing: true,
+        isRange: true,
+        element: new Anemo(),
+        player: ctx.player,
+      };
+      enemies[i].applyAttack(attack);
+    }
   }
 }

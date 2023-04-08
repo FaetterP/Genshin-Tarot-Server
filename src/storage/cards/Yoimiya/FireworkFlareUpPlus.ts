@@ -17,13 +17,17 @@ export class FireworkFlareUpPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 2,
-      isRange: true,
-      element: new Pyro(),
-      player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
-    // TODO attack 3 enemies
+    const enemies = [...ctx.enemies, ...ctx.enemies, ...ctx.enemies];
+    enemies.length = 3;
+
+    for (let i = 0; i < 3; i++) {
+      const attack: Attack = {
+        damage: 2,
+        isRange: true,
+        element: new Pyro(),
+        player: ctx.player,
+      };
+      ctx.enemies[i].applyAttack(attack);
+    }
   }
 }

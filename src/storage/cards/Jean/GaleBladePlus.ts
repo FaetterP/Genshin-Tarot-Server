@@ -24,5 +24,7 @@ export class GaleBladePlus extends Card {
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+
+    // TODO
   }
 }

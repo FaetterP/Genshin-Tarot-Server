@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { MirrorReflectionsEffect } from "../../effects/MirrorReflectionsEffect";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
@@ -19,13 +20,6 @@ export class MirrorReflectionsPlus extends Card {
 
     ctx.enemies[0].addStun();
 
-    for (const enemy of ctx.player.Enemies) {
-      const attack: Attack = {
-        damage: 2,
-        element: new Hydro(),
-        player: ctx.player,
-      };
-      enemy.applyAttack(attack);
-    }
+    ctx.player.addEffect(new MirrorReflectionsEffect());
   }
 }

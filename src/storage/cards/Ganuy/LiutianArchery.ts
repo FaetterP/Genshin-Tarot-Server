@@ -9,7 +9,7 @@ export class LiutianArchery extends Card {
   }
 
   constructor() {
-    super(1);
+    super(0);
   }
 
   use(ctx: CardUseContext): void {

@@ -14,9 +14,11 @@ export class DanceOfFirePlus extends Card {
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = { damage: 1, player: ctx.player };
+
       if (ctx.player.Shields > 0) {
         attack.damage = 3;
       }
+
       enemy.applyAttack(attack);
     }
   }

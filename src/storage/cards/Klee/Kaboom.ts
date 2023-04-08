@@ -21,8 +21,8 @@ export class Kaboom extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      player: ctx.player,
       element: new Pyro(),
+      player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
 

@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { SkywardSonnetPlusEffect } from "../../effects/SkywardSonnetPlusEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -21,6 +22,6 @@ export class SkywardSonnetPlus extends Card {
       enemy.applyElement(new Anemo(), ctx.player);
     }
 
-    // TODO next attack +2 damage
+    ctx.player.addEffect(new SkywardSonnetPlusEffect());
   }
 }

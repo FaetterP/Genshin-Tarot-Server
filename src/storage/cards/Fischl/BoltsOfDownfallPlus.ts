@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
+import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -9,7 +10,7 @@ export class BoltsOfDownfallPlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(0);
   }
 
   use(ctx: CardUseContext): void {
@@ -23,8 +24,11 @@ export class BoltsOfDownfallPlus extends Card {
       isRange: true,
       player: ctx.player,
     };
-    ctx.enemies[0].applyAttack(attack);
 
-    // TODO
+    if (ctx.player.isContainsEffect(new NightriderEffect(ctx.enemies[0]))) {
+      attack.damage = 3;
+    }
+
+    ctx.enemies[0].applyAttack(attack);
   }
 }

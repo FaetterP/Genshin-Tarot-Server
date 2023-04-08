@@ -18,6 +18,6 @@ export class IcyPawsPlus extends Card {
       enemy.applyElement(new Cryo(), ctx.player);
     }
 
-    // Discard all burn cards
+    // TODO Trash all burn cards
   }
 }

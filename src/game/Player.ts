@@ -141,6 +141,10 @@ export class Player {
     this.effects.push(effect);
   }
 
+  public isContainsEffect(effect: PlayerEffect) {
+    return this.effects.map((effect) => effect.Name).includes(effect.Name);
+  }
+
   public addEnergy(count: number) {
     if (this.hand.map((card) => card.Name).includes(new Freeze().Name)) {
       return;

@@ -12,14 +12,14 @@ export class IcyPaws extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.addShield(3);
-
-    // TODO or
-
-    for (const enemy of ctx.player.Enemies) {
-      enemy.applyElement(new Cryo(), ctx.player);
+    if (ctx.isUseAlternative) {
+      for (const enemy of ctx.player.Enemies) {
+        enemy.applyElement(new Cryo(), ctx.player);
+      }
+    } else {
+      ctx.player.addShield(3);
     }
 
-    // Discard all burn cards
+    // TODO trash all burn cards
   }
 }

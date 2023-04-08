@@ -1,6 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
-import { Cryo } from "../../elements/Cryo";
+import { TrailOfTheQilinEffect } from "../../effects/TrailOfTheQilinEffect";
 import { Card } from "../Card";
 
 export class TrailOfTheQilin extends Card {
@@ -19,13 +18,6 @@ export class TrailOfTheQilin extends Card {
 
     ctx.enemies[0].addStun();
 
-    for (const enemy of ctx.player.Enemies) {
-      const attack: Attack = {
-        damage: 2,
-        element: new Cryo(),
-        player: ctx.player,
-      };
-      enemy.applyAttack(attack);
-    }
+    ctx.player.addEffect(new TrailOfTheQilinEffect());
   }
 }
