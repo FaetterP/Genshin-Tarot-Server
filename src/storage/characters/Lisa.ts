@@ -1,8 +1,9 @@
 import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { Card } from "../cards/Card";
 import { Electro } from "../elements/Electro";
 import { Character } from "./Character";
+import { LightningTouch } from "../cards/Lisa/LightningTouch";
+import { VioletArc } from "../cards/Lisa/VioletArc";
 
 export class Lisa extends Character {
   public get Name() {
@@ -11,7 +12,11 @@ export class Lisa extends Character {
 
   constructor() {
     const cards: Card[] = [
-      // TODO
+      new LightningTouch(),
+      new LightningTouch(),
+      new LightningTouch(),
+      new VioletArc(),
+      new VioletArc(),
     ];
     super({ cards, burstCost: 3 });
   }
@@ -20,10 +25,8 @@ export class Lisa extends Character {
     ctx.player.drawCard();
     ctx.player.drawCard();
 
-    if (!ctx.selectedEnemy) {
-      throw new Error("player not selected");
+    if (ctx.selectedEnemy) {
+      ctx.selectedEnemy.applyElement(new Electro(), ctx.player);
     }
-
-    ctx.selectedEnemy.applyElement(new Electro(), ctx.player);
   }
 }

@@ -20,4 +20,13 @@ export type CharacterUseBurstContext = {
   allPlayers: Player[];
   selectedEnemy?: Enemy;
   selectedPlayer?: Player;
+
+  // Barbara
+  divide?: { player: Player; count: number }[];
+
+  // Mona
+  selectedCharacter?: Character;
+
+  // Tartaglia
+  selectedEnemies?: Enemy[];
 };

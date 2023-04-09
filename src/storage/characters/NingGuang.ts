@@ -3,6 +3,8 @@ import { Attack } from "../../../types/general";
 import { Card } from "../cards/Card";
 import { Geo } from "../elements/Geo";
 import { Character } from "./Character";
+import { SparklingScatter } from "../cards/NingGuang/SparklingScatter";
+import { JadeScreen } from "../cards/NingGuang/JadeScreen";
 
 export class NingGuang extends Character {
   public get Name() {
@@ -11,7 +13,11 @@ export class NingGuang extends Character {
 
   constructor() {
     const cards: Card[] = [
-      // TODO
+      new SparklingScatter(),
+      new SparklingScatter(),
+      new SparklingScatter(),
+      new JadeScreen(),
+      new JadeScreen(),
     ];
     super({ cards, burstCost: 7 });
   }
