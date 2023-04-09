@@ -14,11 +14,7 @@ export class VioletArc extends Card {
 
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
-      if (
-        enemy.Elements.map((element) => element.Name).includes(
-          new Electro().Name
-        )
-      ) {
+      if (enemy.isContainsElement(new Electro())) {
         const attack: Attack = {
           damage: 5,
           isPiercing: true,

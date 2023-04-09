@@ -17,11 +17,7 @@ export class DemonbanePlus extends Card {
       throw new Error("no enemies");
     }
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Cryo().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Cryo())) {
       const attack: Attack = { damage: 4, player: ctx.player };
       ctx.enemies[0].applyAttack(attack);
     } else {

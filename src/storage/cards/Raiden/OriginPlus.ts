@@ -21,11 +21,7 @@ export class OriginPlus extends Card {
 
     const attack: Attack = { damage: 2, player: ctx.player };
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Electro().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Electro())) {
       attack.damage = 5;
     }
 

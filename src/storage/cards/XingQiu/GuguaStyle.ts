@@ -17,15 +17,10 @@ export class GuhuaStyle extends Card {
       throw new Error("no enemies");
     }
 
-    
     const attack: Attack = { damage: 2, player: ctx.player };
     ctx.enemies[0].applyAttack(attack);
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Hydro().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Hydro())) {
       ctx.player.addEnergy(2);
     }
   }

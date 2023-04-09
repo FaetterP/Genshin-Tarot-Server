@@ -24,11 +24,7 @@ export class CuttingTorrentPlus extends Card {
       player: ctx.player,
     };
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Hydro().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Hydro())) {
       attack.damage = 3;
     }
 

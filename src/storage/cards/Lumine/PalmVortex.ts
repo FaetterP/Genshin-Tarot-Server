@@ -17,13 +17,11 @@ export class PalmVortex extends Card {
 
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
-      const elements = enemy.Elements.map((element) => element.Name);
-
       if (
-        elements.includes(new Hydro().Name) ||
-        elements.includes(new Pyro().Name) ||
-        elements.includes(new Cryo().Name) ||
-        elements.includes(new Electro().Name)
+        enemy.isContainsElement(new Hydro()) ||
+        enemy.isContainsElement(new Pyro()) ||
+        enemy.isContainsElement(new Cryo()) ||
+        enemy.isContainsElement(new Electro())
       ) {
         const attack: Attack = {
           damage: 2,

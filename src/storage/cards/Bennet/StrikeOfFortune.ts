@@ -23,11 +23,7 @@ export class StrikeOfFortune extends Card {
     };
     ctx.enemies[0].applyAttack(attack);
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Pyro().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Pyro())) {
       ctx.player.addEnergy(2);
     }
   }

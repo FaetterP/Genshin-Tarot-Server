@@ -23,11 +23,7 @@ export class FavoniusBladework extends Card {
     };
     ctx.enemies[0].applyAttack(attack);
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Anemo().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Anemo())) {
       ctx.player.addEnergy(2);
     }
   }

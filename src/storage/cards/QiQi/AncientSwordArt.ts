@@ -20,11 +20,7 @@ export class AncientSwordArt extends Card {
     const attack: Attack = { damage: 2, player: ctx.player };
     ctx.enemies[0].applyAttack(attack);
 
-    if (
-      ctx.enemies[0].Elements.map((element) => element.Name).includes(
-        new Cryo().Name
-      )
-    ) {
+    if (ctx.enemies[0].isContainsElement(new Cryo())) {
       ctx.player.addEnergy(2);
     }
   }

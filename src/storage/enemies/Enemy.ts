@@ -105,6 +105,10 @@ export abstract class Enemy {
     }
   }
 
+  isContainsElement(element: Element) {
+    return this.elements.map((el) => el.Name).includes(element.Name);
+  }
+
   addShields(count: number) {
     this.shield = Math.max(0, this.shield + count);
   }
