@@ -198,3 +198,11 @@
   }
 }
 ```
+
+## Списки
+
+Персонажи:  
+`Aether, Albedo, Amber, Barbara, Beidou, Bennett, ChongYun, Diluc, Diona, Eula, Fischl, Ganyu, HuTao, Jean, Kaeya, Kazuha, KeQing, Klee, Lisa, Lumine, Mona, NingGuang, Noelle, QiQi, Raiden, Razor, Rosaria, Sucrose, Tartaglia, Venti, XiangLing, Xiao, XingQiu, Xinyan, Yanfei, Yoimiya, ZhongLi`
+
+Эффекты на игроке:
+`Breastplate, DominusLapidis, ExplosivePuppet, GuideOfAfterlife, GuobaFire, LayeredFrost, LetTheShowBegin, MirrorReflections, Nightrider, NightriderPlus, NiwabiFireDance, Pyronado, Raincutter, SkywardSonnet, SkywardSonnetPlus, SolarIsotoma, Stormbreaker, TrailOfTheQilin`
