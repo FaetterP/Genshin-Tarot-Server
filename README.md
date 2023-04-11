@@ -204,5 +204,44 @@
 Персонажи:  
 `Aether, Albedo, Amber, Barbara, Beidou, Bennett, ChongYun, Diluc, Diona, Eula, Fischl, Ganyu, HuTao, Jean, Kaeya, Kazuha, KeQing, Klee, Lisa, Lumine, Mona, NingGuang, Noelle, QiQi, Raiden, Razor, Rosaria, Sucrose, Tartaglia, Venti, XiangLing, Xiao, XingQiu, Xinyan, Yanfei, Yoimiya, ZhongLi`
 
-Эффекты на игроке:
+Эффекты на игроке:  
 `Breastplate, DominusLapidis, ExplosivePuppet, GuideOfAfterlife, GuobaFire, LayeredFrost, LetTheShowBegin, MirrorReflections, Nightrider, NightriderPlus, NiwabiFireDance, Pyronado, Raincutter, SkywardSonnet, SkywardSonnetPlus, SolarIsotoma, Stormbreaker, TrailOfTheQilin`
+
+Карты:  
+`ForeignRockblade, ForeignRockbladePlus, StarfellSword, StarfellSwordPlus`,  
+`WeissBladework, WeissBladeworkPlus, SolarIsotoma, SolarIsotomaPlus`,  
+`Sharpshooter, SharpshooterPlus, ExplosivePuppet, ExplosivePuppetPlus`,  
+`WhisperOfWater, WhisperOfWaterPlus, LetTheShowBegin, LetTheShowBeginPlus`,  
+`Oceanborn, OceanbornPlus, Tidecaller, TidecallerPlus`,  
+`StrikeOfFortune, StrikeOfFortunePlus, PassionOverload, PassionOverloadPlus`,  
+`Demonbane, DemonbanePlus, LayeredFrost, LayeredFrostPlus`,  
+`TemperedSword, TemperedSwordPlus, SearingOnslaught, SearingOnslaughtPlus`,  
+`KatzleinStyle, KatzleinStylePlus, IcyPaws, IcyPawsPlus`,  
+`EdelBladework, EdelBladeworkPlus, IcetideVortex, IcetideVortexPlus`,  
+`BoltsOfDownfall, BoltsOfDownfallPlus, Nightrider, NightriderPlus`,  
+`LiutianArchery, LiutianArcheryPlus, TrailOfTheQilin, TrailOfTheQilinPlus`,  
+`SpearOfWangsheng, SpearOfWangshengPlus, GuideOfAfterlife, GuideOfAfterlifePlus`,  
+`FavoniusBladework, FavoniusBladeworkPlus, GaleBlade, GaleBladePlus`,  
+`CeremonialBladework, CeremonialBladeworkPlus, Frostgnaw, FrostgnawPlus`,  
+`GaryuuBladework, GaryuuBladeworkPlus, Chihayaburu, ChihayaburuPlus`,  
+`YunlaiSwordsmanship, YunlaiSwordsmanshipPlus, StellarRestoration, StellarRestorationPlus`,  
+`Kaboom, KaboomPlus, JumpyDumpty, JumpyDumptyPlus`,  
+`LightningTouch, LightningTouchPlus, VioletArc, VioletArcPlus`,  
+`ForeignIronwind, ForeignIronwindPlus, PalmVortex, PalmVortexPlus`,  
+`RippleOfFate, RippleOfFatePlus, MirrorReflections, MirrorReflectionsPlus`,  
+`SparklingScatter, SparklingScatterPlus, JadeScreen, JadeScreenPlus`,  
+`MaidsBladework, MaidsBladeworkPlus, Breastplate, BreastplatePlus`,  
+`AncientSwordArt, AncientSwordArtPlus, HeraldOfFrost, HeraldOfFrostPlus`,  
+`Origin, OriginPlus, BalefulOmen, BalefulOmenPlus`,  
+`SteelFang, SteelFangPlus, ClawAndThunder, ClawAndThunderPlus`,  
+`SpearOfTheChurch, SpearOfTheChurchPlus, RavagingConfession, RavagingConfessionPlus`,  
+`WindSpiritCreation, WindSpiritCreationPlus, AnemoHypostatis, AnemoHypostatisPlus`,  
+`CuttingTorrent, CuttingTorrentPlus, RagingTide, RagingTidePlus`,  
+`DivineArchery, DivineArcheryPlus, SkywardSonnet, SkywardSonnetPlus`,  
+`DoughFu, DoughFuPlus, GuobaFire, GuobaFirePlus`,  
+`WhirlwindThrust, WhirlwindThrustPlus, LemniscaticWind, LemniscaticWindPlus`,  
+`GuhuaStyle, GuhuaStylePlus, FatalRainscreen, FatalRainscreenPlus`,  
+`DanceOfFire, DanceOfFirePlus, SweepingFervor, SweepingFervorPlus`,  
+`SealOfApproval, SealOfApprovalPlus, SignedEdict, SignedEdictPlus`,  
+`FireworkFlareUp, FireworkFlareUpPlus, NiwabiFireDance, NiwabiFireDancePlus`,  
+`RainOfStone, RainOfStonePlus, DominusLapidis, DominusLapidisPlus`
