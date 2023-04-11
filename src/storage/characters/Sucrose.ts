@@ -3,9 +3,9 @@ import { WindSpiritCreation } from "../cards/Sucrose/WindSpiritCreation";
 import { AnemoHypostatis } from "../cards/Sucrose/AnemoHypostatis";
 import { Character } from "./Character";
 
-export class Kaeya extends Character {
+export class Sucrose extends Character {
   public get Name() {
-    return "Kaeya";
+    return "Sucrose";
   }
 
   constructor() {

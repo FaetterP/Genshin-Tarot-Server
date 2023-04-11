@@ -3,9 +3,9 @@ import { RippleOfFate } from "../cards/Mona/RippleOfFate";
 import { MirrorReflections } from "../cards/Mona/MirrorReflections";
 import { Character } from "./Character";
 
-export class Kaeya extends Character {
+export class Mona extends Character {
   public get Name() {
-    return "Kaeya";
+    return "Mona";
   }
 
   constructor() {

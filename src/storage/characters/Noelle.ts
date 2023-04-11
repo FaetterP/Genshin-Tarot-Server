@@ -4,9 +4,9 @@ import { Breastplate } from "../cards/Noelle/Breastplate";
 import { Character } from "./Character";
 import { Attack } from "../../../types/general";
 
-export class Kaeya extends Character {
+export class Noelle extends Character {
   public get Name() {
-    return "Kaeya";
+    return "Noelle";
   }
 
   constructor() {
