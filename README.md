@@ -204,9 +204,6 @@
 Персонажи:  
 `Aether, Albedo, Amber, Barbara, Beidou, Bennett, ChongYun, Diluc, Diona, Eula, Fischl, Ganyu, HuTao, Jean, Kaeya, Kazuha, KeQing, Klee, Lisa, Lumine, Mona, NingGuang, Noelle, QiQi, Raiden, Razor, Rosaria, Sucrose, Tartaglia, Venti, XiangLing, Xiao, XingQiu, Xinyan, Yanfei, Yoimiya, ZhongLi`
 
-Эффекты на игроке:  
-`Breastplate, DominusLapidis, ExplosivePuppet, GuideOfAfterlife, GuobaFire, LayeredFrost, LetTheShowBegin, MirrorReflections, Nightrider, NightriderPlus, NiwabiFireDance, Pyronado, Raincutter, SkywardSonnet, SkywardSonnetPlus, SolarIsotoma, Stormbreaker, TrailOfTheQilin`
-
 Карты:  
 `ForeignRockblade, ForeignRockbladePlus, StarfellSword, StarfellSwordPlus`,  
 `WeissBladework, WeissBladeworkPlus, SolarIsotoma, SolarIsotomaPlus`,  
@@ -245,3 +242,16 @@
 `SealOfApproval, SealOfApprovalPlus, SignedEdict, SignedEdictPlus`,  
 `FireworkFlareUp, FireworkFlareUpPlus, NiwabiFireDance, NiwabiFireDancePlus`,  
 `RainOfStone, RainOfStonePlus, DominusLapidis, DominusLapidisPlus`
+
+Эффекты на игроке:  
+`Breastplate, DominusLapidis, ExplosivePuppet, GuideOfAfterlife, GuobaFire, LayeredFrost, LetTheShowBegin, MirrorReflections, Nightrider, NightriderPlus, NiwabiFireDance, Pyronado, Raincutter, SkywardSonnet, SkywardSonnetPlus, SolarIsotoma, Stormbreaker, TrailOfTheQilin`
+
+Враги:  
+`SmallAnemoSlime, SmallCryoSlime, SmallDendroSlime, SmallElectroSlime, SmallGeoSlime, SmallHydroSlime, SmallPyroSlime`,  
+`GiantAnemoSlime, GiantCryoSlime, GiantDendroSlime, GiantElectroSlime, GiantGeoSlime, GiantHydroSlime, GiantCryoSlime`,  
+`HilichurlGang, HilichurlGuard, HilichurlGrenadier, HilichurlBerserk, CryoHilichurlShooter, ElectroHilichurlShooter, PyroHilichurlShooter`,  
+`AnemoShamachurl, DendroShamachurl, GeoShamachurl, UnusualHilichurl, CryoAbyssMage, HydroAbyssMage, PyroAbyssMage`,
+`AnemoBoxer, CryoGunner, ElectroHammer, GeoChanter, HydroGunner, PyroSlinger`,  
+`TreasureHoarderGang, VishapHatchling, CryoCicinSwarm, ElectroCicinSwarm, CryoWhopperflower, PyroWhopperflower`,  
+  
+`PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`
