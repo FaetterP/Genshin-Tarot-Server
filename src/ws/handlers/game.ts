@@ -3,7 +3,6 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { PlayerPrimitive } from "../../../types/general";
 import { ExtWebSocket } from "../../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
-import { SmallCryoSlime } from "../../storage/enemies/normal/SmallCryoSlime";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 
 async function startGame(ws: ExtWebSocket, payload: any) {

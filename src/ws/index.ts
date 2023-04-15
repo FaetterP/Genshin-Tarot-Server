@@ -65,6 +65,8 @@ async function onConnect(ws: ExtWebSocket, req: any) {
     cycleController.connectPlayer(player);
     ws.player = player;
     ws.cycleController = cycleController;
+
+    ws.send(JSON.stringify({ action: "ws.connect", youPlayerId: player.ID }));
   } catch (e) {
     ws.terminate();
   }

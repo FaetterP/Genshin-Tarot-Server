@@ -50,7 +50,7 @@ export class CycleController {
 
     for (const player of this.players) {
       if (player.Characters.length < 4) {
-        throw new Error("player doesn't have 4 characters");
+        throw new Error(`player ${player.ID} doesn't have 4 characters`);
       }
     }
 

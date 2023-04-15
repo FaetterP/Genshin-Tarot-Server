@@ -104,7 +104,8 @@
 
 ```json
 {
-  "action": "game.startGame"
+  "action": "game.startGame",
+  "taskId": "task-{uuid}"
 }
 ```
 
