@@ -12,6 +12,7 @@ export type EnemyPrimitive = {
 
 export type PlayerPrimitive = {
   playerId: string;
+  characters: string[];
   hp: number;
   wave: number;
   enemies: EnemyPrimitive[];

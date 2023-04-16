@@ -89,6 +89,7 @@ export class Player {
       wave: this.wave,
       enemies,
       effects,
+      characters: this.characters.map((character) => character.Name),
     };
   }
 
