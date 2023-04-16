@@ -7,6 +7,10 @@ export class TaskAwaiter {
   private tasks: string[] = [];
   private e_onTasksCompleted = new Event();
 
+  constructor() {
+    TaskAwaiter.allAwaiters.push(this);
+  }
+
   addTask(taskId: string) {
     if (!this.tasks.includes(taskId)) {
       this.tasks.push(taskId);
@@ -41,8 +45,13 @@ export class TaskAwaiter {
     if (!TaskAwaiter.allTasks.includes(taskId)) {
       throw new Error("task not found");
     }
+
     TaskAwaiter.allTasks = TaskAwaiter.allTasks.filter(
       (item) => item != taskId
     );
+
+    for (const awaiter of TaskAwaiter.allAwaiters) {
+      awaiter.checkTasks();
+    }
   }
 }
