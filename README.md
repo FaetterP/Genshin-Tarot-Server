@@ -119,7 +119,16 @@
     {
       "playerId": "player-{uuid}",
       "hp": 10,
+      "shields": 10,
+      "energy": 10,
+      "actionPoints": {
+        "normal": 3,
+        "extra": 1,
+        "total": 4
+      },
       "wave": 1,
+      "characters": ["Amber"],
+      "hand": ["Sharpshooter"],
       "enemies": [
         {
           "id": "enemy-{uuid}",
@@ -153,7 +162,16 @@
   "player": {
     "playerId": "player-{uuid}",
     "hp": 10,
+    "shields": 10,
+    "energy": 10,
+    "actionPoints": {
+      "normal": 3,
+      "extra": 1,
+      "total": 4
+    },
     "wave": 1,
+    "characters": ["Amber"],
+    "hand": ["Sharpshooter"],
     "enemies": [
       {
         "id": "enemy-{uuid}",
@@ -186,7 +204,16 @@
   "player": {
     "playerId": "player-{uuid}",
     "hp": 10,
+    "shields": 10,
+    "energy": 10,
+    "actionPoints": {
+      "normal": 3,
+      "extra": 1,
+      "total": 4
+    },
     "wave": 1,
+    "characters": ["Amber"],
+    "hand": ["Sharpshooter"],
     "enemies": [
       {
         "id": "enemy-{uuid}",
@@ -253,6 +280,6 @@
 `HilichurlGang, HilichurlGuard, HilichurlGrenadier, HilichurlBerserk, CryoHilichurlShooter, ElectroHilichurlShooter, PyroHilichurlShooter`,  
 `AnemoShamachurl, DendroShamachurl, GeoShamachurl, UnusualHilichurl, CryoAbyssMage, HydroAbyssMage, PyroAbyssMage`,
 `AnemoBoxer, CryoGunner, ElectroHammer, GeoChanter, HydroGunner, PyroSlinger`,  
-`TreasureHoarderGang, VishapHatchling, CryoCicinSwarm, ElectroCicinSwarm, CryoWhopperflower, PyroWhopperflower`,  
-  
+`TreasureHoarderGang, VishapHatchling, CryoCicinSwarm, ElectroCicinSwarm, CryoWhopperflower, PyroWhopperflower`,
+
 `PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`

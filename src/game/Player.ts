@@ -6,13 +6,14 @@ import {
 import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
-import { SmallCryoSlime } from "../storage/enemies/normal/SmallCryoSlime";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
 import { Dash } from "../storage/cards/misc/Dash";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
+import { getRandomElement } from "../utils/arrays";
+import { eliteEnemies, normalEnemies } from "../storage/enemies";
 
 export class Player {
   public readonly ID: string;
@@ -86,10 +87,18 @@ export class Player {
     return {
       playerId: this.ID,
       hp: this.hp,
+      shields: this.shield,
+      energy: this.energy,
       wave: this.wave,
+      actionPoints: {
+        normal: this.actionPoints,
+        extra: this.extraActionPoints,
+        total: this.actionPoints + this.extraActionPoints,
+      },
       enemies,
       effects,
       characters: this.characters.map((character) => character.Name),
+      hand: this.hand.map((card) => card.Name),
     };
   }
 
@@ -121,6 +130,8 @@ export class Player {
     }
 
     this.hp = 12;
+    this.shield = 0;
+    this.energy = 0;
   }
 
   public applyDamage(damage: number) {
@@ -204,11 +215,15 @@ export class Player {
 
     this.enemies = [];
     const count = [1, 2, 3, 2, 3][this.wave];
+    const isElite = this.wave === 4;
+
     for (let i = 0; i < count; i++) {
-      // TODO
-      const addedEnemy: Enemy = new SmallCryoSlime();
+      const enemyType = getRandomElement(
+        isElite ? eliteEnemies : normalEnemies
+      );
+      const addedEnemy: Enemy = new enemyType();
       addedEnemy.OnDeath.addListener(this.enemyDeathHandler);
-      this.enemies.push();
+      this.enemies.push(addedEnemy);
     }
 
     this.wave++;

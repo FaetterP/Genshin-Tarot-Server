@@ -1,9 +1,9 @@
 import { getAllPlayers } from "../../../ws";
 import { Enemy } from "../Enemy";
 
-export class GiantCryoSlime extends Enemy {
+export class GiantPyroSlime extends Enemy {
   public get Name() {
-    return "GiantCryoSlime";
+    return "GiantPyroSlime";
   }
 
   constructor() {
