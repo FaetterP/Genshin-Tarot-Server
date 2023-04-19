@@ -98,7 +98,7 @@ export class Player {
       enemies,
       effects,
       characters: this.characters.map((character) => character.Name),
-      hand: this.hand.map((card) => card.Name),
+      hand: this.hand.map((card) => ({ cardId: card.ID, name: card.Name })),
     };
   }
 
@@ -224,6 +224,10 @@ export class Player {
       const addedEnemy: Enemy = new enemyType();
       addedEnemy.OnDeath.addListener(this.enemyDeathHandler);
       this.enemies.push(addedEnemy);
+    }
+
+    for (const enemy of this.enemies) {
+      enemy.reveal();
     }
 
     this.wave++;

@@ -276,10 +276,10 @@
 
 Враги:  
 `SmallAnemoSlime, SmallCryoSlime, SmallDendroSlime, SmallElectroSlime, SmallGeoSlime, SmallHydroSlime, SmallPyroSlime`,  
-`GiantAnemoSlime, GiantCryoSlime, GiantDendroSlime, GiantElectroSlime, GiantGeoSlime, GiantHydroSlime, GiantCryoSlime`,  
+`GiantAnemoSlime, GiantCryoSlime, GiantDendroSlime, GiantElectroSlime, GiantGeoSlime, GiantHydroSlime, GiantPyroSlime`,  
 `HilichurlGang, HilichurlGuard, HilichurlGrenadier, HilichurlBerserk, CryoHilichurlShooter, ElectroHilichurlShooter, PyroHilichurlShooter`,  
 `AnemoShamachurl, DendroShamachurl, GeoShamachurl, UnusualHilichurl, CryoAbyssMage, HydroAbyssMage, PyroAbyssMage`,
 `AnemoBoxer, CryoGunner, ElectroHammer, GeoChanter, HydroGunner, PyroSlinger`,  
 `TreasureHoarderGang, VishapHatchling, CryoCicinSwarm, ElectroCicinSwarm, CryoWhopperflower, PyroWhopperflower`,
 
-`PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`
+`PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, Stonehideawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`

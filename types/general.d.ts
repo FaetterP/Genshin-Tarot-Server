@@ -24,7 +24,7 @@ export type PlayerPrimitive = {
   wave: number;
   enemies: EnemyPrimitive[];
   effects: string[];
-  hand: string[];
+  hand: CardPrimitive[];
 };
 
 export type Attack = {
@@ -33,4 +33,9 @@ export type Attack = {
   isRange?: boolean;
   element?: Element;
   player: Player;
+};
+
+export type CardPrimitive = {
+  cardId: string;
+  name: string;
 };
