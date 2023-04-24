@@ -16,7 +16,7 @@
 `npm run start` - запускает уже собранное приложение.  
 `npm run dev` - запуск в режиме разработки.
 
-По умолчанию сервер поднимает вебсокет на порте `8006`. Это можно изменить в конфиге.
+По умолчанию сервер поднимает вебсокет на порте `8999`. Это можно изменить в конфиге.
 
 ## Команды для wss
 
@@ -282,4 +282,4 @@
 `AnemoBoxer, CryoGunner, ElectroHammer, GeoChanter, HydroGunner, PyroSlinger`,  
 `TreasureHoarderGang, VishapHatchling, CryoCicinSwarm, ElectroCicinSwarm, CryoWhopperflower, PyroWhopperflower`,
 
-`PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, Stonehideawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`
+`PyroAgent, CicinCryoMage, CicinElectroMage, RuinGuard, RuinHunter, RuinGrader, ShieldBearerMitachurl, BlazingAxeMitachurl, FrostarmLawachurl, StonehideLawachurl, EyeOfStorm, CryoRegisvine, PyroRegisvine, AnemoHypostasis, ElectroHypostasis, GeoHypostasis`
