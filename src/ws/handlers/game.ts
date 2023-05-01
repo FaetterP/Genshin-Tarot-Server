@@ -11,19 +11,28 @@ async function startGame(ws: ExtWebSocket, payload: any) {
 
   ws.cycleController.startCycle();
   const ret: {
+    you?: PlayerPrimitive;
     cycle: number;
-    players: PlayerPrimitive[];
+    otherPlayers: PlayerPrimitive[];
   } = {
     cycle: ws.cycleController.CycleNumber,
-    players: [],
+    otherPlayers: [],
   };
 
   for (const ws of getAllClients()) {
     const player = (ws as ExtWebSocket).player;
-    ret.players.push(player.getPrimitiveStats());
+    ret.otherPlayers.push(player.getPrimitiveStats());
   }
 
-  await sendToAllAndWait({ ...ret, action: "game.startCycle" });
+  for (const ws of getAllClients()) {
+    const data = { ...ret, action: "game.startCycle" };
+    const you = (ws as ExtWebSocket).player;
+    data.you = you.getPrimitiveStats();
+    data.otherPlayers = data.otherPlayers.filter(
+      (player) => player.playerId !== data.you?.playerId
+    );
+    ws.send(JSON.stringify(data));
+  }
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {

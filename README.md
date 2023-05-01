@@ -54,7 +54,6 @@
 {
   "action": "game.useCard",
   "cardId": "card-{uuid}",
-  "selectedPlayer": "player-{uuid}",
   "enemies": ["enemy-{uuid}"],
   "selectedPlayer": "player-{uuid}",
   "isUseAlternative": true
@@ -115,7 +114,32 @@
 {
   "action": "game.startCycle",
   "cycle": 1,
-  "players": [
+  "you": {
+    "playerId": "player-{uuid}",
+    "hp": 10,
+    "shields": 10,
+    "energy": 10,
+    "actionPoints": {
+      "normal": 3,
+      "extra": 1,
+      "total": 4
+    },
+    "wave": 1,
+    "characters": ["Amber"],
+    "hand": ["Sharpshooter"],
+    "enemies": [
+      {
+        "id": "enemy-{uuid}",
+        "name": "SmallCryoSlime",
+        "hp": 5,
+        "shield": 0,
+        "elements": ["Cryo"],
+        "isStunned": false
+      }
+    ],
+    "effects": ["SolarIsotoma"]
+  },
+  "otherPlayers": [
     {
       "playerId": "player-{uuid}",
       "hp": 10,
@@ -127,19 +151,10 @@
         "total": 4
       },
       "wave": 1,
-      "characters": ["Amber"],
-      "hand": ["Sharpshooter"],
-      "enemies": [
-        {
-          "id": "enemy-{uuid}",
-          "name": "SmallCryoSlime",
-          "hp": 5,
-          "shield": 0,
-          "elements": ["Cryo"],
-          "isStunned": false
-        }
-      ],
-      "effects": ["SolarIsotoma"]
+      "characters": [],
+      "hand": [],
+      "enemies": [],
+      "effects": []
     }
   ]
 }
@@ -154,11 +169,11 @@
 }
 ```
 
-- Игрок атаковал врага
+- Игрок использовал карту
 
 ```json
 {
-  "action": "game.attackCard",
+  "action": "game.useCard",
   "player": {
     "playerId": "player-{uuid}",
     "hp": 10,
