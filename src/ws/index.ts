@@ -13,7 +13,7 @@ let wss: WebSocket.Server;
 const cycleController = new CycleController();
 
 export function getAllClients() {
-  return wss.clients;
+  return wss.clients as Set<ExtWebSocket>;
 }
 
 export function getAllPlayers() {

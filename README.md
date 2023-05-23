@@ -198,47 +198,7 @@
       }
     ]
   },
-  "card": "card-{uuid}",
-  "enemy": {
-    "id": "enemy-{uuid}",
-    "name": "SmallCryoSlime",
-    "hp": 5,
-    "shield": 0,
-    "elements": ["Cryo"],
-    "isStunned": false
-  }
-}
-```
-
-- Игрок использовал скилл
-
-```json
-{
-  "action": "game.useCard",
-  "cardId": "card-{uuid}",
-  "player": {
-    "playerId": "player-{uuid}",
-    "hp": 10,
-    "shields": 10,
-    "energy": 10,
-    "actionPoints": {
-      "normal": 3,
-      "extra": 1,
-      "total": 4
-    },
-    "wave": 1,
-    "characters": ["Amber"],
-    "hand": ["Sharpshooter"],
-    "enemies": [
-      {
-        "id": "enemy-{uuid}",
-        "name": "SmallCryoSlime",
-        "hp": 5,
-        "shield": 0,
-        "elements": ["Cryo"]
-      }
-    ]
-  }
+  "card": "card-{uuid}"
 }
 ```
 
