@@ -10,7 +10,6 @@ import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
-import { Dash } from "../storage/cards/misc/Dash";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
@@ -29,8 +28,8 @@ export class Player {
   private isTurnEnds: boolean = true;
 
   private hand: Card[] = [];
-  private discardDeck: Card[] = [];
-  private collectingDeck: Card[] = [];
+  private discard: Card[] = [];
+  private deck: Card[] = [];
 
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
@@ -99,6 +98,11 @@ export class Player {
       effects,
       characters: this.characters.map((character) => character.Name),
       hand: this.hand.map((card) => ({ cardId: card.ID, name: card.Name })),
+      discard: this.discard.map((card) => ({
+        cardId: card.ID,
+        name: card.Name,
+      })),
+      deck: this.deck.map((card) => ({ cardId: card.ID, name: card.Name })),
     };
   }
 
@@ -126,7 +130,7 @@ export class Player {
 
   public startGame() {
     for (const character of this.characters) {
-      this.hand.push(...character.Cards);
+      this.deck.push(...character.Cards);
     }
 
     this.hp = 12;
@@ -179,9 +183,16 @@ export class Player {
   }
 
   public trySpendActonPoints(count: number): boolean {
-    // TODO
-    // TODO fix anywhere spending energy to action points
-    return false;
+    if (this.ActionPoints.total < count) return false;
+
+    this.extraActionPoints -= count;
+
+    if (this.extraActionPoints > 0) return true;
+
+    this.actionPoints += this.extraActionPoints;
+    this.extraActionPoints = 0;
+
+    return true;
   }
 
   public addHealth(count: number) {
@@ -222,7 +233,7 @@ export class Player {
         isElite ? eliteEnemies : normalEnemies
       );
       const addedEnemy: Enemy = new enemyType();
-      addedEnemy.OnDeath.addListener(this.enemyDeathHandler);
+      addedEnemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
       this.enemies.push(addedEnemy);
     }
 
@@ -234,16 +245,33 @@ export class Player {
   }
 
   public drawCard(): Card {
-    // TODO
-    return new Dash();
+    if (this.deck.length === 0) {
+      this.restoreDeck();
+    }
+
+    const card = getRandomElement(this.deck);
+    this.deck = this.deck.filter((c) => c != card);
+    this.hand.push(card);
+    return card;
+  }
+
+  private restoreDeck() {}
+
+  public discardCard(card: Card) {
+    this.hand = this.hand.filter((c) => c != card);
+    this.discard.push(card);
   }
 
   public discardRandomCard() {
-    // TODO
+    if (this.hand.length === 0) return;
+
+    const card = getRandomElement(this.hand);
+    this.hand = this.hand.filter((c) => c != card);
+    this.discard.push(card);
   }
 
   public addCardToDiscard(card: Card) {
-    this.discardDeck.push(card);
+    this.discard.push(card);
   }
 
   public startCycle() {

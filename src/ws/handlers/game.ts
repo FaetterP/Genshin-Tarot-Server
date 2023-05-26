@@ -78,7 +78,13 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     enemies,
     selectedPlayer,
   };
+
+  if (!ws.player.trySpendActonPoints(card.Cost))
+    throw new Error(`not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`);
+
   card.use(ctx);
+  ws.player.discardCard(card);
+  // TODO move discard to card.use
 
   const ret = {
     action: "game.useCard",
