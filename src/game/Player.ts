@@ -313,7 +313,8 @@ export class Player {
   }
 
   public endCycle() {
-    for (let i = 0; i < this.hand.length; i++) {
+    const count = this.hand.length;
+    for (let i = 0; i < count; i++) {
       this.discardRandomCard();
     }
 

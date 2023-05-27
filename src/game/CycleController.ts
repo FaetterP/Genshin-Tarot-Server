@@ -91,7 +91,6 @@ export class CycleController {
       return;
     }
     this.endCycle();
-    this.startCycle();
   }
 
   getPlayerById(id: string) {

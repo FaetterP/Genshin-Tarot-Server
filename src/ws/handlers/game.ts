@@ -8,7 +8,11 @@ import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
   await sendToAllAndWait({ action: "game.startGame" });
+  
+  startCycle(ws);
+}
 
+async function startCycle(ws: ExtWebSocket) {
   ws.cycleController.startCycle();
   const ret: {
     you?: PlayerPrimitive;
@@ -36,10 +40,11 @@ async function startGame(ws: ExtWebSocket, payload: any) {
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
-  ws.cycleController.playerEndTurn(ws.player);
-
   const ret = { action: "game.endTurn", player: ws.player.ID };
   sendToAll(ret);
+  ws.cycleController.playerEndTurn(ws.player);
+
+  startCycle(ws);
 }
 
 async function useCard(ws: ExtWebSocket, payload: any) {
@@ -80,7 +85,9 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   };
 
   if (!ws.player.trySpendActonPoints(card.Cost))
-    throw new Error(`not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`);
+    throw new Error(
+      `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`
+    );
 
   card.use(ctx);
   ws.player.discardCard(card);
