@@ -234,6 +234,7 @@ export class Player {
       );
       const addedEnemy: Enemy = new enemyType();
       addedEnemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
+      addedEnemy.OnEndCycle.addListener(this.enemyAttackHandler.bind(this));
       this.enemies.push(addedEnemy);
     }
 
@@ -255,7 +256,14 @@ export class Player {
     return card;
   }
 
-  private restoreDeck() {}
+  private restoreDeck() {
+    const count = this.discard.length;
+    for (let i = 0; i < count; i++) {
+      const card = this.discard[0];
+      this.deck.push(card);
+      this.discard = this.discard.filter((c) => c !== card);
+    }
+  }
 
   public discardCard(card: Card) {
     this.hand = this.hand.filter((c) => c != card);
@@ -326,10 +334,15 @@ export class Player {
   /* Subscribes */
 
   private enemyDeathHandler({ enemy }: EnemyDeathContext) {
+    this.mora += enemy.Mora;
     this.enemies = this.enemies.filter((item) => item !== enemy);
 
     if (this.enemies.length === 0) {
       this.createWave();
     }
+  }
+
+  private enemyAttackHandler({ enemy }: EnemyDeathContext) {
+    this.applyDamage(enemy.Damage);
   }
 }

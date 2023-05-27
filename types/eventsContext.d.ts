@@ -5,6 +5,10 @@ export type EnemyDeathContext = {
   enemy: Enemy;
 };
 
+export type EnemyEndCycleContext = {
+  enemy: Enemy;
+};
+
 export type PlayerEndsWavesContext = {
   player: Player;
 };

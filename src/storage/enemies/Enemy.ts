@@ -1,7 +1,10 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
 import { Element } from "../elements/Element";
-import { EnemyDeathContext } from "../../../types/eventsContext";
+import {
+  EnemyDeathContext,
+  EnemyEndCycleContext,
+} from "../../../types/eventsContext";
 import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../../types/general";
 import { Cryo } from "../elements/Cryo";
@@ -19,13 +22,22 @@ export abstract class Enemy {
   public readonly ID: string;
   private hp: number;
   private shield: number;
+  private damage: number;
+  private mora: number;
   protected elements: Element[] = [];
   private isStunned: boolean = false;
 
   private e_onDeath = new Event<EnemyDeathContext>();
+  private e_onEndCycle = new Event<EnemyEndCycleContext>();
 
   public get Health() {
     return this.hp;
+  }
+  public get Damage() {
+    return this.damage;
+  }
+  public get Mora() {
+    return this.mora;
   }
   public get Shield() {
     return this.shield;
@@ -39,11 +51,19 @@ export abstract class Enemy {
       removeListener: this.e_onDeath.RemoveListener.bind(this.e_onDeath),
     };
   }
+  public get OnEndCycle() {
+    return {
+      addListener: this.e_onEndCycle.AddListener.bind(this.e_onDeath),
+      removeListener: this.e_onEndCycle.RemoveListener.bind(this.e_onDeath),
+    };
+  }
 
   constructor({ hp, damage, mora, shield }: constructorSetup) {
     this.ID = `enemy-${v4()}`;
     this.hp = hp;
     this.shield = shield;
+    this.damage = damage;
+    this.mora = mora;
   }
 
   getPrimitiveStats(): EnemyPrimitive {

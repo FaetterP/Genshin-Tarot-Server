@@ -1,8 +1,9 @@
+import { Freeze } from "../storage/cards/misc/Freeze";
 import { Cryo } from "../storage/elements/Cryo";
 import { Electro } from "../storage/elements/Electro";
 import { Hydro } from "../storage/elements/Hydro";
 import { Pyro } from "../storage/elements/Pyro";
-import { getRandomInteger } from "../utils/math";
+import { getRandomElement } from "../utils/arrays";
 import { Player } from "./Player";
 
 function EngulfingStorm(players: Player[]) {
@@ -41,7 +42,7 @@ function CondensedIce(players: Player[]) {
         enemy.applyElement(new Cryo(), player);
       }
     }
-    // TODO add Freeze to discard
+    player.addCardToDiscard(new Freeze());
   }
 }
 
@@ -153,6 +154,6 @@ export function useRandomEffect(players: Player[]) {
     SheerCold,
   ];
 
-  const index = getRandomInteger(0, effects.length);
-  effects[index](players);
+  const effect = getRandomElement(effects);
+  effect(players);
 }
