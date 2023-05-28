@@ -73,9 +73,13 @@ export class CycleController {
     }
 
     const countEffects = Math.floor(this.cycle / 3);
+    const leylines: string[] = [];
+
     for (let i = 0; i < countEffects; i++) {
-      useRandomEffect(this.players);
+      leylines.push(useRandomEffect(this.players));
     }
+
+    return { leylines };
   }
 
   endCycle() {

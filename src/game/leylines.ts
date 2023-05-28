@@ -135,26 +135,29 @@ function SheerCold() {
 }
 
 export function useRandomEffect(players: Player[]) {
-  const effects: ((players: Player[]) => void)[] = [
-    EngulfingStorm,
-    SmolderingFlames,
-    MonsterAttendants,
-    Adrenaline,
-    CondensedIce,
-    LightingBolts,
-    ReinforcedShields,
-    ElementalRefresh,
-    SlowingWater,
-    ChaosCluster,
-    HighEnergyCores,
-    IcicleBlast,
-    PlasmaField,
-    EnergyTides,
-    WindCurrent,
-    SheerCold,
+  const effects: {
+    use: (players: Player[]) => void;
+    name: string;
+  }[] = [
+    { use: EngulfingStorm, name: "EngulfingStorm" },
+    { use: SmolderingFlames, name: "SmolderingFlames" },
+    { use: MonsterAttendants, name: "MonsterAttendants" },
+    { use: Adrenaline, name: "Adrenaline" },
+    { use: CondensedIce, name: "CondensedIce" },
+    { use: LightingBolts, name: "LightingBolts" },
+    { use: ReinforcedShields, name: "ReinforcedShields" },
+    { use: ElementalRefresh, name: "ElementalRefresh" },
+    { use: SlowingWater, name: "SlowingWater" },
+    { use: ChaosCluster, name: "ChaosCluster" },
+    { use: HighEnergyCores, name: "HighEnergyCores" },
+    { use: IcicleBlast, name: "IcicleBlast" },
+    { use: PlasmaField, name: "PlasmaField" },
+    { use: EnergyTides, name: "EnergyTides" },
+    { use: WindCurrent, name: "WindCurrent" },
+    { use: SheerCold, name: "SheerCold" },
   ];
 
   const effect = getRandomElement(effects);
-  effect(players);
-  return effect.caller.name;
+  effect.use(players);
+  return effect.name;
 }

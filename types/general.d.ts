@@ -16,6 +16,7 @@ export type PlayerPrimitive = {
   hp: number;
   shields: number;
   energy: number;
+  mora: number;
   actionPoints: {
     normal: number;
     extra: number;

@@ -8,18 +8,20 @@ import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
   await sendToAllAndWait({ action: "game.startGame" });
-  
+
   startCycle(ws);
 }
 
 async function startCycle(ws: ExtWebSocket) {
-  ws.cycleController.startCycle();
+  const { leylines } = ws.cycleController.startCycle()!;
   const ret: {
     you?: PlayerPrimitive;
     cycle: number;
+    leylines: string[];
     otherPlayers: PlayerPrimitive[];
   } = {
     cycle: ws.cycleController.CycleNumber,
+    leylines,
     otherPlayers: [],
   };
 

@@ -126,6 +126,7 @@
       "total": 4
     },
     "wave": 1,
+    "mora": 5,
     "characters": ["Amber"],
     "hand": ["Sharpshooter"],
     "deck": [],
@@ -154,6 +155,7 @@
         "total": 4
       },
       "wave": 1,
+      "mora": 5,
       "characters": [],
       "hand": [],
       "deck": [],
