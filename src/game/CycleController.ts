@@ -1,6 +1,6 @@
 import { Event } from "../utils/Event";
 import { Player } from "./Player";
-import { useRandomEffect } from "./leyLine";
+import { useRandomEffect } from "./leylines";
 
 export class CycleController {
   private players: Player[] = [];

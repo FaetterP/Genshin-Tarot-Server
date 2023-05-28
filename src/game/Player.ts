@@ -139,14 +139,11 @@ export class Player {
   }
 
   public applyDamage(damage: number) {
-    if (this.shield >= damage) {
-      this.shield -= damage;
-      return;
+    this.shield -= damage;
+    if (this.shield < 0) {
+      this.hp += this.shield;
+      this.shield = 0;
     }
-
-    damage -= this.shield;
-    this.shield = 0;
-    this.hp -= damage;
 
     if (this.hp <= 0) {
       // TODO

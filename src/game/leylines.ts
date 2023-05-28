@@ -156,4 +156,5 @@ export function useRandomEffect(players: Player[]) {
 
   const effect = getRandomElement(effects);
   effect(players);
+  return effect.caller.name;
 }

@@ -53,8 +53,8 @@ export abstract class Enemy {
   }
   public get OnEndCycle() {
     return {
-      addListener: this.e_onEndCycle.AddListener.bind(this.e_onDeath),
-      removeListener: this.e_onEndCycle.RemoveListener.bind(this.e_onDeath),
+      addListener: this.e_onEndCycle.AddListener.bind(this.e_onEndCycle),
+      removeListener: this.e_onEndCycle.RemoveListener.bind(this.e_onEndCycle),
     };
   }
 
@@ -143,5 +143,7 @@ export abstract class Enemy {
     this.isStunned = false;
   }
 
-  endCycle() {}
+  endCycle() {
+    this.e_onEndCycle.Invoke({ enemy: this });
+  }
 }

@@ -114,6 +114,7 @@
 {
   "action": "game.startCycle",
   "cycle": 1,
+  "leylines": ["LightingBolts"],
   "you": {
     "playerId": "player-{uuid}",
     "hp": 10,
@@ -127,6 +128,8 @@
     "wave": 1,
     "characters": ["Amber"],
     "hand": ["Sharpshooter"],
+    "deck": [],
+    "discard": [],
     "enemies": [
       {
         "id": "enemy-{uuid}",
@@ -153,6 +156,8 @@
       "wave": 1,
       "characters": [],
       "hand": [],
+      "deck": [],
+      "discard": [],
       "enemies": [],
       "effects": []
     }
@@ -187,6 +192,8 @@
     "wave": 1,
     "characters": ["Amber"],
     "hand": ["Sharpshooter"],
+    "deck": [],
+    "discard": [],
     "enemies": [
       {
         "id": "enemy-{uuid}",
