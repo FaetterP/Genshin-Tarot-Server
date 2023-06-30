@@ -89,6 +89,7 @@ export class Player {
       shields: this.shield,
       energy: this.energy,
       wave: this.wave,
+      mora: this.mora,
       actionPoints: {
         normal: this.actionPoints,
         extra: this.extraActionPoints,

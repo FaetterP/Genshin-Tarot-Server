@@ -1,4 +1,4 @@
-import { getAllClients } from "..";
+import { getAllClients, getAllPlayers } from "..";
 import { CardUseContext } from "../../../types/functionsContext";
 import { EnemyPrimitive, PlayerPrimitive } from "../../../types/general";
 import { ExtWebSocket } from "../../../types/wsTypes";
@@ -95,12 +95,14 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   ws.player.discardCard(card);
   // TODO move discard to card.use
 
-  const ret = {
-    action: "game.useCard",
-    cardId: card.ID,
-    player: ws.player.getPrimitiveStats(),
-  };
-  sendToAll(ret);
+  for (const player of getAllPlayers()) {
+    const ret = {
+      action: "game.useCard",
+      cardId: card.ID,
+      player: player.getPrimitiveStats(),
+    };
+    sendToAll(ret);
+  }
 }
 
 export default { handlers: { startGame, useCard, endTurn } };
