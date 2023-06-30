@@ -44,9 +44,9 @@ async function startCycle(ws: ExtWebSocket) {
 async function endTurn(ws: ExtWebSocket, payload: any) {
   const ret = { action: "game.endTurn", player: ws.player.ID };
   sendToAll(ret);
-  ws.cycleController.playerEndTurn(ws.player);
-
-  startCycle(ws);
+  if (ws.cycleController.playerEndTurn(ws.player)) {
+    startCycle(ws);
+  }
 }
 
 async function useCard(ws: ExtWebSocket, payload: any) {

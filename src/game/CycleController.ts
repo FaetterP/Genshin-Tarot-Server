@@ -89,12 +89,14 @@ export class CycleController {
     this.cycle += 1;
   }
 
-  playerEndTurn(player: Player) {
+  playerEndTurn(player: Player): boolean {
     player.endTurn();
     if (this.players.find((player) => !player.IsTurnEnds)) {
-      return;
+      return false;
     }
+
     this.endCycle();
+    return true;
   }
 
   getPlayerById(id: string) {
