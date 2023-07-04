@@ -1,4 +1,5 @@
 import { getAllPlayers } from "../../../ws";
+import { Burn } from "../../cards/misc/Burn";
 import { Enemy } from "../Enemy";
 
 export class HilichurlGrenadier extends Enemy {
@@ -12,8 +13,8 @@ export class HilichurlGrenadier extends Enemy {
   }
 
   override death(): void {
-    for(const player of getAllPlayers()){
-      // TODO add Burn to top deck
+    for (const player of getAllPlayers()) {
+      player.addCardToDeck(new Burn());
     }
   }
 }

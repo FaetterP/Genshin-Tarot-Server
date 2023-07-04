@@ -1,4 +1,7 @@
+import { Burn } from "../storage/cards/misc/Burn";
+import { Dash } from "../storage/cards/misc/Dash";
 import { Freeze } from "../storage/cards/misc/Freeze";
+import { Overheat } from "../storage/cards/misc/Overheat";
 import { Cryo } from "../storage/elements/Cryo";
 import { Electro } from "../storage/elements/Electro";
 import { Hydro } from "../storage/elements/Hydro";
@@ -8,7 +11,7 @@ import { Player } from "./Player";
 
 function EngulfingStorm(players: Player[]) {
   for (const player of players) {
-    player.applyDamage(1); // TODO piercing damage
+    player.applyDamage(1, true);
   }
 }
 
@@ -19,7 +22,7 @@ function SmolderingFlames(players: Player[]) {
         enemy.applyElement(new Pyro(), player);
       }
     }
-    // TODO add Burn to discard
+    player.addCardToDiscard(new Burn());
   }
 }
 
@@ -30,7 +33,7 @@ function MonsterAttendants() {
 function Adrenaline(players: Player[]) {
   for (const player of players) {
     if (player.Health <= 7) {
-      // TODO add overheat to hand
+      player.addCardToHand(new Overheat());
     }
   }
 }
@@ -66,14 +69,14 @@ function ReinforcedShields(players: Player[]) {
 function ElementalRefresh(players: Player[]) {
   for (const player of players) {
     for (const enemy of player.Enemies) {
-      // TODO delete elements
+      enemy.clearElements();
     }
   }
 }
 
 function SlowingWater(players: Player[]) {
   for (const player of players) {
-    // TODO player drop random card
+    player.discardRandomCard();
     for (const enemy of player.Enemies) {
       if (enemy.Elements.length === 0) {
         enemy.applyElement(new Hydro(), player);
@@ -125,7 +128,7 @@ function EnergyTides(players: Player[]) {
 function WindCurrent(players: Player[]) {
   for (const player of players) {
     if (player.Health <= 7) {
-      // TODO add Dash to hand
+      player.addCardToHand(new Dash());
     }
   }
 }

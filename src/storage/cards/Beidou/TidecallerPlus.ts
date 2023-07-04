@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
+import { Overheat } from "../misc/Overheat";
 
 export class TidecallerPlus extends Card {
   public get Name(): string {
@@ -17,6 +18,6 @@ export class TidecallerPlus extends Card {
     }
 
     ctx.player.addShield(3);
-    // TODO add Overheat to hand
+    ctx.player.addCardToHand(new Overheat());
   }
 }

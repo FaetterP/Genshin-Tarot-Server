@@ -129,6 +129,10 @@ export abstract class Enemy {
     return this.elements.map((el) => el.Name).includes(element.Name);
   }
 
+  clearElements() {
+    this.elements = [];
+  }
+
   addShields(count: number) {
     this.shield = Math.max(0, this.shield + count);
   }

@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
+import { Dash } from "../misc/Dash";
 
 export class LemniscaticWindPlus extends Card {
   public get Name(): string {
@@ -23,7 +24,11 @@ export class LemniscaticWindPlus extends Card {
       element: new Anemo(),
       player: ctx.player,
     };
-    // TODO if last played card is Dash, 5 damage
+
+    if (ctx.player.LastCard instanceof Dash) {
+      attack.damage = 5;
+    }
+
     ctx.enemies[0].applyAttack(attack);
   }
 }

@@ -30,6 +30,7 @@ export class Player {
   private hand: Card[] = [];
   private discard: Card[] = [];
   private deck: Card[] = [];
+  private lastCard?: Card;
 
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
@@ -63,6 +64,9 @@ export class Player {
   }
   public get Hand(): ReadonlyArray<Card> {
     return this.hand;
+  }
+  public get LastCard(): Card | undefined {
+    return this.lastCard;
   }
   public get IsTurnEnds() {
     return this.isTurnEnds;
@@ -139,11 +143,15 @@ export class Player {
     this.energy = 0;
   }
 
-  public applyDamage(damage: number) {
-    this.shield -= damage;
-    if (this.shield < 0) {
-      this.hp += this.shield;
-      this.shield = 0;
+  public applyDamage(damage: number, isPiercing: boolean = false) {
+    if (isPiercing) {
+      this.hp -= damage;
+    } else {
+      this.shield -= damage;
+      if (this.shield < 0) {
+        this.hp += this.shield;
+        this.shield = 0;
+      }
     }
 
     if (this.hp <= 0) {
@@ -278,6 +286,14 @@ export class Player {
 
   public addCardToDiscard(card: Card) {
     this.discard.push(card);
+  }
+
+  public addCardToHand(card: Card) {
+    this.hand.push(card);
+  }
+
+  public addCardToDeck(card: Card) {
+    this.deck.push(card);
   }
 
   public startCycle() {
