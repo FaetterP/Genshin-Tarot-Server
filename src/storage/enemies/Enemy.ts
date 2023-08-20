@@ -84,6 +84,10 @@ export abstract class Enemy {
   }
 
   applyAttack(attack: Attack) {
+    if (this.Health <= 0) {
+      return;
+    }
+
     if (!attack.isRange && !attack.player.Enemies.includes(this)) {
       throw new Error("attack not range");
     }
@@ -107,6 +111,10 @@ export abstract class Enemy {
   death() {}
 
   applyElement(element: Element, player: Player) {
+    if (this.Health <= 0) {
+      return;
+    }
+
     if (element instanceof Cryo || element instanceof Hydro) {
       // TODO player drop all Burn cards
     }
