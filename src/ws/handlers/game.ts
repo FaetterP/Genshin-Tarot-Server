@@ -3,50 +3,18 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { EnemyPrimitive, PlayerPrimitive } from "../../../types/general";
 import { ExtWebSocket } from "../../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
+import { TaskAwaiter } from "../../utils/TaskAwaiter";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
   await sendToAllAndWait({ action: "game.startGame" });
 
-  startCycle(ws);
-}
-
-async function startCycle(ws: ExtWebSocket) {
-  const { leylines } = ws.cycleController.startCycle()!;
-  const ret: {
-    you?: PlayerPrimitive;
-    cycle: number;
-    leylines: string[];
-    otherPlayers: PlayerPrimitive[];
-  } = {
-    cycle: ws.cycleController.CycleNumber,
-    leylines,
-    otherPlayers: [],
-  };
-
-  for (const ws of getAllClients()) {
-    const player = (ws as ExtWebSocket).player;
-    ret.otherPlayers.push(player.getPrimitiveStats());
-  }
-
-  for (const ws of getAllClients()) {
-    const data = { ...ret, action: "game.startCycle" };
-    const you = (ws as ExtWebSocket).player;
-    data.you = you.getPrimitiveStats();
-    data.otherPlayers = data.otherPlayers.filter(
-      (player) => player.playerId !== data.you?.playerId
-    );
-    ws.send(JSON.stringify(data));
-  }
+  ws.cycleController.startCycle();
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
-  const ret = { action: "game.endTurn", player: ws.player.ID };
-  sendToAll(ret);
-  if (ws.cycleController.playerEndTurn(ws.player)) {
-    startCycle(ws);
-  }
+  ws.cycleController.playerEndTurn(ws.player);
 }
 
 async function useCard(ws: ExtWebSocket, payload: any) {

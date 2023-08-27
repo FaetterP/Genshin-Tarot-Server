@@ -7,8 +7,20 @@ export type EnemyDeathContext = {
 
 export type EnemyEndCycleContext = {
   enemy: Enemy;
+  addToReport: (data: any[]) => void;
 };
 
 export type PlayerEndsWavesContext = {
   player: Player;
+};
+
+export type CycleStartContext = {
+  cycle: number;
+  // leylines: { name: string; use: (player: Player) => void }[];
+  addToReport: (data: any[]) => void;
+};
+
+export type CycleEndContext = {
+  cycle: number;
+  addToReport: (data: any[]) => void;
 };

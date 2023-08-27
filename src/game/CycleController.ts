@@ -1,13 +1,18 @@
+import { CycleEndContext, CycleStartContext } from "../../types/eventsContext";
+import { ExtWebSocket } from "../../types/wsTypes";
 import { Event } from "../utils/Event";
+import { sendToAll, sendToAllAndWait } from "../utils/wsUtils";
+import { getAllClients, getAllPlayers } from "../ws";
 import { Player } from "./Player";
-import { useRandomEffect } from "./leylines";
+import { getRandomEffect } from "./leylines";
 
 export class CycleController {
   private players: Player[] = [];
   private cycle: number = 0;
   private isGameStart: boolean = false;
 
-  private e_onCyclesEnd = new Event();
+  private e_onCycleEnd = new Event<CycleEndContext>();
+  private e_onCycleStart = new Event<CycleStartContext>();
 
   public get PlayersCount() {
     return this.players.length;
@@ -18,11 +23,17 @@ export class CycleController {
   public get IsGameStart() {
     return this.isGameStart;
   }
-  public get OnCyclesEnd() {
+  public get OnCycleEnd() {
     return {
-      addListener: this.e_onCyclesEnd.AddListener.bind(this.e_onCyclesEnd),
-      removeListener: this.e_onCyclesEnd.RemoveListener.bind(
-        this.e_onCyclesEnd
+      addListener: this.e_onCycleEnd.AddListener.bind(this.e_onCycleEnd),
+      removeListener: this.e_onCycleEnd.RemoveListener.bind(this.e_onCycleEnd),
+    };
+  }
+  public get OnCycleStart() {
+    return {
+      addListener: this.e_onCycleStart.AddListener.bind(this.e_onCycleStart),
+      removeListener: this.e_onCycleStart.RemoveListener.bind(
+        this.e_onCycleStart
       ),
     };
   }
@@ -62,41 +73,81 @@ export class CycleController {
     this.cycle = 1;
   }
 
-  startCycle() {
-    if (this.cycle === 12) {
-      this.e_onCyclesEnd.Invoke(null);
+  startCycle(): void {
+    if (this.cycle > 12) {
+      // TODO
       return;
     }
 
-    for (const player of this.players) {
-      player.startCycle();
-    }
-
     const countEffects = Math.floor(this.cycle / 3);
-    const leylines: string[] = [];
+    const leylines: { name: string; use: (player: Player[]) => void }[] = [];
 
     for (let i = 0; i < countEffects; i++) {
-      leylines.push(useRandomEffect(this.players));
+      leylines.push(getRandomEffect());
     }
 
-    return { leylines };
+    let report: any[] = [];
+    for (const line of leylines) {
+      line.use(this.players);
+      report.push({ type: "useLeyline", name: line.name });
+    }
+
+    this.e_onCycleStart.Invoke({
+      cycle: this.cycle,
+      addToReport: (data: any[]) => {
+        report = [...report, ...data];
+      },
+    });
+
+    for (const ws of getAllClients()) {
+      const you = (ws as ExtWebSocket).player;
+      const data = {
+        action: "game.startCycle",
+
+        you: you.getPrimitiveStats(),
+        otherPlayers: getAllPlayers().map((player) =>
+          player.getPrimitiveStats()
+        ),
+        cycle: this.cycle,
+        leylines: leylines.map((line) => line.name),
+        report,
+      };
+      data.otherPlayers = data.otherPlayers.filter(
+        (player) => player.playerId !== data.you?.playerId
+      );
+      ws.send(JSON.stringify(data));
+    }
   }
 
-  endCycle() {
-    for (const player of this.players) {
-      player.endCycle();
-    }
+  private async endCycle() {
+    let report: any[] = [];
+
+    this.e_onCycleEnd.Invoke({
+      cycle: this.cycle,
+      addToReport(data) {
+        report = [...report, ...data];
+      },
+    });
+
+    const ret = {
+      action: "game.endTurnReport",
+      report,
+    };
+    await sendToAllAndWait(ret);
+
     this.cycle += 1;
+    this.startCycle();
   }
 
-  playerEndTurn(player: Player): boolean {
+  playerEndTurn(player: Player) {
     player.endTurn();
+    sendToAll({ action: "game.endTurn", playerID: player.ID });
+
     if (this.players.find((player) => !player.IsTurnEnds)) {
-      return false;
+      return;
     }
 
     this.endCycle();
-    return true;
   }
 
   getPlayerById(id: string) {

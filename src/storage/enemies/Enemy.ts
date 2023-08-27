@@ -155,7 +155,7 @@ export abstract class Enemy {
     this.isStunned = false;
   }
 
-  endCycle() {
-    this.e_onEndCycle.Invoke({ enemy: this });
+  endCycle(addToReport: (data: any[]) => void) {
+    this.e_onEndCycle.Invoke({ enemy: this, addToReport });
   }
 }

@@ -117,7 +117,7 @@ describe("game/CycleController", () => {
     const player = new Player();
 
     const callbackMock = jest.fn(() => {});
-    cycleController.OnCyclesEnd.addListener(callbackMock);
+    cycleController.OnCycleEnd.addListener(callbackMock);
 
     cycleController.connectPlayer(player);
 

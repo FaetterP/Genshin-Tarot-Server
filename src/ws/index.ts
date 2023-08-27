@@ -61,7 +61,7 @@ async function onConnect(ws: ExtWebSocket, req: any) {
     ws.on("close", onDisconnect);
     ws.on("pong", heartbeat);
 
-    const player = new Player();
+    const player = new Player(cycleController);
     cycleController.connectPlayer(player);
     ws.player = player;
     ws.cycleController = cycleController;

@@ -24,7 +24,7 @@ export async function sendToAllAndWait(payload: any) {
   await taskAwaiter.done();
 }
 
-export async function sendToAll(payload: any) {
+export function sendToAll(payload: any) {
   for (const ws of getAllClients()) {
     ws.send(JSON.stringify({ ...payload }));
   }

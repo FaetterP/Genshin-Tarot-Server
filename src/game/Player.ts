@@ -1,6 +1,9 @@
 import { v4 } from "uuid";
 import {
+  CycleEndContext,
+  CycleStartContext,
   EnemyDeathContext,
+  EnemyEndCycleContext,
   PlayerEndsWavesContext,
 } from "../../types/eventsContext";
 import { Card } from "../storage/cards/Card";
@@ -13,6 +16,7 @@ import { Freeze } from "../storage/cards/misc/Freeze";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
+import { CycleController } from "./CycleController";
 
 export class Player {
   public readonly ID: string;
@@ -72,8 +76,11 @@ export class Player {
     return this.isTurnEnds;
   }
 
-  constructor() {
+  constructor(cycleController: CycleController) {
     this.ID = `player-${v4()}`;
+
+    cycleController.OnCycleEnd.addListener(this.cycleEndHandler.bind(this));
+    cycleController.OnCycleStart.addListener(this.cycleStartHandler.bind(this));
   }
 
   public getPrimitiveStats(): PlayerPrimitive {
@@ -240,7 +247,7 @@ export class Player {
       );
       const addedEnemy: Enemy = new enemyType();
       addedEnemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
-      addedEnemy.OnEndCycle.addListener(this.enemyAttackHandler.bind(this));
+      addedEnemy.OnEndCycle.addListener(this.enemyEndCycleHandler.bind(this));
       this.enemies.push(addedEnemy);
     }
 
@@ -296,32 +303,6 @@ export class Player {
     this.deck.push(card);
   }
 
-  public startCycle() {
-    if (this.enemies.length === 0) {
-      this.createWave();
-    }
-
-    this.isTurnEnds = false;
-
-    this.shield = 0;
-    this.actionPoints = 3;
-    this.extraActionPoints = 0;
-
-    for (let i = 0; i < 5; i++) {
-      this.drawCard();
-    }
-
-    for (const effect of this.effects) {
-      if (effect.onStartCycle(this)) {
-        this.effects = this.effects.filter((eff) => eff !== effect);
-      }
-    }
-
-    for (const enemy of this.enemies) {
-      enemy.startCycle();
-    }
-  }
-
   public useAttackEffects(enemy: Enemy) {
     for (const effect of this.effects) {
       if (effect.onAttack(this, enemy)) {
@@ -332,17 +313,6 @@ export class Player {
 
   public endTurn() {
     this.isTurnEnds = true;
-  }
-
-  public endCycle() {
-    const count = this.hand.length;
-    for (let i = 0; i < count; i++) {
-      this.discardRandomCard();
-    }
-
-    for (const enemy of this.enemies) {
-      enemy.endCycle();
-    }
   }
 
   /* Subscribes */
@@ -356,7 +326,69 @@ export class Player {
     }
   }
 
-  private enemyAttackHandler({ enemy }: EnemyDeathContext) {
-    this.applyDamage(enemy.Damage);
+  private enemyEndCycleHandler(ctx: EnemyEndCycleContext) {
+    this.applyDamage(ctx.enemy.Damage);
+    ctx.addToReport([
+      {
+        type: "enemyAttack",
+        player: this.ID,
+        enemy: ctx.enemy.ID,
+        damage: ctx.enemy.Damage,
+      },
+    ]);
+  }
+
+  private cycleStartHandler(ctx: CycleStartContext) {
+    if (this.enemies.length === 0) {
+      this.createWave();
+      ctx.addToReport([
+        {
+          type: "createWave",
+          enemies: this.enemies.map((enemy) => enemy.getPrimitiveStats()),
+        },
+      ]);
+    }
+
+    this.isTurnEnds = false;
+
+    this.shield = 0;
+    this.actionPoints = 3;
+    this.extraActionPoints = 0;
+    ctx.addToReport([{ type: "resetStats" }]);
+
+    for (let i = 0; i < 5; i++) {
+      this.drawCard();
+    }
+    ctx.addToReport([
+      {
+        type: "drawCards",
+        cards: this.hand.map((card) => ({ name: card.Name, cardId: card.ID })),
+      },
+    ]);
+
+    for (const effect of this.effects) {
+      const isRemove = effect.onStartCycle(this);
+      if (isRemove) {
+        this.effects = this.effects.filter((eff) => eff !== effect);
+      }
+
+      ctx.addToReport([{ type: "useEffect", effect: effect.Name, isRemove }]);
+    }
+
+    for (const enemy of this.enemies) {
+      enemy.startCycle();
+    }
+  }
+
+  private cycleEndHandler(ctx: CycleEndContext) {
+    const count = this.hand.length;
+    for (let i = 0; i < count; i++) {
+      this.discardRandomCard();
+    }
+    ctx.addToReport([{ type: "clearHand" }]);
+
+    for (const enemy of this.enemies) {
+      enemy.endCycle(ctx.addToReport);
+    }
   }
 }

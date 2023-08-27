@@ -137,7 +137,7 @@ function SheerCold() {
   // TODO all players without Freeze in hand take Freeze to top deck
 }
 
-export function useRandomEffect(players: Player[]) {
+export function getRandomEffect() {
   const effects: {
     use: (players: Player[]) => void;
     name: string;
@@ -161,6 +161,5 @@ export function useRandomEffect(players: Player[]) {
   ];
 
   const effect = getRandomElement(effects);
-  effect.use(players);
-  return effect.name;
+  return effect;
 }
