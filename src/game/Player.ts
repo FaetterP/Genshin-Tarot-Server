@@ -344,6 +344,7 @@ export class Player {
       ctx.addToReport([
         {
           type: "createWave",
+          player: this.ID,
           enemies: this.enemies.map((enemy) => enemy.getPrimitiveStats()),
         },
       ]);
@@ -354,13 +355,14 @@ export class Player {
     this.shield = 0;
     this.actionPoints = 3;
     this.extraActionPoints = 0;
-    ctx.addToReport([{ type: "resetStats" }]);
+    ctx.addToReport([{ type: "resetStats", player: this.ID }]);
 
     for (let i = 0; i < 5; i++) {
       this.drawCard();
     }
     ctx.addToReport([
       {
+        player: this.ID,
         type: "drawCards",
         cards: this.hand.map((card) => ({ name: card.Name, cardId: card.ID })),
       },
@@ -372,7 +374,9 @@ export class Player {
         this.effects = this.effects.filter((eff) => eff !== effect);
       }
 
-      ctx.addToReport([{ type: "useEffect", effect: effect.Name, isRemove }]);
+      ctx.addToReport([
+        { type: "useEffect", effect: effect.Name, isRemove, player: this.ID },
+      ]);
     }
 
     for (const enemy of this.enemies) {
@@ -385,7 +389,7 @@ export class Player {
     for (let i = 0; i < count; i++) {
       this.discardRandomCard();
     }
-    ctx.addToReport([{ type: "clearHand" }]);
+    ctx.addToReport([{ type: "clearHand", player: this.ID }]);
 
     for (const enemy of this.enemies) {
       enemy.endCycle(ctx.addToReport);
