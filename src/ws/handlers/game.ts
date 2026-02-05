@@ -60,18 +60,19 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   };
   ws.player.setStepsCollector((data) => steps.push(...data));
 
-  if (!ws.player.trySpendActonPoints(card.Cost))
+  if (ws.player.ActionPoints.total < card.Cost)
     throw new Error(
       `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`
     );
 
+  card.use(ctx);
+
+  ws.player.trySpendActonPoints(card.Cost);
   steps.push({
     type: "player_change_action_points",
     playerId: ws.player.ID,
     delta: -card.Cost,
   });
-
-  card.use(ctx);
 
   if (ws.player.Hand.some((c) => c.ID === card.ID)) {
     steps.push({

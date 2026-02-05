@@ -20,11 +20,10 @@ export abstract class Character {
   }
 
   public tryUseBurst(ctx: CharacterUseBurstContext) {
-    if (ctx.player.trySpendEnergy(this.burstCost)) {
-      this.useBurst(ctx);
-      return true;
-    }
-    return false;
+    if (ctx.player.Energy < this.burstCost) return false;
+    this.useBurst(ctx);
+    ctx.player.trySpendEnergy(this.burstCost);
+    return true;
   }
 
   abstract useBurst(ctx: CharacterUseBurstContext): void;
