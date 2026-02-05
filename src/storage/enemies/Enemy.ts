@@ -5,6 +5,7 @@ import type { DetailedStep } from "../../../types/detailedStep";
 import {
   EnemyDeathContext,
   EnemyEndCycleContext,
+  EnemyStartCycleContext,
 } from "../../../types/eventsContext";
 import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../../types/general";
@@ -29,6 +30,7 @@ export abstract class Enemy {
   private isStunned: boolean = false;
 
   private e_onDeath = new Event<EnemyDeathContext>();
+  private e_onStartCycle = new Event<EnemyStartCycleContext>();
   private e_onEndCycle = new Event<EnemyEndCycleContext>();
 
   public get Health() {
@@ -50,6 +52,12 @@ export abstract class Enemy {
     return {
       addListener: this.e_onDeath.AddListener.bind(this.e_onDeath),
       removeListener: this.e_onDeath.RemoveListener.bind(this.e_onDeath),
+    };
+  }
+  public get OnStartCycle() {
+    return {
+      addListener: this.e_onStartCycle.AddListener.bind(this.e_onStartCycle),
+      removeListener: this.e_onStartCycle.RemoveListener.bind(this.e_onStartCycle),
     };
   }
   public get OnEndCycle() {
@@ -163,18 +171,12 @@ export abstract class Enemy {
 
   reveal() {}
 
-  startCycle() {
+  startCycle(ctx: EnemyStartCycleContext) {
     this.isStunned = false;
+    this.e_onStartCycle.Invoke(ctx);
   }
 
-  endCycle(ctx: {
-    addToReport: (data: any[]) => void;
-    addToSteps: (data: DetailedStep[]) => void;
-  }) {
-    this.e_onEndCycle.Invoke({
-      enemy: this,
-      addToReport: ctx.addToReport,
-      addToSteps: ctx.addToSteps,
-    });
+  endCycle(ctx: EnemyEndCycleContext) {
+    this.e_onEndCycle.Invoke(ctx);
   }
 }

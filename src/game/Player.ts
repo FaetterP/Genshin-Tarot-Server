@@ -5,6 +5,7 @@ import {
   CycleStartContext,
   EnemyDeathContext,
   EnemyEndCycleContext,
+  EnemyStartCycleContext,
   PlayerEndsWavesContext,
 } from "../../types/eventsContext";
 import { Card } from "../storage/cards/Card";
@@ -282,6 +283,14 @@ export class Player {
     }
 
     this.wave++;
+
+    this._stepsCollector?.(
+      this.enemies.map((enemy) => ({
+        type: "enemy_appearance" as const,
+        playerId: this.ID,
+        enemy: enemy.getPrimitiveStats(),
+      }))
+    );
   }
 
   public drawCard(): Card {
@@ -353,22 +362,49 @@ export class Player {
   }
 
   private enemyEndCycleHandler(ctx: EnemyEndCycleContext) {
-    this.applyDamage(ctx.enemy.Damage);
+    const damage = ctx.enemy.Damage;
+    const isPiercing = false;
+    if (damage <= 0) return;
+
+    if (isPiercing) {
+      this.applyDamage(damage, true);
+      ctx.addToSteps([{
+        type: "player_take_damage",
+        playerId: ctx.playerId,
+        damage,
+        isPiercing: true,
+        enemyId: ctx.enemy.ID,
+      }]);
+    } else {
+      const shieldBefore = this.shield;
+      this.applyDamage(damage, false);
+      const shieldAfter = this.shield;
+      const shieldDelta = shieldAfter - shieldBefore;
+      if (shieldDelta < 0) {
+        ctx.addToSteps([{
+          type: "player_change_shield",
+          playerId: ctx.playerId,
+          delta: shieldDelta,
+        }]);
+      }
+      const hpDamage = Math.max(0, damage - shieldBefore);
+      if (hpDamage > 0) {
+        ctx.addToSteps([{
+          type: "player_take_damage",
+          playerId: ctx.playerId,
+          damage: hpDamage,
+          isPiercing: false,
+          enemyId: ctx.enemy.ID,
+        }]);
+      }
+    }
+
     ctx.addToReport([
       {
         type: "enemyAttack",
         player: this.ID,
         enemy: ctx.enemy.ID,
         damage: ctx.enemy.Damage,
-      },
-    ]);
-    ctx.addToSteps([
-      {
-        type: "player_take_damage",
-        playerId: this.ID,
-        damage: ctx.enemy.Damage,
-        isPiercing: false,
-        enemyId: ctx.enemy.ID,
       },
     ]);
   }
@@ -445,7 +481,12 @@ export class Player {
     }
 
     for (const enemy of this.enemies) {
-      enemy.startCycle();
+      enemy.startCycle({
+        enemy,
+        playerId: this.ID,
+        addToReport: ctx.addToReport,
+        addToSteps: ctx.addToSteps,
+      });
     }
   }
 
@@ -466,6 +507,8 @@ export class Player {
 
     for (const enemy of this.enemies) {
       enemy.endCycle({
+        enemy,
+        playerId: this.ID,
         addToReport: ctx.addToReport,
         addToSteps: ctx.addToSteps,
       });
