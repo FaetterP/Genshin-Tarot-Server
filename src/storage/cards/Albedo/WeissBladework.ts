@@ -17,10 +17,28 @@ export class WeissBladework extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 2, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    const damage = 2;
 
-    if (ctx.enemies[0].isContainsElement(new Geo())) {
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+      },
+    ]);
+    if (target.isContainsElement(new Geo())) {
+      ctx.addToSteps([{
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 2,
+      }]);
+    }
+
+    const attack: Attack = { damage, player: ctx.player };
+    target.applyAttack(attack);
+    if (target.isContainsElement(new Geo())) {
       ctx.player.addEnergy(2);
     }
   }

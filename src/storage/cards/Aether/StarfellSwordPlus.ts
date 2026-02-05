@@ -13,9 +13,21 @@ export class StarfellSwordPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    const damage = 2;
+
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemy.ID,
+        damage,
+        isPiercing: true,
+        element: "Geo",
+      }))
+    );
+
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
-        damage: 2,
+        damage,
         isPiercing: true,
         element: new Geo(),
         player: ctx.player,

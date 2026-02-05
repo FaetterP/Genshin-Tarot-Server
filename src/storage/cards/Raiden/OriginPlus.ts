@@ -17,14 +17,27 @@ export class OriginPlus extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    const damage = target.isContainsElement(new Electro()) ? 5 : 2;
+    ctx.addToSteps([
+      {
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 2,
+      },
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element: "Electro",
+      },
+    ]);
     ctx.player.addEnergy(2);
-
-    const attack: Attack = { damage: 2, player: ctx.player };
-
-    if (ctx.enemies[0].isContainsElement(new Electro())) {
-      attack.damage = 5;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    target.applyAttack({
+      damage,
+      element: new Electro(),
+      player: ctx.player,
+    });
   }
 }

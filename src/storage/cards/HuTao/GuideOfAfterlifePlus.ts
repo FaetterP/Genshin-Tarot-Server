@@ -12,15 +12,47 @@ export class GuideOfAfterlifePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps([
+      {
+        type: "player_take_damage",
+        playerId: ctx.player.ID,
+        damage: 1,
+        isPiercing: false,
+      },
+    ]);
     ctx.player.applyDamage(1);
 
     if (ctx.isUseAlternative) {
-      ctx.player.drawCard();
-      ctx.player.drawCard();
+      const c1 = ctx.player.drawCard();
+      const c2 = ctx.player.drawCard();
+      ctx.addToSteps([
+        {
+          type: "draw_cards",
+          playerId: ctx.player.ID,
+          cards: [
+            { cardId: c1.ID, name: c1.Name },
+            { cardId: c2.ID, name: c2.Name },
+          ],
+        },
+      ]);
     } else {
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 1,
+        },
+      ]);
       ctx.player.addEnergy(1);
     }
-
-    ctx.player.addEffect(new GuideOfAfterlifeEffect());
+    const effect = new GuideOfAfterlifeEffect();
+    ctx.addToSteps([
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
+    ctx.player.addEffect(effect);
   }
 }

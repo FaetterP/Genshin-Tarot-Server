@@ -12,14 +12,20 @@ export class DanceOfFirePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    const damage = ctx.player.Shields > 0 ? 3 : 1;
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemy.ID,
+        damage,
+        isPiercing: false,
+      }))
+    );
     for (const enemy of ctx.player.Enemies) {
-      const attack: Attack = { damage: 1, player: ctx.player };
-
-      if (ctx.player.Shields > 0) {
-        attack.damage = 3;
-      }
-
-      enemy.applyAttack(attack);
+      enemy.applyAttack({
+        damage,
+        player: ctx.player,
+      });
     }
   }
 }

@@ -12,6 +12,13 @@ export class LetTheShowBeginPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Hydro",
+      }))
+    );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Hydro(), ctx.player);
     }

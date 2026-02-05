@@ -12,10 +12,16 @@ export class Breastplate extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Geo",
+      }))
+    );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
     }
-
     ctx.player.addHealth(1);
   }
 }

@@ -1,3 +1,4 @@
+import type { DetailedStep } from "../../types/detailedStep";
 import { CycleEndContext, CycleStartContext } from "../../types/eventsContext";
 import { ExtWebSocket } from "../../types/wsTypes";
 import { Event } from "../utils/Event";
@@ -87,6 +88,7 @@ export class CycleController {
     }
 
     let report: any[] = [];
+    const steps: DetailedStep[] = [];
     for (const line of leylines) {
       line.use(this.players);
       report.push({ type: "useLeyline", name: line.name });
@@ -96,6 +98,9 @@ export class CycleController {
       cycle: this.cycle,
       addToReport: (data: any[]) => {
         report = [...report, ...data];
+      },
+      addToSteps: (data: DetailedStep[]) => {
+        steps.push(...data);
       },
     });
 
@@ -111,6 +116,7 @@ export class CycleController {
         cycle: this.cycle,
         leylines: leylines.map((line) => line.name),
         report,
+        steps,
       };
       data.otherPlayers = data.otherPlayers.filter(
         (player) => player.playerId !== data.you?.playerId
@@ -121,17 +127,22 @@ export class CycleController {
 
   private async endCycle() {
     let report: any[] = [];
+    const steps: DetailedStep[] = [];
 
     this.e_onCycleEnd.Invoke({
       cycle: this.cycle,
       addToReport(data) {
         report = [...report, ...data];
       },
+      addToSteps(data: DetailedStep[]) {
+        steps.push(...data);
+      },
     });
 
     const ret = {
       action: "game.endTurnReport",
       report,
+      steps,
     };
     await sendToAllAndWait(ret);
 

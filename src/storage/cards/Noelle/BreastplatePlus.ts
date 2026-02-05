@@ -13,10 +13,22 @@ export class BreastplatePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    const effect = new BreastplateEffect();
+    ctx.addToSteps([
+      ...ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Geo",
+      })),
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
     }
-
-    ctx.player.addEffect(new BreastplateEffect());
+    ctx.player.addEffect(effect);
   }
 }

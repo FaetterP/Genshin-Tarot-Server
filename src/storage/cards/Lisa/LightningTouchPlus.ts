@@ -17,15 +17,28 @@ export class LightningTouchPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
+    const target = ctx.enemies[0];
+    const drawn = ctx.player.drawCard();
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 1,
+        isPiercing: true,
+        element: "Electro",
+      },
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [{ cardId: drawn.ID, name: drawn.Name }],
+      },
+    ]);
+    target.applyAttack({
       damage: 1,
       isPiercing: true,
       isRange: true,
       element: new Electro(),
       player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
-
-    ctx.player.drawCard();
+    });
   }
 }

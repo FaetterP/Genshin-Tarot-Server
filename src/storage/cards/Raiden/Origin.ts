@@ -20,6 +20,13 @@ export class Origin extends Card {
     ctx.enemies[0].applyAttack(attack);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+      ctx.addToSteps([
+        {
+          type: "player_change_action_points",
+          playerId: ctx.player.ID,
+          delta: 1,
+        },
+      ]);
       ctx.player.addExtraActionPoints(1);
     }
   }

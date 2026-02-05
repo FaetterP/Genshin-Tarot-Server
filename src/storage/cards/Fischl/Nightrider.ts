@@ -18,14 +18,28 @@ export class Nightrider extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
+    const target = ctx.enemies[0];
+    const effect = new NightriderEffect(target);
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 1,
+        isPiercing: true,
+        element: "Electro",
+      },
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
+    target.applyAttack({
       damage: 1,
       isPiercing: true,
       element: new Electro(),
       player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
-
-    ctx.player.addEffect(new NightriderEffect(ctx.enemies[0]));
+    });
+    ctx.player.addEffect(effect);
   }
 }

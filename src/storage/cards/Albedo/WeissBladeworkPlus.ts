@@ -21,6 +21,13 @@ export class WeissBladeworkPlus extends Card {
     ctx.enemies[0].applyAttack(attack);
 
     if (ctx.player.isContainsEffect(new SolarIsotomaEffect())) {
+      ctx.addToSteps([
+        {
+          type: "player_change_action_points",
+          playerId: ctx.player.ID,
+          delta: 1,
+        },
+      ]);
       ctx.player.addExtraActionPoints(1);
       ctx.player.drawCard();
     }

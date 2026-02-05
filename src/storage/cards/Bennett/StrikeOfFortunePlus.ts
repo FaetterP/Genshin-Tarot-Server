@@ -17,16 +17,28 @@ export class StrikeOfFortunePlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 3,
-      player: ctx.player,
-    };
-
+    const target = ctx.enemies[0];
+    const damage = ctx.player.Health <= 7 ? 4 : 3;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+      },
+    ]);
     if (ctx.player.Health <= 7) {
-      attack.damage += 1;
-      ctx.player.addEnergy(3);
+      ctx.addToSteps([{
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 3,
+      }]);
     }
 
-    ctx.enemies[0].applyAttack(attack);
+    const attack: Attack = { damage, player: ctx.player };
+    if (ctx.player.Health <= 7) {
+      ctx.player.addEnergy(3);
+    }
+    target.applyAttack(attack);
   }
 }

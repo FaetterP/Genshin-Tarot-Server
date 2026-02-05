@@ -11,9 +11,18 @@ export class Overheat extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.drawCard();
-    ctx.player.drawCard();
-
+    const c1 = ctx.player.drawCard();
+    const c2 = ctx.player.drawCard();
+    ctx.addToSteps([
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [
+          { cardId: c1.ID, name: c1.Name },
+          { cardId: c2.ID, name: c2.Name },
+        ],
+      },
+    ]);
     // TODO
   }
 }

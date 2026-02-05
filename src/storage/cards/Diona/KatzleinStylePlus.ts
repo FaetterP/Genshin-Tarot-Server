@@ -16,17 +16,21 @@ export class KatzleinStylePlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 2,
+    const target = ctx.enemies[0];
+    const damage = ctx.player.Shields > 0 ? 5 : 2;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: true,
+      },
+    ]);
+    target.applyAttack({
+      damage,
       isPiercing: true,
       isRange: true,
       player: ctx.player,
-    };
-
-    if (ctx.player.Shields > 0) {
-      attack.damage = 5;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    });
   }
 }

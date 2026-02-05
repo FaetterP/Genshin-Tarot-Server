@@ -17,18 +17,24 @@ export class KaboomPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 2,
+    const target = ctx.enemies[0];
+    const damage =
+      ctx.isUseAlternative && ctx.player.trySpendEnergy(2) ? 4 : 2;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: true,
+        element: "Pyro",
+      },
+    ]);
+    target.applyAttack({
+      damage,
       isPiercing: true,
       isRange: true,
       element: new Pyro(),
       player: ctx.player,
-    };
-
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      attack.damage *= 2;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    });
   }
 }

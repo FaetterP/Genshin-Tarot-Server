@@ -17,12 +17,21 @@ export class GuhuaStylePlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 3, player: ctx.player };
-
-    if (ctx.enemies[0].isContainsElement(new Hydro())) {
-      attack.damage = 5;
+    const target = ctx.enemies[0];
+    const damage = target.isContainsElement(new Hydro()) ? 5 : 3;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element: "Hydro",
+      },
+    ]);
+    const attack: Attack = { damage, player: ctx.player };
+    if (target.isContainsElement(new Hydro())) {
+      attack.element = new Hydro();
     }
-
-    ctx.enemies[0].applyAttack(attack);
+    target.applyAttack(attack);
   }
 }

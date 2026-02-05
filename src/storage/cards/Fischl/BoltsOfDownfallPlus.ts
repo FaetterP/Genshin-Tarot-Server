@@ -18,17 +18,24 @@ export class BoltsOfDownfallPlus extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    const damage = ctx.player.isContainsEffect(new NightriderEffect(target))
+      ? 3
+      : 1;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: true,
+      },
+    ]);
     const attack: Attack = {
-      damage: 1,
+      damage,
       isPiercing: true,
       isRange: true,
       player: ctx.player,
     };
-
-    if (ctx.player.isContainsEffect(new NightriderEffect(ctx.enemies[0]))) {
-      attack.damage = 3;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    target.applyAttack(attack);
   }
 }

@@ -18,17 +18,22 @@ export class LemniscaticWindPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
-      damage: 2,
+    const target = ctx.enemies[0];
+    const damage = ctx.player.LastCard instanceof Dash ? 5 : 2;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: true,
+        element: "Anemo",
+      },
+    ]);
+    target.applyAttack({
+      damage,
       isPiercing: true,
       element: new Anemo(),
       player: ctx.player,
-    };
-
-    if (ctx.player.LastCard instanceof Dash) {
-      attack.damage = 5;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    });
   }
 }

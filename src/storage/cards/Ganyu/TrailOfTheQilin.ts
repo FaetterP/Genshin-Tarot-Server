@@ -16,8 +16,15 @@ export class TrailOfTheQilin extends Card {
       throw new Error("no enemies");
     }
 
+    const effect = new TrailOfTheQilinEffect();
+    ctx.addToSteps([
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
     ctx.enemies[0].addStun();
-
-    ctx.player.addEffect(new TrailOfTheQilinEffect());
+    ctx.player.addEffect(effect);
   }
 }

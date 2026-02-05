@@ -1,6 +1,7 @@
 import { Player } from "../src/game/Player";
 import { Character } from "../src/storage/characters/Character";
 import { Enemy } from "../src/storage/enemies/Enemy";
+import type { DetailedStep } from "./detailedStep";
 
 export type ElementReactionContext = {
   player: Player;
@@ -12,6 +13,7 @@ export type CardUseContext = {
   enemies?: Enemy[];
   selectedPlayer?: Player;
   isUseAlternative?: boolean;
+  addToSteps: (data: DetailedStep[]) => void;
 };
 
 export type CharacterUseBurstContext = {

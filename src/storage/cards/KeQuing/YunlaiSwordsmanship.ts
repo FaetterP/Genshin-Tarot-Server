@@ -16,7 +16,15 @@ export class YunlaiSwordsmanship extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 3, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 3,
+        isPiercing: false,
+      },
+    ]);
+    target.applyAttack({ damage: 3, player: ctx.player });
   }
 }

@@ -23,6 +23,15 @@ export class JumpyDumpty extends Card {
       throw new Error("need 2 different enemies");
     }
 
+    ctx.addToSteps(
+      [0, 1].map((i) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemies[i].ID,
+        damage: 1,
+        isPiercing: false,
+        element: "Pyro",
+      }))
+    );
     for (let i = 0; i < 2; i++) {
       const attack: Attack = {
         damage: 1,

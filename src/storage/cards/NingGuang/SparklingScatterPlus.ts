@@ -23,15 +23,23 @@ export class SparklingScatterPlus extends Card {
       throw new Error("need 2 enemies");
     }
 
+    ctx.addToSteps(
+      [0, 1].map((i) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemies[i].ID,
+        damage: 2,
+        isPiercing: true,
+        element: "Geo",
+      }))
+    );
     for (let i = 0; i < 2; i++) {
-      const attack: Attack = {
+      enemies[i].applyAttack({
         damage: 2,
         isPiercing: true,
         isRange: true,
         element: new Geo(),
         player: ctx.player,
-      };
-      enemies[i].applyAttack(attack);
+      });
     }
   }
 }

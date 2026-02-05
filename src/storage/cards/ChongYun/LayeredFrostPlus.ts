@@ -12,8 +12,22 @@ export class LayeredFrostPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.drawCard();
+    const drawn = ctx.player.drawCard();
+    const effect = new LayeredFrostEffect();
 
-    ctx.player.addEffect(new LayeredFrostEffect());
+    ctx.addToSteps([
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [{ cardId: drawn.ID, name: drawn.Name }],
+      },
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
+
+    ctx.player.addEffect(effect);
   }
 }

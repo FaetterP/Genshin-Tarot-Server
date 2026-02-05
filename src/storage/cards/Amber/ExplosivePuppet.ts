@@ -16,8 +16,15 @@ export class ExplosivePuppet extends Card {
       throw new Error("no enemies");
     }
 
+    const effect = new ExplosivePuppetEffect();
+    ctx.addToSteps([
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
     ctx.enemies[0].addStun();
-
-    ctx.player.addEffect(new ExplosivePuppetEffect());
+    ctx.player.addEffect(effect);
   }
 }

@@ -1,6 +1,7 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
 import { Element } from "../elements/Element";
+import type { DetailedStep } from "../../../types/detailedStep";
 import {
   EnemyDeathContext,
   EnemyEndCycleContext,
@@ -94,6 +95,11 @@ export abstract class Enemy {
 
     if (this.shield <= 0 || attack.isPiercing) {
       this.hp -= attack.damage;
+    } else {
+      attack.player.reportEnemyBlockDamage(
+        this.ID,
+        attack.element?.Name
+      );
     }
 
     if (attack.element) {
@@ -103,6 +109,7 @@ export abstract class Enemy {
     attack.player.useAttackEffects(this);
 
     if (this.hp <= 0) {
+      attack.player.reportEnemyDeath(this.ID);
       this.death();
       this.e_onDeath.Invoke({ enemy: this });
     }
@@ -122,6 +129,11 @@ export abstract class Enemy {
     this.elements = [...this.elements, element];
 
     if (this.elements.length >= 2) {
+      player.reportEnemyReaction(
+        this.ID,
+        this.elements[0].Name,
+        this.elements[1].Name
+      );
       this.addShields(-1);
 
       this.elements.forEach((el) => {
@@ -155,7 +167,14 @@ export abstract class Enemy {
     this.isStunned = false;
   }
 
-  endCycle(addToReport: (data: any[]) => void) {
-    this.e_onEndCycle.Invoke({ enemy: this, addToReport });
+  endCycle(ctx: {
+    addToReport: (data: any[]) => void;
+    addToSteps: (data: DetailedStep[]) => void;
+  }) {
+    this.e_onEndCycle.Invoke({
+      enemy: this,
+      addToReport: ctx.addToReport,
+      addToSteps: ctx.addToSteps,
+    });
   }
 }

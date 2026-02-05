@@ -17,15 +17,29 @@ export class EdelBladework extends Card {
       throw new Error("no enemies");
     }
 
-    if (ctx.enemies[0].Shield > 0) {
-      ctx.enemies[0].addShields(-1);
+    const target = ctx.enemies[0];
+    if (target.Shield > 0) {
+      ctx.addToSteps([
+        { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
+      ]);
+      target.addShields(-1);
     } else {
-      const attack: Attack = { damage: 2, player: ctx.player };
-      ctx.enemies[0].applyAttack(attack);
+      ctx.addToSteps([
+        {
+          type: "enemy_take_damage",
+          enemyId: target.ID,
+          damage: 2,
+          isPiercing: false,
+        },
+      ]);
+      target.applyAttack({ damage: 2, player: ctx.player });
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      ctx.enemies[0].applyElement(new Cryo(), ctx.player);
+      ctx.addToSteps([
+        { type: "enemy_get_element", enemyId: target.ID, element: "Cryo" },
+      ]);
+      target.applyElement(new Cryo(), ctx.player);
     }
   }
 }

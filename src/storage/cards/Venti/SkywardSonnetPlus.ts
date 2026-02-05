@@ -13,15 +13,23 @@ export class SkywardSonnetPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    let player = ctx.player;
-    if (ctx.selectedPlayer) {
-      player = ctx.selectedPlayer;
-    }
-
+    const player = ctx.selectedPlayer ?? ctx.player;
+    const effect = new SkywardSonnetPlusEffect();
+    ctx.addToSteps([
+      ...player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Anemo",
+      })),
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
     for (const enemy of player.Enemies) {
       enemy.applyElement(new Anemo(), ctx.player);
     }
-
-    ctx.player.addEffect(new SkywardSonnetPlusEffect());
+    ctx.player.addEffect(effect);
   }
 }

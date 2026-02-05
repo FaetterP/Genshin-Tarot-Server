@@ -17,17 +17,28 @@ export class LiutianArchery extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    let damage = 2;
+    let element: string | undefined;
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+      element = "Cryo";
+      damage *= 3;
+    }
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element,
+      },
+    ]);
     const attack: Attack = {
-      damage: 2,
+      damage,
       isRange: true,
       player: ctx.player,
     };
-
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      attack.element = new Cryo();
-      attack.damage *= 3;
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    if (element) attack.element = new Cryo();
+    target.applyAttack(attack);
   }
 }

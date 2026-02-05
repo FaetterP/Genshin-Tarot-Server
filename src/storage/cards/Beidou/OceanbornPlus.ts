@@ -12,6 +12,14 @@ export class OceanbornPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemy.ID,
+        damage: 2,
+        isPiercing: false,
+      }))
+    );
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
         damage: 2,

@@ -12,6 +12,14 @@ export class NiwabiFireDance extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.addEffect(new NiwabiFireDanceEffect());
+    const effect = new NiwabiFireDanceEffect();
+    ctx.addToSteps([
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: effect.Name,
+      },
+    ]);
+    ctx.player.addEffect(effect);
   }
 }

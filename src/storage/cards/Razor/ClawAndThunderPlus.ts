@@ -12,10 +12,16 @@ export class ClawAndThunderPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps(
+      ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Electro",
+      }))
+    );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Electro(), ctx.player);
     }
-
     // TODO
   }
 }

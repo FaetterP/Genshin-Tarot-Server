@@ -17,13 +17,32 @@ export class ForeignRockbladePlus extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    const damage = 3;
+    const energyDelta = 2;
+
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element: "Geo",
+      },
+      {
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: energyDelta,
+      },
+    ]);
+
     const attack: Attack = {
-      damage: 3,
+      damage,
       element: new Geo(),
       player: ctx.player,
     };
-    ctx.enemies[0].applyAttack(attack);
+    target.applyAttack(attack);
 
-    ctx.player.addEnergy(2);
+    ctx.player.addEnergy(energyDelta);
   }
 }

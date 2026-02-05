@@ -16,14 +16,26 @@ export class TemperedSwordPlus extends Card {
       throw new Error("no enemies");
     }
 
-    if (ctx.enemies[0].Shield > 0) {
-      ctx.enemies[0].addShields(-Infinity);
+    const target = ctx.enemies[0];
+    if (target.Shield > 0) {
+      ctx.addToSteps([
+        {
+          type: "enemy_change_shield",
+          enemyId: target.ID,
+          delta: -target.Shield,
+        },
+      ]);
+      target.addShields(-Infinity);
     } else {
-      const attack: Attack = {
-        damage: 4,
-        player: ctx.player,
-      };
-      ctx.enemies[0].applyAttack(attack);
+      ctx.addToSteps([
+        {
+          type: "enemy_take_damage",
+          enemyId: target.ID,
+          damage: 4,
+          isPiercing: false,
+        },
+      ]);
+      target.applyAttack({ damage: 4, player: ctx.player });
     }
   }
 }

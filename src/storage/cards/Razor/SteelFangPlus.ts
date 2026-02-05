@@ -16,11 +16,18 @@ export class SteelFangPlus extends Card {
       throw new Error("no enemies");
     }
 
-    ctx.enemies[0].addShields(-1);
-
-    const attack: Attack = { damage: 2, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
-
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 2,
+        isPiercing: false,
+      },
+    ]);
+    target.addShields(-1);
+    target.applyAttack({ damage: 2, player: ctx.player });
     // TODO
   }
 }

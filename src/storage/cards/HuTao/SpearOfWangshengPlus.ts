@@ -16,20 +16,27 @@ export class SpearOfWangsheng extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      {
+        type: "player_take_damage",
+        playerId: ctx.player.ID,
+        damage: 1,
+        isPiercing: false,
+      },
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: ctx.player.Health <= 7 ? 4 : 1,
+        isPiercing: true,
+      },
+    ]);
     ctx.player.applyDamage(1);
-
-    const attack: Attack = {
-      damage: 1,
+    target.applyAttack({
+      damage: ctx.player.Health <= 7 ? 4 : 1,
       isPiercing: true,
       player: ctx.player,
-    };
-
-    if (ctx.player.Health <= 7) {
-      attack.damage = 4;
-    }
-
-    // TODO 
-
-    ctx.enemies[0].applyAttack(attack);
+    });
+    // TODO
   }
 }

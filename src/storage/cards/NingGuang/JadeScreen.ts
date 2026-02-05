@@ -11,10 +11,14 @@ export class JadeScreen extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (ctx.selectedPlayer) {
-      ctx.selectedPlayer.addShield(3);
-    } else {
-      ctx.player.addShield(3);
-    }
+    const targetPlayer = ctx.selectedPlayer ?? ctx.player;
+    ctx.addToSteps([
+      {
+        type: "player_change_shield",
+        playerId: targetPlayer.ID,
+        delta: 3,
+      },
+    ]);
+    targetPlayer.addShield(3);
   }
 }

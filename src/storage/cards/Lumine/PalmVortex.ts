@@ -23,10 +23,23 @@ export class PalmVortex extends Card {
         enemy.isContainsElement(new Cryo()) ||
         enemy.isContainsElement(new Electro())
       ) {
-        const attack: Attack = {
+        ctx.addToSteps([{
+          type: "enemy_take_damage",
+          enemyId: enemy.ID,
           damage: 2,
-          player: ctx.player,
-        };
+          isPiercing: false,
+        }]);
+      }
+    }
+
+    for (const enemy of ctx.player.Enemies) {
+      if (
+        enemy.isContainsElement(new Hydro()) ||
+        enemy.isContainsElement(new Pyro()) ||
+        enemy.isContainsElement(new Cryo()) ||
+        enemy.isContainsElement(new Electro())
+      ) {
+        const attack: Attack = { damage: 2, player: ctx.player };
         enemy.applyAttack(attack);
       }
     }

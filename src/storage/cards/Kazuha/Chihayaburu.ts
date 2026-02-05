@@ -13,10 +13,14 @@ export class Chihayaburu extends Card {
 
   use(ctx: CardUseContext): void {
     if (!ctx.enemies?.length) {
-        throw new Error("no enemies");
-      }
+      throw new Error("no enemies");
+    }
 
-    ctx.enemies[0].applyElement(new Anemo(), ctx.player)
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      { type: "enemy_get_element", enemyId: target.ID, element: "Anemo" },
+    ]);
+    target.applyElement(new Anemo(), ctx.player);
     // TODO
   }
 }

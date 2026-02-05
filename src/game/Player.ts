@@ -1,4 +1,5 @@
 import { v4 } from "uuid";
+import type { DetailedStep } from "../../types/detailedStep";
 import {
   CycleEndContext,
   CycleStartContext,
@@ -40,6 +41,31 @@ export class Player {
   private effects: PlayerEffect[] = [];
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
+  private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
+
+  public setStepsCollector(fn: ((data: DetailedStep[]) => void) | null) {
+    this._stepsCollector = fn;
+  }
+
+  public reportEnemyDeath(enemyId: string) {
+    this._stepsCollector?.([{ type: "enemy_death", enemyId }]);
+  }
+
+  public reportEnemyReaction(
+    enemyId: string,
+    element1: string,
+    element2: string
+  ) {
+    this._stepsCollector?.([
+      { type: "enemy_reaction", enemyId, element1, element2 },
+    ]);
+  }
+
+  public reportEnemyBlockDamage(enemyId: string, element?: string) {
+    this._stepsCollector?.([
+      { type: "enemy_block_damage", enemyId, ...(element && { element }) },
+    ]);
+  }
 
   public get Health() {
     return this.hp;
@@ -336,6 +362,15 @@ export class Player {
         damage: ctx.enemy.Damage,
       },
     ]);
+    ctx.addToSteps([
+      {
+        type: "player_take_damage",
+        playerId: this.ID,
+        damage: ctx.enemy.Damage,
+        isPiercing: false,
+        enemyId: ctx.enemy.ID,
+      },
+    ]);
   }
 
   private cycleStartHandler(ctx: CycleStartContext) {
@@ -348,17 +383,39 @@ export class Player {
           enemies: this.enemies.map((enemy) => enemy.getPrimitiveStats()),
         },
       ]);
+      ctx.addToSteps(
+        this.enemies.map((enemy) => ({
+          type: "enemy_appearance" as const,
+          playerId: this.ID,
+          enemy: enemy.getPrimitiveStats(),
+        }))
+      );
     }
 
     this.isTurnEnds = false;
 
+    const oldShield = this.shield;
     this.shield = 0;
     this.actionPoints = 3;
     this.extraActionPoints = 0;
     ctx.addToReport([{ type: "resetStats", player: this.ID }]);
+    if (oldShield > 0) {
+      ctx.addToSteps([
+        { type: "player_change_shield", playerId: this.ID, delta: -oldShield },
+      ]);
+    }
+    ctx.addToSteps([
+      {
+        type: "player_change_action_points",
+        playerId: this.ID,
+        delta: 3,
+      },
+    ]);
 
+    const drawnCards: { cardId: string; name: string }[] = [];
     for (let i = 0; i < 5; i++) {
-      this.drawCard();
+      const card = this.drawCard();
+      drawnCards.push({ cardId: card.ID, name: card.Name });
     }
     ctx.addToReport([
       {
@@ -366,6 +423,9 @@ export class Player {
         type: "drawCards",
         cards: this.hand.map((card) => ({ name: card.Name, cardId: card.ID })),
       },
+    ]);
+    ctx.addToSteps([
+      { type: "draw_cards", playerId: this.ID, cards: drawnCards },
     ]);
 
     for (const effect of this.effects) {
@@ -377,6 +437,11 @@ export class Player {
       ctx.addToReport([
         { type: "useEffect", effect: effect.Name, isRemove, player: this.ID },
       ]);
+      if (isRemove) {
+        ctx.addToSteps([
+          { type: "player_lose_effect", playerId: this.ID, effect: effect.Name },
+        ]);
+      }
     }
 
     for (const enemy of this.enemies) {
@@ -385,14 +450,25 @@ export class Player {
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {
-    const count = this.hand.length;
-    for (let i = 0; i < count; i++) {
-      this.discardRandomCard();
+    const handSnapshot = [...this.hand];
+    for (const card of handSnapshot) {
+      this.hand = this.hand.filter((c) => c !== card);
+      this.discard.push(card);
+      ctx.addToSteps([
+        {
+          type: "discard_card",
+          playerId: this.ID,
+          card: { cardId: card.ID, name: card.Name },
+        },
+      ]);
     }
     ctx.addToReport([{ type: "clearHand", player: this.ID }]);
 
     for (const enemy of this.enemies) {
-      enemy.endCycle(ctx.addToReport);
+      enemy.endCycle({
+        addToReport: ctx.addToReport,
+        addToSteps: ctx.addToSteps,
+      });
     }
   }
 }

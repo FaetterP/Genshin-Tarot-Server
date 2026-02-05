@@ -20,14 +20,22 @@ export class FireworkFlareUpPlus extends Card {
     const enemies = [...ctx.enemies, ...ctx.enemies, ...ctx.enemies];
     enemies.length = 3;
 
+    ctx.addToSteps(
+      [0, 1, 2].map((i) => ({
+        type: "enemy_take_damage" as const,
+        enemyId: enemies[i].ID,
+        damage: 2,
+        isPiercing: false,
+        element: "Pyro",
+      }))
+    );
     for (let i = 0; i < 3; i++) {
-      const attack: Attack = {
+      enemies[i].applyAttack({
         damage: 2,
         isRange: true,
         element: new Pyro(),
         player: ctx.player,
-      };
-      ctx.enemies[i].applyAttack(attack);
+      });
     }
   }
 }

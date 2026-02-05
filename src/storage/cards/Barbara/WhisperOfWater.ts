@@ -17,6 +17,24 @@ export class WhisperOfWater extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    const drawn = ctx.player.drawCard();
+
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 1,
+        isPiercing: true,
+        element: "Hydro",
+      },
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [{ cardId: drawn.ID, name: drawn.Name }],
+      },
+    ]);
+
     const attack: Attack = {
       damage: 1,
       isPiercing: true,
@@ -24,8 +42,6 @@ export class WhisperOfWater extends Card {
       element: new Hydro(),
       player: ctx.player,
     };
-    ctx.enemies[0].applyAttack(attack);
-
-    ctx.player.drawCard();
+    target.applyAttack(attack);
   }
 }

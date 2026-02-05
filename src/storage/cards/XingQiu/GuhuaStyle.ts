@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
@@ -17,10 +16,25 @@ export class GuhuaStyle extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 2, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 2,
+        isPiercing: false,
+      },
+    ]);
+    if (target.isContainsElement(new Hydro())) {
+      ctx.addToSteps([{
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 2,
+      }]);
+    }
 
-    if (ctx.enemies[0].isContainsElement(new Hydro())) {
+    target.applyAttack({ damage: 2, player: ctx.player });
+    if (target.isContainsElement(new Hydro())) {
       ctx.player.addEnergy(2);
     }
   }

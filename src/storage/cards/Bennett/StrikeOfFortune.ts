@@ -17,13 +17,32 @@ export class StrikeOfFortune extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    const damage = 2;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element: "Pyro",
+      },
+    ]);
+    if (target.isContainsElement(new Pyro())) {
+      ctx.addToSteps([{
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 2,
+      }]);
+    }
+
     const attack: Attack = {
-      damage: 2,
+      damage,
+      element: new Pyro(),
       player: ctx.player,
     };
-    ctx.enemies[0].applyAttack(attack);
-
-    if (ctx.enemies[0].isContainsElement(new Pyro())) {
+    target.applyAttack(attack);
+    if (target.isContainsElement(new Pyro())) {
       ctx.player.addEnergy(2);
     }
   }

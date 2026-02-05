@@ -1,3 +1,4 @@
+import type { DetailedStep } from "../../../../types/detailedStep";
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Cryo } from "../../elements/Cryo";
@@ -17,12 +18,29 @@ export class AncientSwordArtPlus extends Card {
       throw new Error("no enemies");
     }
 
-    if (ctx.enemies[0].isContainsElement(new Cryo())) {
-      const attack: Attack = { damage: 5, player: ctx.player };
-      ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    const hasCryo = target.isContainsElement(new Cryo());
+    const damage = hasCryo ? 5 : 2;
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+        element: hasCryo ? "Cryo" : undefined,
+      },
+    ]);
+    if (!hasCryo) {
+      ctx.addToSteps([{
+        type: "player_change_energy",
+        playerId: ctx.player.ID,
+        delta: 2,
+      }]);
+    }
+    if (hasCryo) {
+      target.applyAttack({ damage: 5, element: new Cryo(), player: ctx.player });
     } else {
-      const attack: Attack = { damage: 2, player: ctx.player };
-      ctx.enemies[0].applyAttack(attack);
+      target.applyAttack({ damage: 2, player: ctx.player });
       ctx.player.addEnergy(2);
     }
   }

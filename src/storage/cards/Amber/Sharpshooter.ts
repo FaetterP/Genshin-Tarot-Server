@@ -17,17 +17,32 @@ export class Sharpshooter extends Card {
       throw new Error("no enemies");
     }
 
+    const target = ctx.enemies[0];
+    let damage = 1;
+    const isPiercing = true;
+    let element: string | undefined;
+
+    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+      element = "Pyro";
+    }
+
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage,
+        isPiercing,
+        element,
+      },
+    ]);
+
     const attack: Attack = {
-      damage: 1,
+      damage,
       isRange: true,
       isPiercing: true,
       player: ctx.player,
     };
-
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      attack.element = new Pyro();
-    }
-
-    ctx.enemies[0].applyAttack(attack);
+    if (element) attack.element = new Pyro();
+    target.applyAttack(attack);
   }
 }

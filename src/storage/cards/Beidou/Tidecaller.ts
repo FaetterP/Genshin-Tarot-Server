@@ -12,10 +12,21 @@ export class Tidecaller extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.addToSteps([
+      ...ctx.player.Enemies.map((enemy) => ({
+        type: "enemy_get_element" as const,
+        enemyId: enemy.ID,
+        element: "Electro",
+      })),
+      {
+        type: "player_change_shield",
+        playerId: ctx.player.ID,
+        delta: 2,
+      },
+    ]);
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Electro(), ctx.player);
     }
-
     ctx.player.addShield(2);
   }
 }

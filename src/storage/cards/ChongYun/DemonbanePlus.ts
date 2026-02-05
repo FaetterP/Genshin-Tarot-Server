@@ -17,13 +17,33 @@ export class DemonbanePlus extends Card {
       throw new Error("no enemies");
     }
 
-    if (ctx.enemies[0].isContainsElement(new Cryo())) {
-      const attack: Attack = { damage: 4, player: ctx.player };
-      ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    if (target.isContainsElement(new Cryo())) {
+      ctx.addToSteps([
+        {
+          type: "enemy_take_damage",
+          enemyId: target.ID,
+          damage: 4,
+          isPiercing: false,
+          element: "Cryo",
+        },
+      ]);
+      target.applyAttack({
+        damage: 4,
+        element: new Cryo(),
+        player: ctx.player,
+      });
     } else {
+      ctx.addToSteps(
+        ctx.player.Enemies.map((enemy) => ({
+          type: "enemy_take_damage" as const,
+          enemyId: enemy.ID,
+          damage: 2,
+          isPiercing: false,
+        }))
+      );
       for (const enemy of ctx.player.Enemies) {
-        const attack: Attack = { damage: 2, player: ctx.player };
-        enemy.applyAttack(attack);
+        enemy.applyAttack({ damage: 2, player: ctx.player });
       }
     }
   }

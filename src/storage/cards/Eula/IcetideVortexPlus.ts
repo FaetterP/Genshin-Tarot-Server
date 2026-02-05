@@ -16,7 +16,11 @@ export class IcetideVortexPlus extends Card {
       throw new Error("no enemies");
     }
 
-    ctx.enemies[0].applyElement(new Cryo(), ctx.player);
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      { type: "enemy_get_element", enemyId: target.ID, element: "Cryo" },
+    ]);
+    target.applyElement(new Cryo(), ctx.player);
     // TODO
   }
 }

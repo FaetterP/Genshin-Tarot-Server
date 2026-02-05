@@ -17,12 +17,21 @@ export class EdelBladeworkPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = {
+    const target = ctx.enemies[0];
+    ctx.addToSteps([
+      {
+        type: "enemy_take_damage",
+        enemyId: target.ID,
+        damage: 2,
+        isPiercing: false,
+        element: "Cryo",
+      },
+    ]);
+    target.applyAttack({
       damage: 2,
       element: new Cryo(),
       player: ctx.player,
-    };
-    ctx.enemies[0].applyAttack(attack);
+    });
     // TODO
   }
 }
