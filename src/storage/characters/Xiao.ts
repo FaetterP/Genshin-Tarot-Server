@@ -22,5 +22,14 @@ export class Xiao extends Character {
   useBurst(ctx: CharacterUseBurstContext): void {
     ctx.player.applyDamage(1); // TODO piercing
     // TODO add dash to hand
+
+    ctx.addToSteps([
+      {
+        type: "player_take_damage",
+        playerId: ctx.player.ID,
+        damage: 1,
+        isPiercing: true,
+      },
+    ]);
   }
 }

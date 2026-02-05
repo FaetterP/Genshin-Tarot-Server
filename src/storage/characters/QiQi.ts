@@ -21,14 +21,22 @@ export class QiQi extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
+    const cryo = new Cryo();
     for (const enemy of ctx.player.Enemies) {
-      enemy.applyElement(new Cryo(), ctx.player);
+      enemy.applyElement(cryo, ctx.player);
+      ctx.addToSteps([
+        { type: "enemy_get_element", enemyId: enemy.ID, element: cryo.Name },
+      ]);
     }
 
     ctx.player.addHealth(2);
+    ctx.addToSteps([{ type: "player_heal", playerId: ctx.player.ID, amount: 2 }]);
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(2);
+      ctx.addToSteps([
+        { type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: 2 },
+      ]);
     }
   }
 }

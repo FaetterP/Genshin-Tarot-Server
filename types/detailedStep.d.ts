@@ -9,6 +9,7 @@ export type DetailedStep =
   | { type: "enemy_death"; enemyId: string }
   | { type: "enemy_appearance"; playerId: string; enemy: EnemyPrimitive }
   | { type: "player_take_damage"; playerId: string; damage: number; isPiercing: boolean, enemyId?: string }
+  | { type: "player_heal"; playerId: string; amount: number }
   | { type: "player_change_energy"; playerId: string; delta: number }
   | { type: "player_change_shield"; playerId: string; delta: number }
   | { type: "player_change_mora"; playerId: string; delta: number }

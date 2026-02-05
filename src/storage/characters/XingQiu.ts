@@ -21,9 +21,25 @@ export class XingQiu extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
-    ctx.player.drawCard();
-    ctx.player.drawCard();
+    const card1 = ctx.player.drawCard();
+    const card2 = ctx.player.drawCard();
 
     ctx.player.addEffect(new RaincutterEffect());
+
+    ctx.addToSteps([
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [
+          { cardId: card1.ID, name: card1.Name },
+          { cardId: card2.ID, name: card2.Name },
+        ],
+      },
+      {
+        type: "player_get_effect",
+        playerId: ctx.player.ID,
+        effect: new RaincutterEffect().Name,
+      },
+    ]);
   }
 }

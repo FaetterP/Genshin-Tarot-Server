@@ -20,6 +20,7 @@ export type CharacterUseBurstContext = {
   character: Character;
   player: Player;
   allPlayers: Player[];
+  addToSteps: (data: DetailedStep[]) => void;
   selectedEnemy?: Enemy;
   selectedPlayer?: Player;
 

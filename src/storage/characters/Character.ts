@@ -10,6 +10,10 @@ export abstract class Character {
     return this.cards;
   }
 
+  public get BurstCost(): number {
+    return this.burstCost;
+  }
+
   constructor({ cards, burstCost }: { cards: Card[]; burstCost: number }) {
     this.cards = cards;
     this.burstCost = burstCost;

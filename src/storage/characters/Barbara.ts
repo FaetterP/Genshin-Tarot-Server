@@ -33,6 +33,9 @@ export class Barbara extends Character {
 
     for (const { player, count } of ctx.divide) {
       player.addHealth(count);
+      ctx.addToSteps([
+        { type: "player_heal", playerId: player.ID, amount: count },
+      ]);
     }
   }
 }

@@ -26,6 +26,9 @@ export class Aether extends Character {
 
     for (const player of otherPlayers) {
       player.addShield(3);
+      ctx.addToSteps([
+        { type: "player_change_shield", playerId: player.ID, delta: 3 },
+      ]);
     }
   }
 }

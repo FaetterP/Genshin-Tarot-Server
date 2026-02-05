@@ -161,6 +161,10 @@ export class CycleController {
     this.endCycle();
   }
 
+  getPlayers(): Player[] {
+    return [...this.players];
+  }
+
   getPlayerById(id: string) {
     return this.players.find((player) => player.ID === id);
   }

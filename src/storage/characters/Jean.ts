@@ -21,14 +21,22 @@ export class Jean extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
+    const anemo = new Anemo();
     for (const enemy of ctx.player.Enemies) {
-      enemy.applyElement(new Anemo(), ctx.player);
+      enemy.applyElement(anemo, ctx.player);
+      ctx.addToSteps([
+        { type: "enemy_get_element", enemyId: enemy.ID, element: anemo.Name },
+      ]);
     }
 
     ctx.player.addHealth(2);
+    ctx.addToSteps([{ type: "player_heal", playerId: ctx.player.ID, amount: 2 }]);
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(2);
+      ctx.addToSteps([
+        { type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: 2 },
+      ]);
     }
   }
 }

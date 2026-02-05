@@ -20,9 +20,21 @@ export class ChongYun extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
-    ctx.player.drawCard();
-    ctx.player.drawCard();
-    ctx.player.drawCard();
+    const card1 = ctx.player.drawCard();
+    const card2 = ctx.player.drawCard();
+    const card3 = ctx.player.drawCard();
     // TODO
+
+    ctx.addToSteps([
+      {
+        type: "draw_cards",
+        playerId: ctx.player.ID,
+        cards: [
+          { cardId: card1.ID, name: card1.Name },
+          { cardId: card2.ID, name: card2.Name },
+          { cardId: card3.ID, name: card3.Name },
+        ],
+      },
+    ]);
   }
 }

@@ -1,5 +1,5 @@
 import type { DetailedStep } from "../../../types/detailedStep";
-import { CardUseContext } from "../../../types/functionsContext";
+import { CardUseContext, CharacterUseBurstContext } from "../../../types/functionsContext";
 import { ExtWebSocket } from "../../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
 import { TaskAwaiter } from "../../utils/TaskAwaiter";
@@ -140,4 +140,87 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
   });
 }
 
-export default { handlers: { startGame, useCard, endTurn, upgradeCard } };
+async function useBurst(ws: ExtWebSocket, payload: any) {
+  const {
+    character: characterName,
+    selectedPlayer: selectedPlayerId,
+    selectedEnemy: selectedEnemyId,
+    selectedEnemies: selectedEnemiesIds,
+    divide,
+    selectedCharacter: selectedCharacterName,
+  } = payload as {
+    character: string;
+    selectedPlayer?: string;
+    selectedEnemy?: string;
+    selectedEnemies?: string[];
+    divide?: { playerId: string; count: number }[];
+    selectedCharacter?: string;
+  };
+
+  if (!characterName) {
+    throw new Error("character is required");
+  }
+
+  const character = ws.player.Characters.find((c) => c.Name === characterName);
+  if (!character) {
+    throw new Error("character not found");
+  }
+
+  const steps: DetailedStep[] = [];
+  const addToSteps = (data: DetailedStep[]) => steps.push(...data);
+  ws.player.setStepsCollector(addToSteps);
+
+  const allPlayers = ws.cycleController.getPlayers();
+  const selectedPlayer = selectedPlayerId
+    ? ws.cycleController.getPlayerById(selectedPlayerId)
+    : undefined;
+  const selectedEnemy = selectedEnemyId
+    ? ws.cycleController.getEnemyById(selectedEnemyId)
+    : undefined;
+  const selectedEnemies = selectedEnemiesIds
+    ? selectedEnemiesIds.map((id) => ws.cycleController.getEnemyById(id)!)
+    : undefined;
+  const divideResolved = divide?.map(({ playerId, count }) => ({
+    player: ws.cycleController.getPlayerById(playerId)!,
+    count,
+  }));
+  const selectedCharacter = selectedCharacterName
+    ? allPlayers.flatMap((p) => [...p.Characters]).find((c) => c.Name === selectedCharacterName)
+    : undefined;
+
+  const ctx: CharacterUseBurstContext = {
+    character,
+    player: ws.player,
+    allPlayers,
+    addToSteps,
+    selectedEnemy,
+    selectedPlayer,
+    divide: divideResolved,
+    selectedCharacter,
+    selectedEnemies,
+  };
+
+  if (!character.tryUseBurst(ctx)) {
+    ws.player.setStepsCollector(null);
+    throw new Error(
+      `not enough energy: need ${character.BurstCost}, have ${ws.player.Energy}`
+    );
+  }
+
+  steps.unshift({
+    type: "player_change_energy",
+    playerId: ws.player.ID,
+    delta: -character.BurstCost,
+  });
+
+  ws.player.setStepsCollector(null);
+
+  sendToAll({
+    action: "game.useBurst",
+    character: characterName,
+    player: ws.player.getPrimitiveStats(),
+    steps,
+  });
+}
+
+export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst } };
