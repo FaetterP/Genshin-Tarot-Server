@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Card } from "../Card";
+import { OceanbornPlus } from "./OceanbornPlus";
 
 export class Oceanborn extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class Oceanborn extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return OceanbornPlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { LayeredFrostEffect } from "../../effects/LayeredFrostEffect";
 import { Card } from "../Card";
+import { LayeredFrostPlus } from "./LayeredFrostPlus";
 
 export class LayeredFrost extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class LayeredFrost extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return LayeredFrostPlus;
   }
 
   use(ctx: CardUseContext): void {

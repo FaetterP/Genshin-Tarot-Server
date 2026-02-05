@@ -3,6 +3,7 @@ import { Attack } from "../../../../types/general";
 import { MirrorReflectionsEffect } from "../../effects/MirrorReflectionsEffect";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
+import { MirrorReflectionsPlus } from "./MirrorReflectionsPlus";
 
 export class MirrorReflections extends Card {
   public get Name(): string {
@@ -11,6 +12,10 @@ export class MirrorReflections extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return MirrorReflectionsPlus;
   }
 
   use(ctx: CardUseContext): void {

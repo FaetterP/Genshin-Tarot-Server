@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
+import { GuhuaStylePlus } from "./GuhuaStylePlus";
 
 export class GuhuaStyle extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class GuhuaStyle extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return GuhuaStylePlus;
   }
 
   use(ctx: CardUseContext): void {

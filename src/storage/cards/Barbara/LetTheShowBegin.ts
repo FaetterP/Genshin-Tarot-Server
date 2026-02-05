@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
+import { LetTheShowBeginPlus } from "./LetTheShowBeginPlus";
 
 export class LetTheShowBegin extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class LetTheShowBegin extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return LetTheShowBeginPlus;
   }
 
   use(ctx: CardUseContext): void {

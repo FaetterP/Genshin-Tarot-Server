@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Card } from "../Card";
+import { SignedEdictPlus } from "./SignedEdictPlus";
 
 export class SignedEdict extends Card {
   public get Name(): string {
@@ -8,6 +9,10 @@ export class SignedEdict extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return SignedEdictPlus;
   }
 
   use(ctx: CardUseContext): void {

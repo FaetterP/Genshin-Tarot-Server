@@ -1,5 +1,6 @@
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { SharpshooterPlus } from "./SharpshooterPlus";
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 
@@ -10,6 +11,10 @@ export class Sharpshooter extends Card {
 
   constructor() {
     super(0);
+  }
+
+  get Upgrade() {
+    return SharpshooterPlus;
   }
 
   use(ctx: CardUseContext): void {

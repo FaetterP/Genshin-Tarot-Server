@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Card } from "../Card";
+import { ForeignIronwindPlus } from "./ForeignIronwindPlus";
 
 export class ForeignIronwind extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class ForeignIronwind extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return ForeignIronwindPlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { SealOfApprovalPlus } from "./SealOfApprovalPlus";
 
 export class SealOfApproval extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class SealOfApproval extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return SealOfApprovalPlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Card } from "../Card";
+import { WhirlwindThrustPlus } from "./WhirlwindThrustPlus";
 
 export class WhirlwindThrust extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class WhirlwindThrust extends Card {
 
   constructor() {
     super(0);
+  }
+
+  get Upgrade() {
+    return WhirlwindThrustPlus;
   }
 
   use(ctx: CardUseContext): void {

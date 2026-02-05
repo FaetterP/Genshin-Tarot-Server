@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
 import { Card } from "../Card";
+import { ExplosivePuppetPlus } from "./ExplosivePuppetPlus";
 
 export class ExplosivePuppet extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class ExplosivePuppet extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return ExplosivePuppetPlus;
   }
 
   use(ctx: CardUseContext): void {

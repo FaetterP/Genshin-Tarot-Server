@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { FireworkFlareUpPlus } from "./FireworkFlareUpPlus";
 
 export class FireworkFlareUp extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class FireworkFlareUp extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return FireworkFlareUpPlus;
   }
 
   use(ctx: CardUseContext): void {

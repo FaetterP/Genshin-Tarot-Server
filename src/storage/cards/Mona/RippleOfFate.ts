@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
+import { RippleOfFatePlus } from "./RippleOfFatePlus";
 
 export class RippleOfFate extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class RippleOfFate extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return RippleOfFatePlus;
   }
 
   use(ctx: CardUseContext): void {

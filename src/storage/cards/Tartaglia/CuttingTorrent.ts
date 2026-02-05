@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
+import { CuttingTorrentPlus } from "./CuttingTorrentPlus";
 
 export class CuttingTorrent extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class CuttingTorrent extends Card {
 
   constructor() {
     super(0);
+  }
+
+  get Upgrade() {
+    return CuttingTorrentPlus;
   }
 
   use(ctx: CardUseContext): void {

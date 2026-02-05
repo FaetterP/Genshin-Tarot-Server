@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { SweepingFervorPlus } from "./SweepingFervorPlus";
 
 export class SweepingFervor extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class SweepingFervor extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return SweepingFervorPlus;
   }
 
   use(ctx: CardUseContext): void {

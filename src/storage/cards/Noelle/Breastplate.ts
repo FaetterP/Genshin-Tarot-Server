@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { BreastplatePlus } from "./BreastplatePlus";
 
 export class Breastplate extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class Breastplate extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return BreastplatePlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
+import { TidecallerPlus } from "./TidecallerPlus";
 
 export class Tidecaller extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class Tidecaller extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return TidecallerPlus;
   }
 
   use(ctx: CardUseContext): void {

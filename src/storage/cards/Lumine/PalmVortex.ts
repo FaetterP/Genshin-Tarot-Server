@@ -5,6 +5,7 @@ import { Electro } from "../../elements/Electro";
 import { Hydro } from "../../elements/Hydro";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { PalmVortexPlus } from "./PalmVortexPlus";
 
 export class PalmVortex extends Card {
   public get Name(): string {
@@ -13,6 +14,10 @@ export class PalmVortex extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return PalmVortexPlus;
   }
 
   use(ctx: CardUseContext): void {

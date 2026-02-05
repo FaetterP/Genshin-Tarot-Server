@@ -3,6 +3,7 @@ import { Attack } from "../../../../types/general";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { JumpyDumptyPlus } from "./JumpyDumptyPlus";
 
 export class JumpyDumpty extends Card {
   public get Name(): string {
@@ -11,6 +12,10 @@ export class JumpyDumpty extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return JumpyDumptyPlus;
   }
 
   use(ctx: CardUseContext): void {

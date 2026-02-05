@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
+import { LemniscaticWindPlus } from "./LemniscaticWindPlus";
 
 export class LemniscaticWind extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class LemniscaticWind extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return LemniscaticWindPlus;
   }
 
   use(ctx: CardUseContext): void {

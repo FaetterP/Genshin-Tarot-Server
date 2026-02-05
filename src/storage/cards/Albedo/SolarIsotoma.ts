@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { SolarIsotomaPlus } from "./SolarIsotomaPlus";
 
 export class SolarIsotoma extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class SolarIsotoma extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return SolarIsotomaPlus;
   }
 
   use(ctx: CardUseContext): void {

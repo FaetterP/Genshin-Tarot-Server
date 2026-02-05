@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Card } from "../Card";
+import { ForeignRockbladePlus } from "./ForeignRockbladePlus";
 
 export class ForeignRockblade extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class ForeignRockblade extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return ForeignRockbladePlus;
   }
 
   use(ctx: CardUseContext): void {

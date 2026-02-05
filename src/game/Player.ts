@@ -80,6 +80,9 @@ export class Player {
   public get Wave() {
     return this.wave;
   }
+  public get Mora() {
+    return this.mora;
+  }
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
   }
@@ -235,6 +238,12 @@ export class Player {
     return true;
   }
 
+  public trySpendMora(amount: number): boolean {
+    if (this.mora < amount) return false;
+    this.mora -= amount;
+    return true;
+  }
+
   public addHealth(count: number) {
     if (count < 0) {
       throw new Error("to do damage use applyAttack");
@@ -316,6 +325,11 @@ export class Player {
   public discardCard(card: Card) {
     this.hand = this.hand.filter((c) => c != card);
     this.discard.push(card);
+  }
+
+  /** Удаляет карту из руки безвозвратно (без добавления в сброс). */
+  public removeCardFromHand(card: Card) {
+    this.hand = this.hand.filter((c) => c !== card);
   }
 
   public discardRandomCard() {

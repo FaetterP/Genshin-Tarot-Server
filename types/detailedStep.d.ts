@@ -18,4 +18,5 @@ export type DetailedStep =
   | { type: "enemy_get_element"; enemyId: string; element: string }
   | { type: "enemy_reaction"; enemyId: string; element1: string; element2: string }
   | { type: "enemy_change_shield"; enemyId: string; delta: number }
-  | { type: "enemy_heal"; enemyId: string; amount: number };
+  | { type: "enemy_heal"; enemyId: string; amount: number }
+  | { type: "upgrade_card"; playerId: string; oldCard: CardPrimitive; newCard: CardPrimitive };

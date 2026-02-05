@@ -3,6 +3,7 @@ import { Attack } from "../../../../types/general";
 import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
+import { NightriderPlus } from "./NightriderPlus";
 
 export class Nightrider extends Card {
   public get Name(): string {
@@ -11,6 +12,10 @@ export class Nightrider extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return NightriderPlus;
   }
 
   use(ctx: CardUseContext): void {

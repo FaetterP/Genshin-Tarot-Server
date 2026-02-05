@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { TrailOfTheQilinEffect } from "../../effects/TrailOfTheQilinEffect";
 import { Card } from "../Card";
+import { TrailOfTheQilinPlus } from "./TrailOfTheQilinPlus";
 
 export class TrailOfTheQilin extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class TrailOfTheQilin extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return TrailOfTheQilinPlus;
   }
 
   use(ctx: CardUseContext): void {

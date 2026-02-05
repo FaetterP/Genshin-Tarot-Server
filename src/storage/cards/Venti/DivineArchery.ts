@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
+import { DivineArcheryPlus } from "./DivineArcheryPlus";
 
 export class DivineArchery extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class DivineArchery extends Card {
 
   constructor() {
     super(0);
+  }
+
+  get Upgrade() {
+    return DivineArcheryPlus;
   }
 
   use(ctx: CardUseContext): void {

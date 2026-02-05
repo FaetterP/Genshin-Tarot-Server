@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { SparklingScatterPlus } from "./SparklingScatterPlus";
 
 export class SparklingScatter extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class SparklingScatter extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return SparklingScatterPlus;
   }
 
   use(ctx: CardUseContext): void {

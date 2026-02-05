@@ -3,6 +3,7 @@ import { Attack } from "../../../../types/general";
 import { GuobaFireEffect } from "../../effects/GuobaFireEffect";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
+import { GuobaFirePlus } from "./GuobaFirePlus";
 
 export class GuobaFire extends Card {
   public get Name(): string {
@@ -11,6 +12,10 @@ export class GuobaFire extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return GuobaFirePlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Card } from "../Card";
+import { JadeScreenPlus } from "./JadeScreenPlus";
 
 export class JadeScreen extends Card {
   public get Name(): string {
@@ -8,6 +9,10 @@ export class JadeScreen extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return JadeScreenPlus;
   }
 
   use(ctx: CardUseContext): void {

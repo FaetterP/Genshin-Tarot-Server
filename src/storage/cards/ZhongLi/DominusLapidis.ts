@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { DominusLapidis as DominusLapidisPlus } from "./DominusLapidisPlus";
 
 export class DominusLapidis extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class DominusLapidis extends Card {
 
   constructor() {
     super(2);
+  }
+
+  get Upgrade() {
+    return DominusLapidisPlus;
   }
 
   use(ctx: CardUseContext): void {

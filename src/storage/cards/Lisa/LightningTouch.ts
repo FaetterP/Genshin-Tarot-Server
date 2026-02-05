@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
+import { LightningTouchPlus } from "./LightningTouchPlus";
 
 export class LightningTouch extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class LightningTouch extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return LightningTouchPlus;
   }
 
   use(ctx: CardUseContext): void {

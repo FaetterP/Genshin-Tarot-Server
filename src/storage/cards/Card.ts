@@ -11,5 +11,9 @@ export abstract class Card {
     this.ID = `card-${v4()}`;
   }
 
+  public get Upgrade(): (new () => Card) | null {
+    return null;
+  }
+
   abstract use(ctx: CardUseContext): void;
 }

@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { NiwabiFireDanceEffect } from "../../effects/NiwabiFireDanceEffect";
 import { Card } from "../Card";
+import { NiwabiFireDancePlus } from "./NiwabiFireDancePlus";
 
 export class NiwabiFireDance extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class NiwabiFireDance extends Card {
 
   constructor() {
     super(0);
+  }
+
+  get Upgrade() {
+    return NiwabiFireDancePlus;
   }
 
   use(ctx: CardUseContext): void {

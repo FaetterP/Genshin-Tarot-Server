@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
 import { Card } from "../Card";
+import { GuideOfAfterlifePlus } from "./GuideOfAfterlifePlus";
 
 export class GuideOfAfterlife extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class GuideOfAfterlife extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return GuideOfAfterlifePlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { SkywardSonnetEffect } from "../../effects/SkywardSonnetEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
+import { SkywardSonnetPlus } from "./SkywardSonnetPlus";
 
 export class SkywardSonnet extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class SkywardSonnet extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return SkywardSonnetPlus;
   }
 
   use(ctx: CardUseContext): void {

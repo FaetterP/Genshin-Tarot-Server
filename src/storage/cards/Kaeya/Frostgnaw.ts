@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
+import { FrostgnawPlus } from "./FrostgnawPlus";
 
 export class Frostgnaw extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class Frostgnaw extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return FrostgnawPlus;
   }
 
   use(ctx: CardUseContext): void {

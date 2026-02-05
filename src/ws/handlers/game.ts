@@ -87,4 +87,52 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   sendToAll(ret);
 }
 
-export default { handlers: { startGame, useCard, endTurn } };
+const UPGRADE_MORA_COST = 5;
+
+async function upgradeCard(ws: ExtWebSocket, payload: any) {
+  const { cardId } = payload as { cardId: string };
+
+  const card = ws.cycleController.getPlayerCard(cardId, ws.player);
+  if (!card) {
+    throw new Error("card not found");
+  }
+  if (!card.Upgrade) {
+    throw new Error("this card cannot be upgraded");
+  }
+  if (ws.player.Mora < UPGRADE_MORA_COST) {
+    throw new Error(`not enough mora: need ${UPGRADE_MORA_COST}, have ${ws.player.Mora}`);
+  }
+
+  ws.player.trySpendMora(UPGRADE_MORA_COST);
+  const oldCardPrimitive = { cardId: card.ID, name: card.Name };
+  ws.player.removeCardFromHand(card);
+
+  const UpgradedCard = card.Upgrade;
+  const newCard = new UpgradedCard();
+  ws.player.addCardToHand(newCard);
+
+  const steps: DetailedStep[] = [
+    { type: "player_change_mora", playerId: ws.player.ID, delta: -UPGRADE_MORA_COST },
+    {
+      type: "add_card",
+      playerId: ws.player.ID,
+      card: { cardId: newCard.ID, name: newCard.Name },
+      to: "hand",
+    },
+    {
+      type: "upgrade_card",
+      playerId: ws.player.ID,
+      oldCard: oldCardPrimitive,
+      newCard: { cardId: newCard.ID, name: newCard.Name },
+    },
+  ];
+
+  sendToAll({
+    action: "game.upgradeCard",
+    cardId,
+    player: ws.player.getPrimitiveStats(),
+    steps,
+  });
+}
+
+export default { handlers: { startGame, useCard, endTurn, upgradeCard } };

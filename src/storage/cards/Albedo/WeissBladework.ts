@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { WeissBladeworkPlus } from "./WeissBladeworkPlus";
 
 export class WeissBladework extends Card {
   public get Name(): string {
@@ -10,6 +11,10 @@ export class WeissBladework extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return WeissBladeworkPlus;
   }
 
   use(ctx: CardUseContext): void {

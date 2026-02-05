@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Attack } from "../../../../types/general";
 import { Card } from "../Card";
+import { KatzleinStylePlus } from "./KatzleinStylePlus";
 
 export class KatzleinStyle extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class KatzleinStyle extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return KatzleinStylePlus;
   }
 
   use(ctx: CardUseContext): void {

@@ -1,6 +1,7 @@
 import { CardUseContext } from "../../../../types/functionsContext";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
+import { StellarRestorationPlus } from "./StellarRestorationPlus";
 
 export class StellarRestoration extends Card {
   public get Name(): string {
@@ -9,6 +10,10 @@ export class StellarRestoration extends Card {
 
   constructor() {
     super(1);
+  }
+
+  get Upgrade() {
+    return StellarRestorationPlus;
   }
 
   use(ctx: CardUseContext): void {
