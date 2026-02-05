@@ -101,8 +101,23 @@ export abstract class Enemy {
       throw new Error("attack not range");
     }
 
+    const bonus = attack.player.getAndConsumeNextAttackBonus();
+    const totalDamage = attack.damage + bonus.bonusDamage;
+
+    if (bonus.bonusDamage > 0) {
+      attack.player.reportSteps([
+        {
+          type: "enemy_take_damage",
+          enemyId: this.ID,
+          damage: bonus.bonusDamage,
+          isPiercing: attack.isPiercing ?? false,
+          element: attack.element?.Name,
+        },
+      ]);
+    }
+
     if (this.shield <= 0 || attack.isPiercing) {
-      this.hp -= attack.damage;
+      this.hp -= totalDamage;
     } else {
       attack.player.reportEnemyBlockDamage(
         this.ID,
@@ -117,6 +132,9 @@ export abstract class Enemy {
     attack.player.useAttackEffects(this);
 
     if (this.hp <= 0) {
+      if (bonus.energyOnKill > 0) {
+        attack.player.addEnergy(bonus.energyOnKill);
+      }
       attack.player.reportEnemyDeath(this.ID);
       this.death();
       this.e_onDeath.Invoke({ enemy: this });
@@ -131,7 +149,7 @@ export abstract class Enemy {
     }
 
     if (element instanceof Cryo || element instanceof Hydro) {
-      // TODO player drop all Burn cards
+      player.trashAllBurnCardsInHand();
     }
 
     this.elements = [...this.elements, element];

@@ -19,4 +19,6 @@ export type DetailedStep =
   | { type: "enemy_reaction"; enemyId: string; element1: string; element2: string }
   | { type: "enemy_change_shield"; enemyId: string; delta: number }
   | { type: "enemy_heal"; enemyId: string; amount: number }
-  | { type: "upgrade_card"; playerId: string; oldCard: CardPrimitive; newCard: CardPrimitive };
+  | { type: "upgrade_card"; playerId: string; oldCard: CardPrimitive; newCard: CardPrimitive }
+  | { type: "energy_freezed"; playerId: string; delta: number }
+  | { type: "trash_card"; playerId: string; card: CardPrimitive };

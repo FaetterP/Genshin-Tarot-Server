@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../../types/functionsContext";
+import { OverheatEffect } from "../../effects/OverheatEffect";
 import { Card } from "../Card";
 
 export class Overheat extends Card {
@@ -11,6 +12,17 @@ export class Overheat extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    ctx.player.addEffect(new OverheatEffect());
+
+    ctx.player.removeCardFromHand(this);
+    ctx.addToSteps([
+      {
+        type: "trash_card",
+        playerId: ctx.player.ID,
+        card: { cardId: this.ID, name: this.Name },
+      },
+    ]);
+
     const c1 = ctx.player.drawCard();
     const c2 = ctx.player.drawCard();
     ctx.addToSteps([
@@ -23,6 +35,5 @@ export class Overheat extends Card {
         ],
       },
     ]);
-    // TODO
   }
 }

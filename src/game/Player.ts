@@ -40,6 +40,7 @@ export class Player {
 
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
+  private burnsDrawnThisTurn: number = 0;
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
   private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
@@ -66,6 +67,10 @@ export class Player {
     this._stepsCollector?.([
       { type: "enemy_block_damage", enemyId, ...(element && { element }) },
     ]);
+  }
+
+  public reportSteps(steps: DetailedStep[]) {
+    this._stepsCollector?.(steps);
   }
 
   public get Health() {
@@ -205,7 +210,10 @@ export class Player {
   }
 
   public addEnergy(count: number) {
-    if (this.hand.map((card) => card.Name).includes(new Freeze().Name)) {
+    if (this.hand.some((card) => card.Name === "Freeze")) {
+      this._stepsCollector?.([
+        { type: "energy_freezed", playerId: this.ID, delta: count },
+      ]);
       return;
     }
 
@@ -217,12 +225,53 @@ export class Player {
       return false;
     }
 
-    if (this.hand.map((card) => card.Name).includes(new Freeze().Name)) {
-      return false;
+    if (this.hand.some((card) => card.Name === "Freeze")) {
+      throw new Error("energy freezed");
     }
 
     this.energy -= count;
     return true;
+  }
+
+  public getAndConsumeNextAttackBonus(): {
+    bonusDamage: number;
+    energyOnKill: number;
+  } {
+    let totalDamage = 0;
+    let totalEnergyOnKill = 0;
+    const toRemove: PlayerEffect[] = [];
+    for (const effect of this.effects) {
+      const bonus = effect.getAttackBonus?.();
+      if (bonus) {
+        totalDamage += bonus.bonusDamage;
+        totalEnergyOnKill += bonus.energyOnKill;
+        toRemove.push(effect);
+      }
+    }
+    this.effects = this.effects.filter((e) => !toRemove.includes(e));
+    for (const effect of toRemove) {
+      this._stepsCollector?.([
+        { type: "player_lose_effect", playerId: this.ID, effect: effect.Name },
+      ]);
+    }
+    return { bonusDamage: totalDamage, energyOnKill: totalEnergyOnKill };
+  }
+
+  /** Удаляет все карты Burn из руки (при применении Гидро/Крио на врага в зоне игрока). */
+  public trashAllBurnCardsInHand() {
+    const burnCards = this.hand.filter((card) => card.Name === "Burn");
+    for (const card of burnCards) {
+      this.hand = this.hand.filter((c) => c !== card);
+    }
+    if (burnCards.length > 0) {
+      this._stepsCollector?.(
+        burnCards.map((card) => ({
+          type: "trash_card" as const,
+          playerId: this.ID,
+          card: { cardId: card.ID, name: card.Name },
+        }))
+      );
+    }
   }
 
   public trySpendActonPoints(count: number): boolean {
@@ -310,6 +359,21 @@ export class Player {
     const card = getRandomElement(this.deck);
     this.deck = this.deck.filter((c) => c != card);
     this.hand.push(card);
+
+    if (card.Name === "Burn") {
+      this.burnsDrawnThisTurn++;
+      const damage = this.burnsDrawnThisTurn >= 2 ? 2 : 1;
+      this.applyDamage(damage, true);
+      this._stepsCollector?.([
+        {
+          type: "player_take_damage",
+          playerId: this.ID,
+          damage,
+          isPiercing: true,
+        },
+      ]);
+    }
+
     return card;
   }
 
@@ -424,6 +488,9 @@ export class Player {
   }
 
   private cycleStartHandler(ctx: CycleStartContext) {
+    const prevStepsCollector = this._stepsCollector;
+    this._stepsCollector = (data) => ctx.addToSteps(data);
+
     if (this.enemies.length === 0) {
       this.createWave();
       ctx.addToReport([
@@ -448,6 +515,7 @@ export class Player {
     this.shield = 0;
     this.actionPoints = 3;
     this.extraActionPoints = 0;
+    this.burnsDrawnThisTurn = 0;
     ctx.addToReport([{ type: "resetStats", player: this.ID }]);
     if (oldShield > 0) {
       ctx.addToSteps([
@@ -502,6 +570,8 @@ export class Player {
         addToSteps: ctx.addToSteps,
       });
     }
+
+    this._stepsCollector = prevStepsCollector;
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {

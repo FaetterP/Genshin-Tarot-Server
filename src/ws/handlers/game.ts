@@ -38,6 +38,10 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     throw new Error("card not Card");
   }
 
+  if (card.Name === "Burn") {
+    throw new Error("Burn card cannot be used");
+  }
+
   const enemies = enemiesId
     ? enemiesId.map((id) => ws.cycleController.getEnemyById(id)!)
     : undefined;
@@ -69,14 +73,15 @@ async function useCard(ws: ExtWebSocket, payload: any) {
 
   card.use(ctx);
 
-  steps.push({
-    type: "discard_card",
-    playerId: ws.player.ID,
-    card: { cardId: card.ID, name: card.Name },
-  });
-  ws.player.discardCard(card);
+  if (ws.player.Hand.some((c) => c.ID === card.ID)) {
+    steps.push({
+      type: "discard_card",
+      playerId: ws.player.ID,
+      card: { cardId: card.ID, name: card.Name },
+    });
+    ws.player.discardCard(card);
+  }
   ws.player.setStepsCollector(null);
-  // TODO move discard to card.use
 
   const ret = {
     action: "game.useCard",

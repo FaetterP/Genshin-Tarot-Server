@@ -10,5 +10,7 @@ export class Burn extends Card {
     super(Number.MAX_SAFE_INTEGER);
   }
 
-  use(ctx: CardUseContext): void {}
+  use(ctx: CardUseContext): void {
+    throw new Error("card cannot be used");
+  }
 }
