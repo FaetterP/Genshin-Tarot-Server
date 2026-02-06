@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Origin } from "../cards/Raiden/Origin";
 import { BalefulOmen } from "../cards/Raiden/BalefulOmen";
 import { Character } from "./Character";

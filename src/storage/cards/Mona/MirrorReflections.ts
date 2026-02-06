@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { MirrorReflectionsEffect } from "../../effects/MirrorReflectionsEffect";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";

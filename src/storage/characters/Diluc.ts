@@ -1,8 +1,8 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { TemperedSword } from "../cards/Diluc/TemperedSword";
 import { SearingOnslaught } from "../cards/Diluc/SearingOnslaught";
 import { Character } from "./Character";
-import { Attack } from "../../../types/general";
+import { Attack } from "../../types/general";
 import { Pyro } from "../elements/Pyro";
 
 export class Diluc extends Character {

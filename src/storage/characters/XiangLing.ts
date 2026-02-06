@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { DoughFu } from "../cards/XiangLing/DoughFu";
 import { GuobaFire } from "../cards/XiangLing/GuobaFire";
 import { PyronadoEffect } from "../effects/PyronadoEffect";

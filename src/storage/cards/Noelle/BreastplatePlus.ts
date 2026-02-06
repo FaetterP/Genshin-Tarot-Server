@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { BreastplateEffect } from "../../effects/BreastplateEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";

@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { GuobaFireEffect } from "../../effects/GuobaFireEffect";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";

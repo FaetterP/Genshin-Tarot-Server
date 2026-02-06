@@ -1,9 +1,9 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Kaboom } from "../cards/Klee/Kaboom";
 import { JumpyDumpty } from "../cards/Klee/JumpyDumpty";
 import { Character } from "./Character";
 import { getRandomInteger } from "../../utils/math";
-import { Attack } from "../../../types/general";
+import { Attack } from "../../types/general";
 
 export class Klee extends Character {
   public get Name() {

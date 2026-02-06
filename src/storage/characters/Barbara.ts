@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WhisperOfWater } from "../cards/Barbara/WhisperOfWater";
 import { LetTheShowBegin } from "../cards/Barbara/LetTheShowBegin";
 import { Character } from "./Character";

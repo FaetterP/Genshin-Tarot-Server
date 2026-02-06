@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 
 export class RagingTidePlus extends Card {

@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { FavoniusBladework } from "../cards/Jean/FavoniusBladework";
 import { GaleBlade } from "../cards/Jean/GaleBlade";
 import { Anemo } from "../elements/Anemo";

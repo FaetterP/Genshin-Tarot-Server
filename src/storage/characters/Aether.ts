@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { ForeignRockblade } from "../cards/Aether/ForeignRockblade";
 import { StarfellSword } from "../cards/Aether/StarfellSword";
 import { Character } from "./Character";

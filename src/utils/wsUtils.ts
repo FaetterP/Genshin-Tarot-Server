@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { WebSocket } from "ws";
 import { TaskAwaiter } from "./TaskAwaiter";
 import { getAllClients } from "../ws";
+import { AnyResponse } from "../types/response";
 
 export async function sendAndWait(ws: WebSocket, payload: any) {
   const taskAwaiter = new TaskAwaiter();
@@ -24,7 +25,7 @@ export async function sendToAllAndWait(payload: any) {
   await taskAwaiter.done();
 }
 
-export function sendToAll(payload: any) {
+export function sendToAll<T = AnyResponse>(payload: T) {
   for (const ws of getAllClients()) {
     ws.send(JSON.stringify({ ...payload }));
   }

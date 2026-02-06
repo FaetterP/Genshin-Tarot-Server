@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { CardUseContext } from "../../../types/functionsContext";
+import { CardUseContext } from "../../types/functionsContext";
 
 export abstract class Card {
   public abstract get Name(): string;

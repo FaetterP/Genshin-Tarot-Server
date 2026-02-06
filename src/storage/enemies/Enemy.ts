@@ -1,14 +1,14 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
 import { Element } from "../elements/Element";
-import type { DetailedStep } from "../../../types/detailedStep";
+import type { DetailedStep } from "../../types/detailedStep";
 import {
   EnemyDeathContext,
   EnemyEndCycleContext,
   EnemyStartCycleContext,
-} from "../../../types/eventsContext";
+} from "../../types/eventsContext";
 import { v4 } from "uuid";
-import { Attack, EnemyPrimitive } from "../../../types/general";
+import { Attack, EnemyPrimitive } from "../../types/general";
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
 

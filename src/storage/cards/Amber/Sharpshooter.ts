@@ -1,8 +1,8 @@
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SharpshooterPlus } from "./SharpshooterPlus";
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 
 export class Sharpshooter extends Card {
   public get Name(): string {

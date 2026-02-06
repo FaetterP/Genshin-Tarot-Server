@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WindSpiritCreation } from "../cards/Sucrose/WindSpiritCreation";
 import { AnemoHypostatis } from "../cards/Sucrose/AnemoHypostatis";
 import { Character } from "./Character";

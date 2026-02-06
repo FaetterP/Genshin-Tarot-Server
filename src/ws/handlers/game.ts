@@ -1,9 +1,10 @@
-import type { DetailedStep } from "../../../types/detailedStep";
-import { CardUseContext, CharacterUseBurstContext } from "../../../types/functionsContext";
-import { ExtWebSocket } from "../../../types/wsTypes";
+import type { DetailedStep } from "../../types/detailedStep";
+import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsContext";
+import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
-import { TaskAwaiter } from "../../utils/TaskAwaiter";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
+import { GameUpgradeCardRequest, GameUseBurstRequest, GameUseCardRequest } from "../../types/request";
+import { GameUpgradeCardResponse, GameUseBurstResponse, GameUseCardResponse } from "../../types/response";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
@@ -22,12 +23,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     enemies: enemiesId,
     isUseAlternative,
     selectedPlayer: selectedPlayerId,
-  } = payload as {
-    cardId: string;
-    enemies?: string[];
-    isUseAlternative?: boolean;
-    selectedPlayer?: string;
-  };
+  } = payload as GameUseCardRequest;
 
   const card = ws.cycleController.getPlayerCard(cardId, ws.player);
   if (!card) {
@@ -84,19 +80,18 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   }
   ws.player.setStepsCollector(null);
 
-  const ret = {
+  sendToAll<GameUseCardResponse>({
     action: "game.useCard",
     cardId: card.ID,
     player: ws.player.getPrimitiveStats(),
     steps,
-  };
-  sendToAll(ret);
+  });
 }
 
 const UPGRADE_MORA_COST = 5;
 
 async function upgradeCard(ws: ExtWebSocket, payload: any) {
-  const { cardId } = payload as { cardId: string };
+  const { cardId } = payload as GameUpgradeCardRequest;
 
   const card = ws.cycleController.getPlayerCard(cardId, ws.player);
   if (!card) {
@@ -133,7 +128,7 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
     },
   ];
 
-  sendToAll({
+  sendToAll<GameUpgradeCardResponse>({
     action: "game.upgradeCard",
     cardId,
     player: ws.player.getPrimitiveStats(),
@@ -149,14 +144,7 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
     selectedEnemies: selectedEnemiesIds,
     divide,
     selectedCharacter: selectedCharacterName,
-  } = payload as {
-    character: string;
-    selectedPlayer?: string;
-    selectedEnemy?: string;
-    selectedEnemies?: string[];
-    divide?: { playerId: string; count: number }[];
-    selectedCharacter?: string;
-  };
+  } = payload as GameUseBurstRequest;
 
   if (!characterName) {
     throw new Error("character is required");
@@ -216,7 +204,7 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
 
   ws.player.setStepsCollector(null);
 
-  sendToAll({
+  sendToAll<GameUseBurstResponse>({
     action: "game.useBurst",
     character: characterName,
     player: ws.player.getPrimitiveStats(),

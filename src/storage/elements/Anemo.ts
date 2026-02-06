@@ -1,4 +1,4 @@
-import { ElementReactionContext } from "../../../types/functionsContext";
+import { ElementReactionContext } from "../../types/functionsContext";
 import { Dash } from "../cards/misc/Dash";
 import { Element } from "./Element";
 

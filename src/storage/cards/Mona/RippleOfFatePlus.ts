@@ -1,5 +1,5 @@
-import type { DetailedStep } from "../../../../types/detailedStep";
-import { CardUseContext } from "../../../../types/functionsContext";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { MirrorReflections } from "./MirrorReflections";
 import { MirrorReflectionsPlus } from "./MirrorReflectionsPlus";

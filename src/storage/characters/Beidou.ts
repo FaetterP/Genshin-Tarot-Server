@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Oceanborn } from "../cards/Beidou/Oceanborn";
 import { Tidecaller } from "../cards/Beidou/Tidecaller";
 import { StormbreakerEffect } from "../effects/StormbreakerEffect";

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { TrailOfTheQilinEffect } from "../../effects/TrailOfTheQilinEffect";
 import { Card } from "../Card";
 

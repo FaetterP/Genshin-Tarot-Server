@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Demonbane } from "../cards/ChongYun/Demonbane";
 import { LayeredFrost } from "../cards/ChongYun/LayeredFrost";
 import { Character } from "./Character";

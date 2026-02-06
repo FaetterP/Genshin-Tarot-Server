@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { FireworkFlareUp } from "../cards/Yoimiya/FireworkFlareUp";
 import { NiwabiFireDance } from "../cards/Yoimiya/NiwabiFireDance";
 import { Character } from "./Character";

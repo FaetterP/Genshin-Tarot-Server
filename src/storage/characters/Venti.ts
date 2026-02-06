@@ -1,5 +1,5 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
+import { Attack } from "../../types/general";
 import { Card } from "../cards/Card";
 import { Cryo } from "../elements/Cryo";
 import { Electro } from "../elements/Electro";

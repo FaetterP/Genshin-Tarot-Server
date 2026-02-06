@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { LemniscaticWindPlus } from "./LemniscaticWindPlus";

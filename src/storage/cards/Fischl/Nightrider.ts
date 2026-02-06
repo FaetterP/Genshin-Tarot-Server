@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";

@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { GuhuaStyle } from "../cards/XingQiu/GuhuaStyle";
 import { FatalRainscreen } from "../cards/XingQiu/FatalRainscreen";
 import { Character } from "./Character";

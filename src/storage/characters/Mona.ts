@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { RippleOfFate } from "../cards/Mona/RippleOfFate";
 import { MirrorReflections } from "../cards/Mona/MirrorReflections";
 import { Character } from "./Character";

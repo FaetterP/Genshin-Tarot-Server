@@ -1,6 +1,6 @@
 import config from "config";
 import WebSocket from "ws";
-import { ExtWebSocket } from "../../types/wsTypes";
+import { ExtWebSocket } from "../types/wsTypes";
 import { CycleController } from "../game/CycleController";
 import { Player } from "../game/Player";
 import { buildHandlers } from "./handlers";

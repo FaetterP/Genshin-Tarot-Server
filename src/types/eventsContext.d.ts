@@ -1,6 +1,6 @@
 import type { DetailedStep } from "./detailedStep";
-import { Player } from "../src/game/Player";
-import { Enemy } from "../src/storage/enemies/Enemy";
+import { Player } from "../game/Player";
+import { Enemy } from "../storage/enemies/Enemy";
 
 export type EnemyDeathContext = {
   enemy: Enemy;

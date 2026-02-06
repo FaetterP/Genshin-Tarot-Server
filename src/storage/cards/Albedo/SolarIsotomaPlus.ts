@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";

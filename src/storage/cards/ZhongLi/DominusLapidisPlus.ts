@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";

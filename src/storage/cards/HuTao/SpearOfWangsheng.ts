@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { Card } from "../Card";
 import { SpearOfWangsheng as SpearOfWangshengPlus } from "./SpearOfWangshengPlus";
 

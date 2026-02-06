@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WeissBladework } from "../cards/Albedo/WeissBladework";
 import { SolarIsotoma } from "../cards/Albedo/SolarIsotoma";
 import { Character } from "./Character";

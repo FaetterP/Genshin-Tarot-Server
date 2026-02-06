@@ -1,5 +1,5 @@
-import { Player } from "../src/game/Player";
-import { Element } from "../src/storage/elements/Element";
+import { Player } from "../game/Player";
+import { Element } from "../storage/elements/Element";
 
 export type EnemyPrimitive = {
   id: string;

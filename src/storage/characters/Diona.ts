@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { KatzleinStyle } from "../cards/Diona/KatzleinStyle";
 import { IcyPaws } from "../cards/Diona/IcyPaws";
 import { Character } from "./Character";

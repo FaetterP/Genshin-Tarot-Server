@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { SkywardSonnetEffect } from "../../effects/SkywardSonnetEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";

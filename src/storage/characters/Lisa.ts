@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Card } from "../cards/Card";
 import { Electro } from "../elements/Electro";
 import { Character } from "./Character";

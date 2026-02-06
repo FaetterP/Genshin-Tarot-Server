@@ -1,6 +1,6 @@
-import { Player } from "../src/game/Player";
-import { Character } from "../src/storage/characters/Character";
-import { Enemy } from "../src/storage/enemies/Enemy";
+import { Player } from "../game/Player";
+import { Character } from "../storage/characters/Character";
+import { Enemy } from "../storage/enemies/Enemy";
 import type { DetailedStep } from "./detailedStep";
 
 export type ElementReactionContext = {

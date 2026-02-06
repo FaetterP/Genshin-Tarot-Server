@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { AncientSwordArt } from "../cards/QiQi/AncientSwordArt";
 import { HeraldOfFrost } from "../cards/QiQi/HeraldOfFrost";
 import { Cryo } from "../elements/Cryo";

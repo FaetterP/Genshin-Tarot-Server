@@ -1,6 +1,6 @@
-import type { DetailedStep } from "../../../../types/detailedStep";
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 

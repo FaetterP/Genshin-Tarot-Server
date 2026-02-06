@@ -1,4 +1,4 @@
-import { Attack } from "../../../types/general";
+import { Attack } from "../../types/general";
 import { Player } from "../../game/Player";
 import { Enemy } from "../enemies/Enemy";
 import { PlayerEffect } from "./PlayerEffect";

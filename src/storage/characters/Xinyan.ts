@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { DanceOfFire } from "../cards/Xinyan/DanceOfFire";
 import { SweepingFervor } from "../cards/Xinyan/SweepingFervor";
 import { Character } from "./Character";

@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { CeremonialBladework } from "../cards/Kaeya/CeremonialBladework";
 import { Frostgnaw } from "../cards/Kaeya/Frostgnaw";
 import { Character } from "./Character";

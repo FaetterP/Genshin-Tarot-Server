@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { GaryuuBladework } from "../cards/Kazuha/GaryuuBladework";
 import { Chihayaburu } from "../cards/Kazuha/Chihayaburu";
 import { Character } from "./Character";

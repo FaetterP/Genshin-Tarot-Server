@@ -1,4 +1,4 @@
-import { ElementReactionContext } from "../../../types/functionsContext";
+import { ElementReactionContext } from "../../types/functionsContext";
 export abstract class Element {
   abstract get Name(): string;
 

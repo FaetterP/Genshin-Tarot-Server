@@ -1,11 +1,12 @@
-import type { DetailedStep } from "../../types/detailedStep";
-import { CycleEndContext, CycleStartContext } from "../../types/eventsContext";
-import { ExtWebSocket } from "../../types/wsTypes";
+import type { DetailedStep } from "../types/detailedStep";
+import { CycleEndContext, CycleStartContext } from "../types/eventsContext";
+import { ExtWebSocket } from "../types/wsTypes";
 import { Event } from "../utils/Event";
 import { sendToAll, sendToAllAndWait } from "../utils/wsUtils";
 import { getAllClients, getAllPlayers } from "../ws";
 import { Player } from "./Player";
 import { getRandomEffect } from "./leylines";
+import { GameEndTurnResponse } from "../types/response";
 
 export class CycleController {
   private players: Player[] = [];
@@ -152,7 +153,7 @@ export class CycleController {
 
   playerEndTurn(player: Player) {
     player.endTurn();
-    sendToAll({ action: "game.endTurn", playerID: player.ID });
+    sendToAll<GameEndTurnResponse>({ action: "game.endTurn", playerID: player.ID });
 
     if (this.players.find((player) => !player.IsTurnEnds)) {
       return;

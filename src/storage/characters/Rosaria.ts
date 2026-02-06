@@ -1,8 +1,8 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SpearOfTheChurch } from "../cards/Rosaria/SpearOfTheChurch";
 import { RavagingConfession } from "../cards/Rosaria/RavagingConfession";
 import { Character } from "./Character";
-import { Attack } from "../../../types/general";
+import { Attack } from "../../types/general";
 import { Cryo } from "../elements/Cryo";
 
 export class Rosaria extends Character {

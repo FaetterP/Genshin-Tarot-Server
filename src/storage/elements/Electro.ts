@@ -1,5 +1,5 @@
-import { ElementReactionContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { ElementReactionContext } from "../../types/functionsContext";
+import { Attack } from "../../types/general";
 import { Element } from "./Element";
 
 export class Electro extends Element {

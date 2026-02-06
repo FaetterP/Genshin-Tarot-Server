@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Card } from "../Card";
 

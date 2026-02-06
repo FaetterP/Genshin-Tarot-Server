@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { EdelBladework } from "../cards/Eula/EdelBladework";
 import { IcetideVortex } from "../cards/Eula/IcetideVortex";
 import { Character } from "./Character";

@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SteelFang } from "../cards/Razor/SteelFang";
 import { ClawAndThunder } from "../cards/Razor/ClawAndThunder";
 import { Character } from "./Character";

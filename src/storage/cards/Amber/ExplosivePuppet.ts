@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
 import { Card } from "../Card";
 import { ExplosivePuppetPlus } from "./ExplosivePuppetPlus";

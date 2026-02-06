@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 

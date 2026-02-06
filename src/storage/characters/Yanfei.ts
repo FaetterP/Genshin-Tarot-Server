@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SealOfApproval } from "../cards/Yanfei/SealOfApproval";
 import { SignedEdict } from "../cards/Yanfei/SignedEdict";
 import { Character } from "./Character";

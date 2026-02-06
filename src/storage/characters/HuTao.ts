@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SpearOfWangsheng } from "../cards/HuTao/SpearOfWangsheng";
 import { GuideOfAfterlife } from "../cards/HuTao/GuideOfAfterlife";
 import { Character } from "./Character";

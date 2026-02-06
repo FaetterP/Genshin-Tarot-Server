@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import type { DetailedStep } from "../../types/detailedStep";
+import type { DetailedStep } from "../types/detailedStep";
 import {
   CycleEndContext,
   CycleStartContext,
@@ -7,13 +7,13 @@ import {
   EnemyEndCycleContext,
   EnemyStartCycleContext,
   PlayerEndsWavesContext,
-} from "../../types/eventsContext";
+} from "../types/eventsContext";
 import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
-import { EnemyPrimitive, PlayerPrimitive } from "../../types/general";
+import { EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement } from "../utils/arrays";

@@ -1,5 +1,5 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
+import { Attack } from "../../types/general";
 import { getRandomInteger } from "../../utils/math";
 import { LiutianArchery } from "../cards/Ganyu/LiutianArchery";
 import { TrailOfTheQilin } from "../cards/Ganyu/TrailOfTheQilin";

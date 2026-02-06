@@ -1,8 +1,8 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Sharpshooter } from "../cards/Amber/Sharpshooter";
 import { ExplosivePuppet } from "../cards/Amber/ExplosivePuppet";
 import { Character } from "./Character";
-import { Attack } from "../../../types/general";
+import { Attack } from "../../types/general";
 import { Pyro } from "../elements/Pyro";
 
 export class Amber extends Character {

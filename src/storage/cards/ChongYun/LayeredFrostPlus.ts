@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { LayeredFrostEffect } from "../../effects/LayeredFrostEffect";
 import { Card } from "../Card";
 

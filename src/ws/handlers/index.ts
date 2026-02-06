@@ -1,4 +1,4 @@
-import { ExtWebSocket } from "../../../types/wsTypes";
+import { ExtWebSocket } from "../../types/wsTypes";
 import characters from "./characters";
 import game from "./game";
 import task from "./task";

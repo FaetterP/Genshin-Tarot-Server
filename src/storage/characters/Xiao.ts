@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WhirlwindThrust } from "../cards/Xiao/WhirlwindThrust";
 import { LemniscaticWind } from "../cards/Xiao/LemniscaticWind";
 import { Character } from "./Character";

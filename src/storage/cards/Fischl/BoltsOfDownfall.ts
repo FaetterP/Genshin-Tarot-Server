@@ -1,5 +1,5 @@
-import { CardUseContext } from "../../../../types/functionsContext";
-import { Attack } from "../../../../types/general";
+import { CardUseContext } from "../../../types/functionsContext";
+import { Attack } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { BoltsOfDownfallPlus } from "./BoltsOfDownfallPlus";

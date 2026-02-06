@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
 import { Card } from "../Card";
 import { GuideOfAfterlifePlus } from "./GuideOfAfterlifePlus";

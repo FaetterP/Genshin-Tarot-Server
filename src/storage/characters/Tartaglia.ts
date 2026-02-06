@@ -1,5 +1,5 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
+import { Attack } from "../../types/general";
 import { CuttingTorrent } from "../cards/Tartaglia/CuttingTorrent";
 import { RagingTide } from "../cards/Tartaglia/RagingTide";
 import { Hydro } from "../elements/Hydro";

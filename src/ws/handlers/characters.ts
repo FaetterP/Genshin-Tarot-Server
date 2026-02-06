@@ -1,9 +1,11 @@
-import { ExtWebSocket } from "../../../types/wsTypes";
+import { ExtWebSocket } from "../../types/wsTypes";
 import { getCharacterByName } from "../../storage/characters";
+import { CharactersAddCharacterRequest, CharactersRemoveCharacterRequest } from "../../types/request";
+import { CharactersAddCharacterResponse, CharactersRemoveCharacterResponse } from "../../types/response";
 import { sendToAll } from "../../utils/wsUtils";
 
 async function addCharacter(ws: ExtWebSocket, payload: any) {
-  const { character: characterName } = payload as { character: string };
+  const { character: characterName } = payload as CharactersAddCharacterRequest;
   const Character = getCharacterByName(characterName);
 
   if (!Character) {
@@ -12,16 +14,15 @@ async function addCharacter(ws: ExtWebSocket, payload: any) {
 
   ws.player.addCharacter(new Character());
 
-  const ret = {
+  sendToAll<CharactersAddCharacterResponse>({
     action: "characters.addCharacter",
     player: ws.player.ID,
     character: characterName,
-  };
-  await sendToAll(ret);
+  });
 }
 
 async function removeCharacter(ws: ExtWebSocket, payload: any) {
-  const { character: characterName } = payload as { character: string };
+  const { character: characterName } = payload as CharactersRemoveCharacterRequest;
   const Character = getCharacterByName(characterName);
 
   if (!Character) {
@@ -30,12 +31,11 @@ async function removeCharacter(ws: ExtWebSocket, payload: any) {
 
   ws.player.removeCharacter(new Character());
 
-  const ret = {
+  sendToAll<CharactersRemoveCharacterResponse>({
     action: "characters.removeCharacter",
     player: ws.player.ID,
     character: characterName,
-  };
-  await sendToAll(ret);
+  });
 }
 
 export default { handlers: { addCharacter, removeCharacter } };

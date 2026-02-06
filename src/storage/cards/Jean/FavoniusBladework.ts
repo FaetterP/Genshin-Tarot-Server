@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { FavoniusBladeworkPlus } from "./FavoniusBladeworkPlus";

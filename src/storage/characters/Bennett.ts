@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../../types/functionsContext";
+import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { StrikeOfFortune } from "../cards/Bennett/StrikeOfFortune";
 import { PassionOverload } from "../cards/Bennett/PassionOverload";
 import { Character } from "./Character";
