@@ -1,7 +1,6 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
 import { Element } from "../elements/Element";
-import type { DetailedStep } from "../../types/detailedStep";
 import {
   EnemyDeathContext,
   EnemyEndCycleContext,

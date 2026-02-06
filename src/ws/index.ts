@@ -1,4 +1,3 @@
-import config from "config";
 import WebSocket from "ws";
 import { ExtWebSocket } from "../types/wsTypes";
 import { CycleController } from "../game/CycleController";
@@ -6,7 +5,7 @@ import { Player } from "../game/Player";
 import { buildHandlers } from "./handlers";
 
 const HEARTBEAT_TIMEOUT = 30000;
-const SERVER_PORT = config.get<number>("server.port");
+const SERVER_PORT = 8999;
 
 const handlers = buildHandlers();
 let wss: WebSocket.Server;
