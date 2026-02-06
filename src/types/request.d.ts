@@ -39,3 +39,12 @@ export type TaskCompleteTaskRequest = {
   action: "task.completeTask"
   taskId: string;
 }
+
+export type AnyRequest = GameStartRequest
+  | GameEndTurnRequest
+  | GameUseCardRequest
+  | GameUpgradeCardRequest
+  | GameUseBurstRequest
+  | CharactersAddCharacterRequest
+  | CharactersRemoveCharacterRequest
+  | TaskCompleteTaskRequest;

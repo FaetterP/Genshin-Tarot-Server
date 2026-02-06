@@ -4,11 +4,11 @@ import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 import { GameUpgradeCardRequest, GameUseBurstRequest, GameUseCardRequest } from "../../types/request";
-import { GameUpgradeCardResponse, GameUseBurstResponse, GameUseCardResponse } from "../../types/response";
+import { GameStartGameResponse, GameUpgradeCardResponse, GameUseBurstResponse, GameUseCardResponse } from "../../types/response";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
-  await sendToAllAndWait({ action: "game.startGame" });
+  await sendToAllAndWait<GameStartGameResponse>({ action: "game.startGame" });
 
   ws.cycleController.startCycle();
 }

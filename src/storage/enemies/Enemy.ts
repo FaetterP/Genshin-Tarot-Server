@@ -104,7 +104,7 @@ export abstract class Enemy {
     const totalDamage = attack.damage + bonus.bonusDamage;
 
     if (bonus.bonusDamage > 0) {
-      attack.player.reportSteps([
+      attack.player.addSteps([
         {
           type: "enemy_take_damage",
           enemyId: this.ID,
@@ -118,7 +118,7 @@ export abstract class Enemy {
     if (this.shield <= 0 || attack.isPiercing) {
       this.hp -= totalDamage;
     } else {
-      attack.player.reportEnemyBlockDamage(
+      attack.player.recordEnemyBlockDamage(
         this.ID,
         attack.element?.Name
       );
@@ -134,7 +134,7 @@ export abstract class Enemy {
       if (bonus.energyOnKill > 0) {
         attack.player.addEnergy(bonus.energyOnKill);
       }
-      attack.player.reportEnemyDeath(this.ID);
+      attack.player.recordEnemyDeath(this.ID);
       this.death();
       this.e_onDeath.Invoke({ enemy: this });
     }
@@ -154,7 +154,7 @@ export abstract class Enemy {
     this.elements = [...this.elements, element];
 
     if (this.elements.length >= 2) {
-      player.reportEnemyReaction(
+      player.recordEnemyReaction(
         this.ID,
         this.elements[0].Name,
         this.elements[1].Name

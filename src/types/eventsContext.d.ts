@@ -9,14 +9,12 @@ export type EnemyDeathContext = {
 export type EnemyStartCycleContext = {
   enemy: Enemy;
   playerId: string;
-  addToReport: (data: any[]) => void;
   addToSteps: (data: DetailedStep[]) => void;
 };
 
 export type EnemyEndCycleContext = {
   enemy: Enemy;
   playerId: string;
-  addToReport: (data: any[]) => void;
   addToSteps: (data: DetailedStep[]) => void;
 };
 
@@ -26,13 +24,10 @@ export type PlayerEndsWavesContext = {
 
 export type CycleStartContext = {
   cycle: number;
-  // leylines: { name: string; use: (player: Player) => void }[];
-  addToReport: (data: any[]) => void;
   addToSteps: (data: DetailedStep[]) => void;
 };
 
 export type CycleEndContext = {
   cycle: number;
-  addToReport: (data: any[]) => void;
   addToSteps: (data: DetailedStep[]) => void;
 };

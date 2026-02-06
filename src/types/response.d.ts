@@ -1,9 +1,18 @@
 import type { DetailedStep } from "./detailedStep";
 import type { PlayerPrimitive } from "./general";
 
-export type ServerActionResult<T = unknown> =
-  | { status: "ok"; data: T }
-  | { status: "error"; message: string };
+export type OkResponse = {
+  status: "ok";
+}
+
+export type ErrorResponse = {
+  status: "error";
+  message: string;
+}
+
+export type AwaitedResponse<T extends AnyResponse> = T & {
+  taskId: string;
+}
 
 export interface WsConnectResponse {
   action: "ws.connect";
@@ -15,8 +24,23 @@ export interface GameStartGameResponse {
 }
 
 export type GameEndTurnResponse = {
-  action: "game.endTurn",
-  playerID: string
+  action: "game.endTurn";
+  playerID: string;
+  steps: DetailedStep[];
+};
+
+export interface GameStartCycleResponse {
+  action: "game.startCycle";
+  you: PlayerPrimitive | undefined;
+  otherPlayers: PlayerPrimitive[];
+  cycle: number;
+  leylines: string[];
+  steps: DetailedStep[];
+}
+
+export interface GameEndCycleResponse {
+  action: "game.endCycle";
+  steps: DetailedStep[];
 }
 
 export interface GameUseCardResponse {
@@ -52,12 +76,14 @@ export interface CharactersRemoveCharacterResponse {
   character: string;
 }
 
-
-export type AnyResponse = WsConnectResponse
+export type AnyResponse =
+  | WsConnectResponse
   | GameStartGameResponse
+  | GameStartCycleResponse
   | GameUseCardResponse
   | GameEndTurnResponse
+  | GameEndCycleResponse
   | GameUpgradeCardResponse
   | GameUseBurstResponse
   | CharactersAddCharacterResponse
-  | CharactersRemoveCharacterResponse
+  | CharactersRemoveCharacterResponse;

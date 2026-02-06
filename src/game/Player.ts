@@ -49,11 +49,11 @@ export class Player {
     this._stepsCollector = fn;
   }
 
-  public reportEnemyDeath(enemyId: string) {
+  public recordEnemyDeath(enemyId: string) {
     this._stepsCollector?.([{ type: "enemy_death", enemyId }]);
   }
 
-  public reportEnemyReaction(
+  public recordEnemyReaction(
     enemyId: string,
     element1: string,
     element2: string
@@ -63,13 +63,13 @@ export class Player {
     ]);
   }
 
-  public reportEnemyBlockDamage(enemyId: string, element?: string) {
+  public recordEnemyBlockDamage(enemyId: string, element?: string) {
     this._stepsCollector?.([
       { type: "enemy_block_damage", enemyId, ...(element && { element }) },
     ]);
   }
 
-  public reportSteps(steps: DetailedStep[]) {
+  public addSteps(steps: DetailedStep[]) {
     this._stepsCollector?.(steps);
   }
 
@@ -424,7 +424,15 @@ export class Player {
     }
   }
 
-  public endTurn() {
+  public endTurn(addToSteps: (data: DetailedStep[]) => void) {
+    const handSnapshot = [...this.hand];
+    for (const card of handSnapshot) {
+      this.hand = this.hand.filter((c) => c !== card);
+      this.discard.push(card);
+      addToSteps([
+        { type: "discard_card", playerId: this.ID, card: { cardId: card.ID, name: card.Name } },
+      ]);
+    }
     this.isTurnEnds = true;
   }
 
@@ -477,11 +485,11 @@ export class Player {
       }
     }
 
-    ctx.addToReport([
+    ctx.addToSteps([
       {
-        type: "enemyAttack",
-        player: this.ID,
-        enemy: ctx.enemy.ID,
+        type: "enemy_attack",
+        enemyId: ctx.enemy.ID,
+        playerId: this.ID,
         damage: ctx.enemy.Damage,
       },
     ]);
@@ -493,13 +501,6 @@ export class Player {
 
     if (this.enemies.length === 0) {
       this.createWave();
-      ctx.addToReport([
-        {
-          type: "createWave",
-          player: this.ID,
-          enemies: this.enemies.map((enemy) => enemy.getPrimitiveStats()),
-        },
-      ]);
       ctx.addToSteps(
         this.enemies.map((enemy) => ({
           type: "enemy_appearance" as const,
@@ -516,7 +517,6 @@ export class Player {
     this.actionPoints = 3;
     this.extraActionPoints = 0;
     this.burnsDrawnThisTurn = 0;
-    ctx.addToReport([{ type: "resetStats", player: this.ID }]);
     if (oldShield > 0) {
       ctx.addToSteps([
         { type: "player_change_shield", playerId: this.ID, delta: -oldShield },
@@ -535,13 +535,6 @@ export class Player {
       const card = this.drawCard();
       drawnCards.push({ cardId: card.ID, name: card.Name });
     }
-    ctx.addToReport([
-      {
-        player: this.ID,
-        type: "drawCards",
-        cards: this.hand.map((card) => ({ name: card.Name, cardId: card.ID })),
-      },
-    ]);
     ctx.addToSteps([
       { type: "draw_cards", playerId: this.ID, cards: drawnCards },
     ]);
@@ -552,8 +545,13 @@ export class Player {
         this.effects = this.effects.filter((eff) => eff !== effect);
       }
 
-      ctx.addToReport([
-        { type: "useEffect", effect: effect.Name, isRemove, player: this.ID },
+      ctx.addToSteps([
+        {
+          type: "effect_trigger",
+          playerId: this.ID,
+          effect: effect.Name,
+          isRemove,
+        },
       ]);
       if (isRemove) {
         ctx.addToSteps([
@@ -566,7 +564,6 @@ export class Player {
       enemy.startCycle({
         enemy,
         playerId: this.ID,
-        addToReport: ctx.addToReport,
         addToSteps: ctx.addToSteps,
       });
     }
@@ -575,25 +572,10 @@ export class Player {
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {
-    const handSnapshot = [...this.hand];
-    for (const card of handSnapshot) {
-      this.hand = this.hand.filter((c) => c !== card);
-      this.discard.push(card);
-      ctx.addToSteps([
-        {
-          type: "discard_card",
-          playerId: this.ID,
-          card: { cardId: card.ID, name: card.Name },
-        },
-      ]);
-    }
-    ctx.addToReport([{ type: "clearHand", player: this.ID }]);
-
     for (const enemy of this.enemies) {
       enemy.endCycle({
         enemy,
         playerId: this.ID,
-        addToReport: ctx.addToReport,
         addToSteps: ctx.addToSteps,
       });
     }

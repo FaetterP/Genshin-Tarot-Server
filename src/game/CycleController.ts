@@ -6,7 +6,7 @@ import { sendToAll, sendToAllAndWait } from "../utils/wsUtils";
 import { getAllClients, getAllPlayers } from "../ws";
 import { Player } from "./Player";
 import { getRandomEffect } from "./leylines";
-import { GameEndTurnResponse } from "../types/response";
+import { GameEndCycleResponse, GameEndTurnResponse } from "../types/response";
 
 export class CycleController {
   private players: Player[] = [];
@@ -88,18 +88,14 @@ export class CycleController {
       leylines.push(getRandomEffect());
     }
 
-    let report: any[] = [];
     const steps: DetailedStep[] = [];
     for (const line of leylines) {
       line.use(this.players);
-      report.push({ type: "useLeyline", name: line.name });
+      steps.push({ type: "use_leyline", name: line.name });
     }
 
     this.e_onCycleStart.Invoke({
       cycle: this.cycle,
-      addToReport: (data: any[]) => {
-        report = [...report, ...data];
-      },
       addToSteps: (data: DetailedStep[]) => {
         steps.push(...data);
       },
@@ -116,7 +112,6 @@ export class CycleController {
         ),
         cycle: this.cycle,
         leylines: leylines.map((line) => line.name),
-        report,
         steps,
       };
       data.otherPlayers = data.otherPlayers.filter(
@@ -127,35 +122,30 @@ export class CycleController {
   }
 
   private async endCycle() {
-    let report: any[] = [];
     const steps: DetailedStep[] = [];
 
     this.e_onCycleEnd.Invoke({
       cycle: this.cycle,
-      addToReport(data) {
-        report = [...report, ...data];
-      },
-      addToSteps(data: DetailedStep[]) {
+      addToSteps: (data: DetailedStep[]) => {
         steps.push(...data);
       },
     });
 
-    const ret = {
-      action: "game.endTurnReport",
-      report,
+    await sendToAllAndWait<GameEndCycleResponse>({
+      action: "game.endCycle",
       steps,
-    };
-    await sendToAllAndWait(ret);
+    });
 
     this.cycle += 1;
     this.startCycle();
   }
 
   playerEndTurn(player: Player) {
-    player.endTurn();
-    sendToAll<GameEndTurnResponse>({ action: "game.endTurn", playerID: player.ID });
+    const steps: DetailedStep[] = [];
+    player.endTurn((data) => steps.push(...data));
+    sendToAll<GameEndTurnResponse>({ action: "game.endTurn", playerID: player.ID, steps });
 
-    if (this.players.find((player) => !player.IsTurnEnds)) {
+    if (this.players.find((p) => !p.IsTurnEnds)) {
       return;
     }
 

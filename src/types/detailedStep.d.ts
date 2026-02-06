@@ -22,4 +22,7 @@ export type DetailedStep =
   | { type: "enemy_heal"; enemyId: string; amount: number }
   | { type: "upgrade_card"; playerId: string; oldCard: CardPrimitive; newCard: CardPrimitive }
   | { type: "energy_freezed"; playerId: string; delta: number }
-  | { type: "trash_card"; playerId: string; card: CardPrimitive };
+  | { type: "trash_card"; playerId: string; card: CardPrimitive }
+  | { type: "use_leyline"; name: string }
+  | { type: "effect_trigger"; playerId: string; effect: string; isRemove: boolean }
+  | { type: "enemy_attack"; enemyId: string; playerId: string; damage: number };

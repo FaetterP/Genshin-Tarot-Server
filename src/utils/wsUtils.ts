@@ -13,7 +13,7 @@ export async function sendAndWait(ws: WebSocket, payload: any) {
   await taskAwaiter.done();
 }
 
-export async function sendToAllAndWait(payload: any) {
+export async function sendToAllAndWait<T extends AnyResponse>(payload: T) {
   const taskAwaiter = new TaskAwaiter();
 
   for (const ws of getAllClients()) {
@@ -25,7 +25,7 @@ export async function sendToAllAndWait(payload: any) {
   await taskAwaiter.done();
 }
 
-export function sendToAll<T = AnyResponse>(payload: T) {
+export function sendToAll<T extends AnyResponse>(payload: T) {
   for (const ws of getAllClients()) {
     ws.send(JSON.stringify({ ...payload }));
   }
