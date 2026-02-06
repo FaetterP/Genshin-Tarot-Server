@@ -25,4 +25,7 @@ export type DetailedStep =
   | { type: "trash_card"; playerId: string; card: CardPrimitive }
   | { type: "use_leyline"; name: string }
   | { type: "effect_trigger"; playerId: string; effect: string; isRemove: boolean }
-  | { type: "enemy_attack"; enemyId: string; playerId: string; damage: number };
+  | { type: "enemy_attack"; enemyId: string; playerId: string; damage: number }
+  | { type: "enemy_get_effect"; enemyId: string; effect: string }
+  | { type: "enemy_lose_effect"; enemyId: string; effect: string }
+  | { type: "enemy_effect_trigger"; enemyId: string; effect: string; isRemove: boolean };

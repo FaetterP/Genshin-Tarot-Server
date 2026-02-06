@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
@@ -34,8 +33,8 @@ export class Nightrider extends Card {
         element: "Electro",
       },
       {
-        type: "player_get_effect",
-        playerId: ctx.player.ID,
+        type: "enemy_get_effect",
+        enemyId: target.ID,
         effect: effect.Name,
       },
     ]);
@@ -45,6 +44,6 @@ export class Nightrider extends Card {
       element: new Electro(),
       player: ctx.player,
     });
-    ctx.player.addEffect(effect);
+    target.addEffect(effect);
   }
 }

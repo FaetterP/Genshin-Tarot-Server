@@ -8,6 +8,7 @@ export type EnemyDeathContext = {
 
 export type EnemyStartCycleContext = {
   enemy: Enemy;
+  player: Player;
   playerId: string;
   addToSteps: (data: DetailedStep[]) => void;
 };

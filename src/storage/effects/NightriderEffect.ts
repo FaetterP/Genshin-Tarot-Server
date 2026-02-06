@@ -1,10 +1,9 @@
-import { Attack } from "../../types/general";
-import { Player } from "../../game/Player";
 import { Electro } from "../elements/Electro";
 import { Enemy } from "../enemies/Enemy";
-import { PlayerEffect } from "./PlayerEffect";
+import { EnemyEffect } from "./EnemyEffect";
+import type { EnemyStartCycleContext } from "../../types/eventsContext";
 
-export class NightriderEffect extends PlayerEffect {
+export class NightriderEffect extends EnemyEffect {
   public get Name(): string {
     return "Nightrider";
   }
@@ -16,15 +15,13 @@ export class NightriderEffect extends PlayerEffect {
     this.enemy = enemy;
   }
 
-  public onStartCycle(player: Player): boolean {
-    const attack: Attack = {
+  public onStartCycle(ctx: EnemyStartCycleContext): boolean {
+    this.enemy.applyAttack({
       damage: 1,
       isPiercing: true,
       element: new Electro(),
-      player,
-    };
-    this.enemy.applyAttack(attack);
-
+      player: ctx.player,
+    });
     return true;
   }
 }

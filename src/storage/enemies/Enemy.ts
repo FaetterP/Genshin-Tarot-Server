@@ -10,6 +10,7 @@ import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../types/general";
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
+import { EnemyEffect } from "../effects/EnemyEffect";
 
 type constructorSetup = {
   hp: number;
@@ -27,6 +28,7 @@ export abstract class Enemy {
   private mora: number;
   protected elements: Element[] = [];
   private isStunned: boolean = false;
+  private effects: EnemyEffect[] = [];
 
   private e_onDeath = new Event<EnemyDeathContext>();
   private e_onStartCycle = new Event<EnemyStartCycleContext>();
@@ -81,6 +83,8 @@ export abstract class Enemy {
       elements.push(element.Name);
     }
 
+    const effectNames = this.effects.map((e) => e.Name);
+
     return {
       id: this.ID,
       name: this.Name,
@@ -88,7 +92,16 @@ export abstract class Enemy {
       shield: this.shield,
       elements,
       isStunned: this.isStunned,
+      effects: effectNames,
     };
+  }
+
+  public addEffect(effect: EnemyEffect) {
+    this.effects.push(effect);
+  }
+
+  public hasEffect(effectName: string): boolean {
+    return this.effects.some((e) => e.Name === effectName);
   }
 
   applyAttack(attack: Attack) {
@@ -191,6 +204,26 @@ export abstract class Enemy {
   startCycle(ctx: EnemyStartCycleContext) {
     this.isStunned = false;
     this.e_onStartCycle.Invoke(ctx);
+
+    const toRemove: EnemyEffect[] = [];
+    for (const effect of this.effects) {
+      const isRemove = effect.onStartCycle(ctx);
+      ctx.addToSteps([
+        {
+          type: "enemy_effect_trigger",
+          enemyId: this.ID,
+          effect: effect.Name,
+          isRemove,
+        },
+      ]);
+      if (isRemove) {
+        toRemove.push(effect);
+        ctx.addToSteps([
+          { type: "enemy_lose_effect", enemyId: this.ID, effect: effect.Name },
+        ]);
+      }
+    }
+    this.effects = this.effects.filter((e) => !toRemove.includes(e));
   }
 
   endCycle(ctx: EnemyEndCycleContext) {

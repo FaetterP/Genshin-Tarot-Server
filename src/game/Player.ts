@@ -563,6 +563,7 @@ export class Player {
     for (const enemy of this.enemies) {
       enemy.startCycle({
         enemy,
+        player: this,
         playerId: this.ID,
         addToSteps: ctx.addToSteps,
       });

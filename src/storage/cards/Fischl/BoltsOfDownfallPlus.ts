@@ -1,7 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { NightriderEffect } from "../../effects/NightriderEffect";
-import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
 export class BoltsOfDownfallPlus extends Card {
@@ -19,9 +17,7 @@ export class BoltsOfDownfallPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = ctx.player.isContainsEffect(new NightriderEffect(target))
-      ? 3
-      : 1;
+    const damage = target.hasEffect("Nightrider") ? 3 : 1;
     ctx.addToSteps([
       {
         type: "enemy_take_damage",
