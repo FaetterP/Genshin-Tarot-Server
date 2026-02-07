@@ -13,6 +13,9 @@ export class SolarIsotomaPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (ctx.selectedCard === this.ID)
+      throw new Error("card cannot trash itself");
+
     if (ctx.selectedCard) {
       const inHand = ctx.player.Hand.some((c) => c.ID === ctx.selectedCard);
       const inDiscard = ctx.player.Discard.some((c) => c.ID === ctx.selectedCard);
