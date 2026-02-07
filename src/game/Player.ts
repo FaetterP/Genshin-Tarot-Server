@@ -392,6 +392,20 @@ export class Player {
     return card;
   }
 
+  public findTopCardFromDeck(): Card | undefined {
+    if (this.deck.length === 0)
+      this.restoreDeck();
+
+    if (this.deck.length === 0)
+      return undefined;
+
+    const card = this.deck.reduce((min, c) =>
+      c.deckPosition < min.deckPosition ? c : min
+    );
+    this.deck = this.deck.filter((c) => c !== card);
+    return card;
+  }
+
   private restoreDeck() {
     const count = this.discard.length;
     for (let i = 0; i < count; i++) {
