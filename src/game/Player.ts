@@ -448,6 +448,8 @@ export class Player {
   }
 
   private enemyEndCycleHandler(ctx: EnemyEndCycleContext) {
+    if (ctx.enemy.IsStunned) return;
+
     const damage = ctx.enemy.Damage;
     const isPiercing = false;
     if (damage <= 0) return;

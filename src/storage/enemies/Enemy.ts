@@ -49,6 +49,9 @@ export abstract class Enemy {
   public get Elements(): ReadonlyArray<Element> {
     return this.elements;
   }
+  public get IsStunned(): boolean {
+    return this.isStunned;
+  }
   public get OnDeath() {
     return {
       addListener: this.e_onDeath.AddListener.bind(this.e_onDeath),
