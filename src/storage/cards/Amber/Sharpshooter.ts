@@ -29,6 +29,13 @@ export class Sharpshooter extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = "Pyro";
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: -1,
+        },
+      ]);
     }
 
     ctx.addToSteps([

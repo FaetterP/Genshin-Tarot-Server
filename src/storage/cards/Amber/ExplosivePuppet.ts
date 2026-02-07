@@ -21,6 +21,9 @@ export class ExplosivePuppet extends Card {
       throw new Error("no enemies");
     }
 
+    if (ctx.player.Enemies.includes(ctx.enemies[0]))
+      throw new Error("enemy is not in range");
+
     const effect = new ExplosivePuppetEffect();
     ctx.addToSteps([
       {
@@ -29,7 +32,9 @@ export class ExplosivePuppet extends Card {
         effect: effect.Name,
       },
     ]);
-    ctx.enemies[0].addStun();
     ctx.player.addEffect(effect);
+
+    // TODO: not apply to boss
+    ctx.enemies[0].addStun();
   }
 }
