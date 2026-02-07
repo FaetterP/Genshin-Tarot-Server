@@ -19,7 +19,7 @@ export class Freeze extends Card {
       freezeCards.map((card) => ({
         type: "trash_card" as const,
         playerId: ctx.player.ID,
-        card: { cardId: card.ID, name: card.Name },
+        card: card.getPrimitive(),
       }))
     );
   }

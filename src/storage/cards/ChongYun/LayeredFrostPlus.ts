@@ -19,7 +19,7 @@ export class LayeredFrostPlus extends Card {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [{ cardId: drawn.ID, name: drawn.Name }],
+        cards: [drawn.getPrimitive()],
       },
       {
         type: "player_get_effect",

@@ -13,10 +13,10 @@ import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
-import { EnemyPrimitive, PlayerPrimitive } from "../types/general";
+import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
-import { getRandomElement } from "../utils/arrays";
+import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
 
@@ -152,12 +152,9 @@ export class Player {
       enemies,
       effects,
       characters: this.characters.map((character) => character.Name),
-      hand: this.hand.map((card) => ({ cardId: card.ID, name: card.Name })),
-      discard: this.discard.map((card) => ({
-        cardId: card.ID,
-        name: card.Name,
-      })),
-      deck: this.deck.map((card) => ({ cardId: card.ID, name: card.Name })),
+      hand: this.hand.map((card) => card.getPrimitive()),
+      discard: this.discard.map((card) => card.getPrimitive()),
+      deck: this.deck.map((card) => card.getPrimitive()),
     };
   }
 
@@ -187,6 +184,10 @@ export class Player {
     for (const character of this.characters) {
       this.deck.push(...character.Cards);
     }
+    this.deck.forEach((card, i) => {
+      card.deckPosition = i + 1;
+      card.revealDeckPositionToClient = false;
+    });
 
     this.hp = 12;
     this.shield = 0;
@@ -280,7 +281,7 @@ export class Player {
         burnCards.map((card) => ({
           type: "trash_card" as const,
           playerId: this.ID,
-          card: { cardId: card.ID, name: card.Name },
+          card: card.getPrimitive(),
         }))
       );
     }
@@ -368,9 +369,11 @@ export class Player {
       this.restoreDeck();
     }
 
-    const card = getRandomElement(this.deck);
-    this.deck = this.deck.filter((c) => c != card);
-    this.hand.push(card);
+    const card = this.deck.reduce((min, c) =>
+      c.deckPosition < min.deckPosition ? c : min
+    );
+    this.deck = this.deck.filter((c) => c !== card);
+    this.addCardToHand(card, false);
 
     if (card.Name === "Burn") {
       this.burnsDrawnThisTurn++;
@@ -396,6 +399,13 @@ export class Player {
       this.deck.push(card);
       this.discard = this.discard.filter((c) => c !== card);
     }
+    for (const card of this.deck) {
+      card.revealDeckPositionToClient = false;
+    }
+    const positions = randomPermutation(this.deck.length);
+    this.deck.forEach((card, i) => {
+      card.deckPosition = positions[i];
+    });
   }
 
   public discardCard(card: Card) {
@@ -417,7 +427,7 @@ export class Player {
     this.deck = this.deck.filter((c) => c !== card);
 
     this._stepsCollector?.([
-      { type: "trash_card", playerId: this.ID, card: { cardId: card.ID, name: card.Name } },
+      { type: "trash_card", playerId: this.ID, card: card.getPrimitive() },
     ]);
   }
 
@@ -433,11 +443,17 @@ export class Player {
     this.discard.push(card);
   }
 
-  public addCardToHand(card: Card) {
+  public addCardToHand(card: Card, knownPosition: boolean = false) {
+    card.revealDeckPositionToClient = knownPosition;
     this.hand.push(card);
   }
 
   public addCardToDeck(card: Card) {
+    for (const c of this.deck) {
+      c.deckPosition += 1;
+    }
+    card.deckPosition = 1;
+    card.revealDeckPositionToClient = false;
     this.deck.push(card);
   }
 
@@ -455,7 +471,7 @@ export class Player {
       this.hand = this.hand.filter((c) => c !== card);
       this.discard.push(card);
       addToSteps([
-        { type: "discard_card", playerId: this.ID, card: { cardId: card.ID, name: card.Name } },
+        { type: "discard_card", playerId: this.ID, card: card.getPrimitive() },
       ]);
     }
     this.isTurnEnds = true;
@@ -557,10 +573,10 @@ export class Player {
       },
     ]);
 
-    const drawnCards: { cardId: string; name: string }[] = [];
+    const drawnCards: CardPrimitive[] = [];
     for (let i = 0; i < 5; i++) {
       const card = this.drawCard();
-      drawnCards.push({ cardId: card.ID, name: card.Name });
+      drawnCards.push(card.getPrimitive());
     }
     ctx.addToSteps([
       { type: "draw_cards", playerId: this.ID, cards: drawnCards },

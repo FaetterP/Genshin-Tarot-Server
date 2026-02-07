@@ -42,4 +42,5 @@ export type Attack = {
 export type CardPrimitive = {
   cardId: string;
   name: string;
+  deckPosition?: number;
 };

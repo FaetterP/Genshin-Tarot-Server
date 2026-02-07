@@ -76,7 +76,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     steps.push({
       type: "discard_card",
       playerId: ws.player.ID,
-      card: { cardId: card.ID, name: card.Name },
+      card: card.getPrimitive(),
     });
     ws.player.discardCard(card);
   }
@@ -107,7 +107,7 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
   }
 
   ws.player.trySpendMora(UPGRADE_MORA_COST);
-  const oldCardPrimitive = { cardId: card.ID, name: card.Name };
+  const oldCardPrimitive = card.getPrimitive();
   ws.player.trashCardById(card.ID);
 
   const UpgradedCard = card.Upgrade;
@@ -119,14 +119,14 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
     {
       type: "add_card",
       playerId: ws.player.ID,
-      card: { cardId: newCard.ID, name: newCard.Name },
+      card: newCard.getPrimitive(),
       to: "hand",
     },
     {
       type: "upgrade_card",
       playerId: ws.player.ID,
       oldCard: oldCardPrimitive,
-      newCard: { cardId: newCard.ID, name: newCard.Name },
+      newCard: newCard.getPrimitive(),
     },
   ];
 

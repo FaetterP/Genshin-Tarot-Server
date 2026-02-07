@@ -31,8 +31,8 @@ export class Beidou extends Character {
         type: "draw_cards",
         playerId: ctx.player.ID,
         cards: [
-          { cardId: card1.ID, name: card1.Name },
-          { cardId: card2.ID, name: card2.Name },
+          card1.getPrimitive(),
+          card2.getPrimitive(),
         ],
       },
       {

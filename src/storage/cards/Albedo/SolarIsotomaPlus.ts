@@ -46,7 +46,7 @@ export class SolarIsotomaPlus extends Card {
       ctx.player.trashCardById(ctx.selectedCard)
       const drawn = ctx.player.drawCard();
       ctx.addToSteps([
-        { type: "draw_cards", playerId: ctx.player.ID, cards: [{ cardId: drawn.ID, name: drawn.Name }] },
+        { type: "draw_cards", playerId: ctx.player.ID, cards: [drawn.getPrimitive()] },
       ]);
     }
   }

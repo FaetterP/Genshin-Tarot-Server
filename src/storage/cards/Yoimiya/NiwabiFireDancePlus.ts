@@ -21,9 +21,9 @@ export class NiwabiFireDancePlus extends Card {
         type: "draw_cards",
         playerId: ctx.player.ID,
         cards: [
-          { cardId: c1.ID, name: c1.Name },
-          { cardId: c2.ID, name: c2.Name },
-          { cardId: c3.ID, name: c3.Name },
+          c1.getPrimitive(),
+          c2.getPrimitive(),
+          c3.getPrimitive(),
         ],
       },
       {

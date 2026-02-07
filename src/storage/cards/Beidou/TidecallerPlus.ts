@@ -28,7 +28,7 @@ export class TidecallerPlus extends Card {
       {
         type: "add_card",
         playerId: ctx.player.ID,
-        card: { cardId: overheatCard.ID, name: overheatCard.Name },
+        card: overheatCard.getPrimitive(),
         to: "hand",
       },
     ]);

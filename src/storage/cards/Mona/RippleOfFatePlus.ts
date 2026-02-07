@@ -1,4 +1,5 @@
 import type { DetailedStep } from "../../../types/detailedStep";
+import type { CardPrimitive } from "../../../types/general";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { MirrorReflections } from "./MirrorReflections";
@@ -15,10 +16,10 @@ export class RippleOfFatePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    const drawn: { cardId: string; name: string }[] = [];
+    const drawn: CardPrimitive[] = [];
     for (let i = 0; i < 2; i++) {
       const card = ctx.player.drawCard();
-      drawn.push({ cardId: card.ID, name: card.Name });
+      drawn.push(card.getPrimitive());
       if (
         card instanceof RippleOfFate ||
         card instanceof RippleOfFatePlus ||
