@@ -34,8 +34,14 @@ export class LetTheShowBegin extends Card {
     let healCount = 1;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       healCount = 3;
+      ctx.addToSteps([
+        { type: "player_change_energy", playerId: ctx.player.ID, delta: -2 },
+      ]);
     }
 
     ctx.selectedPlayer.addHealth(healCount);
+    ctx.addToSteps([
+      { type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: healCount },
+    ]);
   }
 }

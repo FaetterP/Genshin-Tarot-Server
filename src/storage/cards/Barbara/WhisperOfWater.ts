@@ -2,7 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
-import { WhisperOfWater as WhisperOfWaterPlus } from "./WhisperOfWaterPlus";
+import { WhisperOfWaterPlus as WhisperOfWaterPlus } from "./WhisperOfWaterPlus";
 
 export class WhisperOfWater extends Card {
   public get Name(): string {

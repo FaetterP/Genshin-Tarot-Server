@@ -1,7 +1,7 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 
-export class WhisperOfWater extends Card {
+export class WhisperOfWaterPlus extends Card {
   public get Name(): string {
     return "WhisperOfWaterPlus";
   }
@@ -14,7 +14,7 @@ export class WhisperOfWater extends Card {
     ctx.player.addHealth(2);
 
     if (ctx.selectedPlayer) {
-      ctx.selectedPlayer.addHealth(2);
+      ctx.selectedPlayer.addHealth(1);
     }
   }
 }
