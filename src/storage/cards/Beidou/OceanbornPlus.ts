@@ -12,20 +12,20 @@ export class OceanbornPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    const damage = ctx.player.IsTookDamageLastTurn ? 4 : 2;
     ctx.addToSteps(
       ctx.player.Enemies.map((enemy) => ({
         type: "enemy_take_damage" as const,
         enemyId: enemy.ID,
-        damage: 2,
+        damage,
         isPiercing: false,
       }))
     );
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {
-        damage: 2,
+        damage,
         player: ctx.player,
       };
-      // TODO 4 damage
       enemy.applyAttack(attack);
     }
   }

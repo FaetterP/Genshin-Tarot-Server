@@ -41,6 +41,8 @@ export class Player {
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
   private burnsDrawnThisTurn: number = 0;
+  private isTookDamageThisTurn: boolean = false;
+  private isTookDamageLastTurn: boolean = false;
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
   private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
@@ -112,6 +114,9 @@ export class Player {
   }
   public get IsTurnEnds() {
     return this.isTurnEnds;
+  }
+  public get IsTookDamageLastTurn() {
+    return this.isTookDamageLastTurn;
   }
 
   constructor(cycleController: CycleController) {
@@ -186,16 +191,20 @@ export class Player {
     this.hp = 12;
     this.shield = 0;
     this.energy = 0;
+    this.isTookDamageThisTurn = false;
+    this.isTookDamageLastTurn = false;
   }
 
   public applyDamage(damage: number, isPiercing: boolean = false) {
     if (isPiercing) {
       this.hp -= damage;
+      if (damage > 0) this.isTookDamageThisTurn = true;
     } else {
       this.shield -= damage;
       if (this.shield < 0) {
         this.hp += this.shield;
         this.shield = 0;
+        if (damage > 0) this.isTookDamageThisTurn = true;
       }
     }
 
@@ -591,6 +600,9 @@ export class Player {
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {
+    this.isTookDamageLastTurn = this.isTookDamageThisTurn;
+    this.isTookDamageThisTurn = false;
+
     for (const enemy of this.enemies) {
       enemy.endCycle({
         enemy,
