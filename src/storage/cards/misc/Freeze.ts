@@ -13,7 +13,7 @@ export class Freeze extends Card {
   use(ctx: CardUseContext): void {
     const freezeCards = [...ctx.player.Hand].filter((c) => c.Name === "Freeze");
     for (const card of freezeCards) {
-      ctx.player.removeCardFromHand(card);
+      ctx.player.trashCardById(card.ID);
     }
     ctx.addToSteps(
       freezeCards.map((card) => ({

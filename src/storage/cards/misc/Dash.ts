@@ -11,7 +11,7 @@ export class Dash extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    ctx.player.removeCardFromHand(this);
+    ctx.player.trashCardById(this.ID);
     ctx.addToSteps([
       {
         type: "trash_card",

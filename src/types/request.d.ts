@@ -8,6 +8,7 @@ export type GameUseCardRequest = {
   enemies?: string[];
   isUseAlternative?: boolean;
   selectedPlayer?: string;
+  selectedCard?: string;
 }
 
 export type GameUpgradeCardRequest = {

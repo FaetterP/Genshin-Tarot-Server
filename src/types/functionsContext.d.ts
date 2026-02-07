@@ -12,6 +12,7 @@ export type CardUseContext = {
   player: Player;
   enemies?: Enemy[];
   selectedPlayer?: Player;
+  selectedCard?: string;
   isUseAlternative?: boolean;
   addToSteps: (data: DetailedStep[]) => void;
 };

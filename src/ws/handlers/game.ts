@@ -23,6 +23,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     enemies: enemiesId,
     isUseAlternative,
     selectedPlayer: selectedPlayerId,
+    selectedCard,
   } = payload as GameUseCardRequest;
 
   const card = ws.cycleController.getPlayerCard(cardId, ws.player);
@@ -52,6 +53,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     isUseAlternative,
     enemies,
     selectedPlayer,
+    selectedCard,
     addToSteps: (data) => steps.push(...data),
   };
   ws.player.setStepsCollector((data) => steps.push(...data));
@@ -106,7 +108,7 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
 
   ws.player.trySpendMora(UPGRADE_MORA_COST);
   const oldCardPrimitive = { cardId: card.ID, name: card.Name };
-  ws.player.removeCardFromHand(card);
+  ws.player.trashCardById(card.ID);
 
   const UpgradedCard = card.Upgrade;
   const newCard = new UpgradedCard();

@@ -104,6 +104,9 @@ export class Player {
   public get Hand(): ReadonlyArray<Card> {
     return this.hand;
   }
+  public get Discard(): ReadonlyArray<Card> {
+    return this.discard;
+  }
   public get LastCard(): Card | undefined {
     return this.lastCard;
   }
@@ -391,9 +394,22 @@ export class Player {
     this.discard.push(card);
   }
 
-  /** Удаляет карту из руки безвозвратно (без добавления в сброс). */
-  public removeCardFromHand(card: Card) {
+  public trashCardById(cardId: string) {
+    const card =
+      this.hand.find((c) => c.ID === cardId) ||
+      this.discard.find((c) => c.ID === cardId) ||
+      this.deck.find((c) => c.ID === cardId);
+
+    if (!card)
+      throw new Error(`Card ${cardId} not found in hand, discard or deck`);
+
     this.hand = this.hand.filter((c) => c !== card);
+    this.discard = this.discard.filter((c) => c !== card);
+    this.deck = this.deck.filter((c) => c !== card);
+
+    this._stepsCollector?.([
+      { type: "trash_card", playerId: this.ID, card: { cardId: card.ID, name: card.Name } },
+    ]);
   }
 
   public discardRandomCard() {

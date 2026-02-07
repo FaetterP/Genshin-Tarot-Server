@@ -13,6 +13,14 @@ export class SolarIsotomaPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
+    if (ctx.selectedCard) {
+      const inHand = ctx.player.Hand.some((c) => c.ID === ctx.selectedCard);
+      const inDiscard = ctx.player.Discard.some((c) => c.ID === ctx.selectedCard);
+      if (!inHand && !inDiscard) {
+        throw new Error("selectedCard must be a card in your hand or discard");
+      }
+    }
+
     const effect = new SolarIsotomaEffect();
     ctx.addToSteps([
       ...ctx.player.Enemies.map((enemy) => ({
@@ -29,7 +37,14 @@ export class SolarIsotomaPlus extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
     }
-    // TODO discard card
     ctx.player.addEffect(effect);
+
+    if (ctx.selectedCard) {
+      ctx.player.trashCardById(ctx.selectedCard)
+      const drawn = ctx.player.drawCard();
+      ctx.addToSteps([
+        { type: "draw_cards", playerId: ctx.player.ID, cards: [{ cardId: drawn.ID, name: drawn.Name }] },
+      ]);
+    }
   }
 }
