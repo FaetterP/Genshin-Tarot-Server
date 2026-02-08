@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
@@ -13,12 +12,14 @@ export class DemonbanePlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (!ctx.enemies?.length) {
-      throw new Error("no enemies");
-    }
-
-    const target = ctx.enemies[0];
-    if (target.isContainsElement(new Cryo())) {
+    if (ctx.isUseAlternative) {
+      if (!ctx.enemies?.length) {
+        throw new Error("no enemies");
+      }
+      const target = ctx.enemies[0];
+      if (!target.isContainsElement(new Cryo())) {
+        throw new Error("no cryo");
+      }
       ctx.addToSteps([
         {
           type: "enemy_take_damage",

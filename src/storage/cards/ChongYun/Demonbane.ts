@@ -45,6 +45,14 @@ export class Demonbane extends Card {
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
+      ctx.addToSteps([
+        {
+          type: "player_change_action_points",
+          playerId: ctx.player.ID,
+          delta: -1,
+        },
+      ]);
+      ctx.player.addActionPoints(-1);
       if (target.Shield > 0) {
         ctx.addToSteps([
           {
