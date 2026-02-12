@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { WhisperOfWaterPlus as WhisperOfWaterPlus } from "./WhisperOfWaterPlus";
@@ -31,7 +31,7 @@ export class WhisperOfWater extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Hydro",
+        element: EElement.Hydro,
       },
       {
         type: "draw_cards",

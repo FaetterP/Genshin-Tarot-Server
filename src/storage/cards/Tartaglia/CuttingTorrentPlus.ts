@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
@@ -18,7 +18,7 @@ export class CuttingTorrentPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const hasHydro = target.isContainsElement(new Hydro());
+    const hasHydro = target.isContainsElement(EElement.Hydro);
     const damage = hasHydro ? 3 : 1;
     ctx.addToSteps([
       {
@@ -26,7 +26,7 @@ export class CuttingTorrentPlus extends Card {
         enemyId: target.ID,
         damage,
         isPiercing: true,
-        element: hasHydro ? "Hydro" : undefined,
+        element: hasHydro ? EElement.Hydro : undefined,
       },
     ]);
     const attack: Attack = {

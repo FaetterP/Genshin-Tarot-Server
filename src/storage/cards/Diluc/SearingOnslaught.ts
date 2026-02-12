@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SearingOnslaughtPlus } from "./SearingOnslaughtPlus";
@@ -31,7 +31,7 @@ export class SearingOnslaught extends Card {
         enemyId: enemies[i].ID,
         damage: 2,
         isPiercing: false,
-        element: "Pyro",
+        element: EElement.Pyro,
       }))
     );
 

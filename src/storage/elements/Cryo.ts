@@ -1,9 +1,10 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Element } from "./Element";
+import { EElement } from "../../types/general";
+import { BaseElement } from "./BaseElement";
 
-export class Cryo extends Element {
+export class Cryo extends BaseElement {
   public get Name() {
-    return "Cryo";
+    return EElement.Cryo;
   }
 
   reaction(ctx: ElementReactionContext) {

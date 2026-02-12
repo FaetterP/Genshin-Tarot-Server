@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { LiutianArchery as LiutianArcheryPlus } from "./LiutianArcheryPlus";
@@ -23,9 +23,9 @@ export class LiutianArchery extends Card {
     }
 
     const target = ctx.enemies[0];
-    let element: string | undefined;
+    let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      element = "Cryo";
+      element = EElement.Cryo;
     }
     ctx.addToSteps([
       {

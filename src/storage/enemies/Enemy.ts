@@ -1,18 +1,18 @@
 import { Player } from "../../game/Player";
 import { Event } from "../../utils/Event";
-import { Element } from "../elements/Element";
+import { BaseElement } from "../elements/BaseElement";
 import {
   EnemyDeathContext,
   EnemyEndCycleContext,
   EnemyStartCycleContext,
 } from "../../types/eventsContext";
 import { v4 } from "uuid";
-import { Attack, EnemyPrimitive } from "../../types/general";
+import { Attack, EElement, EnemyPrimitive } from "../../types/general";
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
 import { EnemyEffect } from "../effects/EnemyEffect";
 
-type constructorSetup = {
+type EnemyConstructorType = {
   hp: number;
   damage: number;
   mora: number;
@@ -26,7 +26,7 @@ export abstract class Enemy {
   private shield: number;
   private damage: number;
   private mora: number;
-  protected elements: Element[] = [];
+  protected elements: BaseElement[] = [];
   private isStunned: boolean = false;
   private effects: EnemyEffect[] = [];
 
@@ -46,7 +46,7 @@ export abstract class Enemy {
   public get Shield() {
     return this.shield;
   }
-  public get Elements(): ReadonlyArray<Element> {
+  public get Elements(): ReadonlyArray<BaseElement> {
     return this.elements;
   }
   public get IsStunned(): boolean {
@@ -71,7 +71,7 @@ export abstract class Enemy {
     };
   }
 
-  constructor({ hp, damage, mora, shield }: constructorSetup) {
+  constructor({ hp, damage, mora, shield }: EnemyConstructorType) {
     this.ID = `enemy-${v4()}`;
     this.hp = hp;
     this.shield = shield;
@@ -80,7 +80,7 @@ export abstract class Enemy {
   }
 
   getPrimitiveStats(): EnemyPrimitive {
-    const elements: string[] = [];
+    const elements: EElement[] = [];
 
     for (const element of this.elements) {
       elements.push(element.Name);
@@ -158,7 +158,7 @@ export abstract class Enemy {
 
   death() {}
 
-  applyElement(element: Element, player: Player) {
+  applyElement(element: BaseElement, player: Player) {
     if (this.Health <= 0) {
       return;
     }
@@ -186,8 +186,8 @@ export abstract class Enemy {
     }
   }
 
-  isContainsElement(element: Element) {
-    return this.elements.map((el) => el.Name).includes(element.Name);
+  isContainsElement(element: EElement) {
+    return this.elements.map((el) => el.Name).includes(element);
   }
 
   clearElements() {

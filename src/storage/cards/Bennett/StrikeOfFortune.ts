@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { StrikeOfFortunePlus } from "./StrikeOfFortunePlus";
@@ -39,7 +39,7 @@ export class StrikeOfFortune extends Card {
     };
     target.applyAttack(attack);
 
-    if (target.isContainsElement(new Pyro())) {
+    if (target.isContainsElement(EElement.Pyro)) {
       ctx.player.addEnergy(2);
       ctx.addToSteps([{
         type: "player_change_energy",

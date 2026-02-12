@@ -1,10 +1,10 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Attack } from "../../types/general";
-import { Element } from "./Element";
+import { Attack, EElement } from "../../types/general";
+import { BaseElement } from "./BaseElement";
 
-export class Electro extends Element {
+export class Electro extends BaseElement {
   public get Name() {
-    return "Electro";
+    return EElement.Electro;
   }
 
   reaction(ctx: ElementReactionContext) {

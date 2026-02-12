@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -29,7 +29,7 @@ export class SparklingScatterPlus extends Card {
         enemyId: enemies[i].ID,
         damage: 2,
         isPiercing: true,
-        element: "Geo",
+        element: EElement.Geo,
       }))
     );
     for (let i = 0; i < 2; i++) {

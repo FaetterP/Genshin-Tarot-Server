@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { WeissBladeworkPlus } from "./WeissBladeworkPlus";
@@ -33,7 +33,7 @@ export class WeissBladework extends Card {
         isPiercing: false,
       },
     ]);
-    if (target.isContainsElement(new Geo())) {
+    if (target.isContainsElement(EElement.Geo)) {
       ctx.addToSteps([{
         type: "player_change_energy",
         playerId: ctx.player.ID,
@@ -43,7 +43,7 @@ export class WeissBladework extends Card {
 
     const attack: Attack = { damage, player: ctx.player };
     target.applyAttack(attack);
-    if (target.isContainsElement(new Geo())) {
+    if (target.isContainsElement(EElement.Geo)) {
       ctx.player.addEnergy(2);
     }
   }

@@ -1,5 +1,5 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
-import { Attack } from "../../types/general";
+import { Attack, EElement } from "../../types/general";
 import { getRandomInteger } from "../../utils/math";
 import { LiutianArchery } from "../cards/Ganyu/LiutianArchery";
 import { TrailOfTheQilin } from "../cards/Ganyu/TrailOfTheQilin";
@@ -38,7 +38,7 @@ export class Ganyu extends Character {
         player: ctx.player,
       };
 
-      if (enemy.isContainsElement(new Cryo())) {
+      if (enemy.isContainsElement(EElement.Cryo)) {
         attack.isPiercing = true;
       }
 

@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { LetTheShowBeginPlus } from "./LetTheShowBeginPlus";
@@ -27,7 +28,7 @@ export class LetTheShowBegin extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: "Hydro" },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Hydro },
     ]);
     target.applyElement(new Hydro(), ctx.player);
 

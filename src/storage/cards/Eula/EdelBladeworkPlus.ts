@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
@@ -24,7 +24,7 @@ export class EdelBladeworkPlus extends Card {
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
-        element: "Cryo",
+        element: EElement.Cryo,
       },
     ]);
     target.applyAttack({

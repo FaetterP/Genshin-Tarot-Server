@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { BreastplatePlus } from "./BreastplatePlus";
@@ -21,7 +22,7 @@ export class Breastplate extends Card {
       ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Geo",
+        element: EElement.Geo,
       }))
     );
     for (const enemy of ctx.player.Enemies) {

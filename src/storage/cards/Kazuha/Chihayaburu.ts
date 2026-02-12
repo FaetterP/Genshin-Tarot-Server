@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { ChihayaburuPlus } from "./ChihayaburuPlus";
@@ -23,7 +24,7 @@ export class Chihayaburu extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: "Anemo" },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Anemo },
     ]);
     target.applyElement(new Anemo(), ctx.player);
     // TODO

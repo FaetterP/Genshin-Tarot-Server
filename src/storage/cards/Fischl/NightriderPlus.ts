@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { NightriderPlusEffect } from "../../effects/NightriderPlusEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
@@ -25,7 +26,7 @@ export class NightriderPlus extends Card {
         enemyId: target.ID,
         damage: 2,
         isPiercing: true,
-        element: "Electro",
+        element: EElement.Electro,
       },
       {
         type: "enemy_get_effect",

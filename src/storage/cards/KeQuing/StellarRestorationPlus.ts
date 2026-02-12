@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -18,9 +19,9 @@ export class StellarRestorationPlus extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: "Electro" },
-      { type: "enemy_get_element", enemyId: target.ID, element: "Electro" },
-      { type: "enemy_get_element", enemyId: target.ID, element: "Electro" },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
       {
         type: "player_change_energy",
         playerId: ctx.player.ID,

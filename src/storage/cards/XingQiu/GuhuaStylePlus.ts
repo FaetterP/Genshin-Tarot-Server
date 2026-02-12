@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
@@ -18,18 +18,18 @@ export class GuhuaStylePlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = target.isContainsElement(new Hydro()) ? 5 : 3;
+    const damage = target.isContainsElement(EElement.Hydro) ? 5 : 3;
     ctx.addToSteps([
       {
         type: "enemy_take_damage",
         enemyId: target.ID,
         damage,
         isPiercing: false,
-        element: "Hydro",
+        element: EElement.Hydro,
       },
     ]);
     const attack: Attack = { damage, player: ctx.player };
-    if (target.isContainsElement(new Hydro())) {
+    if (target.isContainsElement(EElement.Hydro)) {
       attack.element = new Hydro();
     }
     target.applyAttack(attack);

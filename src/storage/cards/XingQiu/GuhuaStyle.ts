@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { GuhuaStylePlus } from "./GuhuaStylePlus";
@@ -30,7 +31,7 @@ export class GuhuaStyle extends Card {
         isPiercing: false,
       },
     ]);
-    if (target.isContainsElement(new Hydro())) {
+    if (target.isContainsElement(EElement.Hydro)) {
       ctx.addToSteps([{
         type: "player_change_energy",
         playerId: ctx.player.ID,
@@ -39,7 +40,7 @@ export class GuhuaStyle extends Card {
     }
 
     target.applyAttack({ damage: 2, player: ctx.player });
-    if (target.isContainsElement(new Hydro())) {
+    if (target.isContainsElement(EElement.Hydro)) {
       ctx.player.addEnergy(2);
     }
   }

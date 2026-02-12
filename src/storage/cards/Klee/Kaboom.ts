@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { KaboomPlus } from "./KaboomPlus";
@@ -29,7 +29,7 @@ export class Kaboom extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Pyro",
+        element: EElement.Pyro,
       },
       {
         type: "player_change_energy",

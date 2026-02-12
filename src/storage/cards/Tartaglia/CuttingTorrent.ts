@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { CuttingTorrentPlus } from "./CuttingTorrentPlus";
@@ -23,9 +23,9 @@ export class CuttingTorrent extends Card {
     }
 
     const target = ctx.enemies[0];
-    let element: string | undefined;
+    let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      element = "Hydro";
+      element = EElement.Hydro;
     }
     ctx.addToSteps([
       {

@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { AncientSwordArtPlus } from "./AncientSwordArtPlus";
@@ -30,7 +31,7 @@ export class AncientSwordArt extends Card {
         isPiercing: false,
       },
     ]);
-    if (target.isContainsElement(new Cryo())) {
+    if (target.isContainsElement(EElement.Cryo)) {
       ctx.addToSteps([{
         type: "player_change_energy",
         playerId: ctx.player.ID,
@@ -38,7 +39,7 @@ export class AncientSwordArt extends Card {
       }]);
     }
     target.applyAttack({ damage: 2, player: ctx.player });
-    if (target.isContainsElement(new Cryo())) {
+    if (target.isContainsElement(EElement.Cryo)) {
       ctx.player.addEnergy(2);
     }
   }

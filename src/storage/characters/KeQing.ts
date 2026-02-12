@@ -1,5 +1,5 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
-import { Attack } from "../../types/general";
+import { Attack, EElement } from "../../types/general";
 import { YunlaiSwordsmanship } from "../cards/KeQuing/YunlaiSwordsmanship";
 import { StellarRestoration } from "../cards/KeQuing/StellarRestoration";
 import { Electro } from "../elements/Electro";
@@ -31,7 +31,7 @@ export class KeQing extends Character {
     }
 
     for (const enemy of ctx.selectedEnemies) {
-      if (enemy.isContainsElement(new Electro())) {
+      if (enemy.isContainsElement(EElement.Electro)) {
         const attack: Attack = {
           damage: 5,
           isPiercing: true,

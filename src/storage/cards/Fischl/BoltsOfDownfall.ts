@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { BoltsOfDownfallPlus } from "./BoltsOfDownfallPlus";
@@ -23,9 +23,9 @@ export class BoltsOfDownfall extends Card {
     }
 
     const target = ctx.enemies[0];
-    let element: string | undefined;
+    let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      element = "Electro";
+      element = EElement.Electro;
     }
     ctx.addToSteps([
       {

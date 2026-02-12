@@ -2,7 +2,7 @@ import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SharpshooterPlus } from "./SharpshooterPlus";
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 
 export class Sharpshooter extends Card {
   public get Name(): string {
@@ -25,10 +25,10 @@ export class Sharpshooter extends Card {
     const target = ctx.enemies[0];
     let damage = 1;
     const isPiercing = true;
-    let element: string | undefined;
+    let element: EElement | undefined;
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      element = "Pyro";
+      element = EElement.Pyro;
       ctx.addToSteps([
         {
           type: "player_change_energy",

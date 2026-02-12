@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { FatalRainscreenPlus } from "./FatalRainscreenPlus";
@@ -23,7 +24,7 @@ export class FatalRainscreen extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: "Hydro" },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Hydro },
       {
         type: "player_change_shield",
         playerId: ctx.player.ID,

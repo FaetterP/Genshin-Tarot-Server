@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { LemniscaticWindPlus } from "./LemniscaticWindPlus";
@@ -29,7 +29,7 @@ export class LemniscaticWind extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Anemo",
+        element: EElement.Anemo,
       },
     ]);
     target.applyAttack({

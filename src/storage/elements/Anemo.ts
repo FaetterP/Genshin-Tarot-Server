@@ -1,10 +1,11 @@
 import { ElementReactionContext } from "../../types/functionsContext";
+import { EElement } from "../../types/general";
 import { Dash } from "../cards/misc/Dash";
-import { Element } from "./Element";
+import { BaseElement } from "./BaseElement";
 
-export class Anemo extends Element {
+export class Anemo extends BaseElement {
   public get Name() {
-    return "Anemo";
+    return EElement.Anemo;
   }
 
   reaction(ctx: ElementReactionContext) {

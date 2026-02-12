@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { SkywardSonnetEffect } from "../../effects/SkywardSonnetEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
@@ -23,7 +24,7 @@ export class SkywardSonnet extends Card {
       ...ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Anemo",
+        element: EElement.Anemo,
       })),
       {
         type: "player_get_effect",

@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -26,7 +26,7 @@ export class ForeignIronwindPlus extends Card {
         enemyId: target.ID,
         damage,
         isPiercing: false,
-        element: "Anemo",
+        element: EElement.Anemo,
       },
       { type: "player_change_energy", playerId: ctx.player.ID, delta: 2 },
     ]);

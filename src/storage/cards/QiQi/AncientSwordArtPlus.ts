@@ -1,6 +1,6 @@
 import type { DetailedStep } from "../../../types/detailedStep";
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
@@ -19,7 +19,7 @@ export class AncientSwordArtPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const hasCryo = target.isContainsElement(new Cryo());
+    const hasCryo = target.isContainsElement(EElement.Cryo);
     const damage = hasCryo ? 5 : 2;
     ctx.addToSteps([
       {
@@ -27,7 +27,7 @@ export class AncientSwordArtPlus extends Card {
         enemyId: target.ID,
         damage,
         isPiercing: false,
-        element: hasCryo ? "Cryo" : undefined,
+        element: hasCryo ? EElement.Cryo : undefined,
       },
     ]);
     if (!hasCryo) {

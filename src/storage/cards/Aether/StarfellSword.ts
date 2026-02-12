@@ -1,7 +1,7 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { StarfellSwordPlus } from "./StarfellSwordPlus";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Geo } from "../../elements/Geo";
 
 export class StarfellSword extends Card {
@@ -26,7 +26,7 @@ export class StarfellSword extends Card {
         enemyId: enemy.ID,
         damage,
         isPiercing: true,
-        element: "Geo",
+        element: EElement.Geo,
       }))
     );
 

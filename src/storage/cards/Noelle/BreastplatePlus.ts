@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { BreastplateEffect } from "../../effects/BreastplateEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -18,7 +19,7 @@ export class BreastplatePlus extends Card {
       ...ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Geo",
+        element: EElement.Geo,
       })),
       {
         type: "player_get_effect",

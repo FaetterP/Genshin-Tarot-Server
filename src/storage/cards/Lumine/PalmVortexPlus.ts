@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Electro } from "../../elements/Electro";
 import { Hydro } from "../../elements/Hydro";
@@ -18,10 +18,10 @@ export class PalmVortexPlus extends Card {
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
       if (
-        enemy.isContainsElement(new Hydro()) ||
-        enemy.isContainsElement(new Pyro()) ||
-        enemy.isContainsElement(new Cryo()) ||
-        enemy.isContainsElement(new Electro())
+        enemy.isContainsElement(EElement.Hydro) ||
+        enemy.isContainsElement(EElement.Pyro) ||
+        enemy.isContainsElement(EElement.Cryo) ||
+        enemy.isContainsElement(EElement.Electro)
       ) {
         ctx.addToSteps([{
           type: "enemy_take_damage",
@@ -34,10 +34,10 @@ export class PalmVortexPlus extends Card {
 
     for (const enemy of ctx.player.Enemies) {
       if (
-        enemy.isContainsElement(new Hydro()) ||
-        enemy.isContainsElement(new Pyro()) ||
-        enemy.isContainsElement(new Cryo()) ||
-        enemy.isContainsElement(new Electro())
+        enemy.isContainsElement(EElement.Hydro) ||
+        enemy.isContainsElement(EElement.Pyro) ||
+        enemy.isContainsElement(EElement.Cryo) ||
+        enemy.isContainsElement(EElement.Electro)
       ) {
         const attack: Attack = { damage: 4, player: ctx.player };
         enemy.applyAttack(attack);

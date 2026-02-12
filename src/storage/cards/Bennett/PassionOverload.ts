@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { PassionOverloadPlus } from "./PassionOverloadPlus";
@@ -42,7 +42,7 @@ export class PassionOverload extends Card {
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
-        element: "Pyro",
+        element: EElement.Pyro,
       },
     ]);
     target.applyAttack(attack);
@@ -85,7 +85,7 @@ export class PassionOverload extends Card {
               enemyId: enemy.ID,
               damage: 1,
               isPiercing: false,
-              element: "Pyro",
+              element: EElement.Pyro,
             },
           ]);
           enemy.applyAttack(aoeAttack);

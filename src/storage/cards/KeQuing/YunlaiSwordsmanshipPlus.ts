@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -24,7 +24,7 @@ export class YunlaiSwordsmanshipPlus extends Card {
         enemyId: target.ID,
         damage: 3,
         isPiercing: false,
-        element: "Electro",
+        element: EElement.Electro,
       },
       {
         type: "player_change_energy",

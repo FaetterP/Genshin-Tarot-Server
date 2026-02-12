@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { LetTheShowBeginPlusEffect } from "../../effects/LetTheShowBeginPlusEffect";
+import { EElement } from "../../../types/general";
 
 export class LetTheShowBeginPlus extends Card {
   public get Name(): string {
@@ -17,7 +18,7 @@ export class LetTheShowBeginPlus extends Card {
       ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Hydro",
+        element: EElement.Hydro,
       }))
     );
     for (const enemy of ctx.player.Enemies) {

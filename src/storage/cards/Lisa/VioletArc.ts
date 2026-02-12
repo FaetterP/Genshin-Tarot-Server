@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { VioletArc as VioletArcPlus } from "./VioletArcPlus";
@@ -18,19 +19,19 @@ export class VioletArc extends Card {
 
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
-      if (enemy.isContainsElement(new Electro())) {
+      if (enemy.isContainsElement(EElement.Electro)) {
         ctx.addToSteps([{
           type: "enemy_take_damage",
           enemyId: enemy.ID,
           damage: 5,
           isPiercing: true,
-          element: "Electro",
+          element: EElement.Electro,
         }]);
       }
     }
 
     for (const enemy of ctx.player.Enemies) {
-      if (enemy.isContainsElement(new Electro())) {
+      if (enemy.isContainsElement(EElement.Electro)) {
         enemy.applyAttack({
           damage: 5,
           isPiercing: true,

@@ -1,6 +1,6 @@
 import { Attack } from "../../../types/general";
 import { Player } from "../../../game/Player";
-import { Element } from "../../elements/Element";
+import { BaseElement } from "../../elements/BaseElement";
 import { Pyro } from "../../elements/Pyro";
 import { Enemy } from "../Enemy";
 
@@ -14,7 +14,7 @@ export class SmallDendroSlime extends Enemy {
     super(setup);
   }
 
-  override applyElement(element: Element, player: Player): void {
+  override applyElement(element: BaseElement, player: Player): void {
     if (element instanceof Pyro) {
       const attack: Attack = { damage: 2, player };
       this.applyAttack(attack);

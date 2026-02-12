@@ -1,9 +1,10 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Element } from "./Element";
+import { EElement } from "../../types/general";
+import { BaseElement } from "./BaseElement";
 
-export class Geo extends Element {
+export class Geo extends BaseElement {
   public get Name() {
-    return "Geo";
+    return EElement.Geo;
   }
 
   reaction(ctx: ElementReactionContext) {

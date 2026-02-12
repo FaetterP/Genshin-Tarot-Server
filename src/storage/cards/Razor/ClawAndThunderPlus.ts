@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -16,7 +17,7 @@ export class ClawAndThunderPlus extends Card {
       ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Electro",
+        element: EElement.Electro,
       }))
     );
     for (const enemy of ctx.player.Enemies) {

@@ -1,12 +1,22 @@
 import { Player } from "../game/Player";
-import { Element } from "../storage/elements/Element";
+import { BaseElement } from "../storage/elements/BaseElement";
+
+export enum EElement {
+  Pyro = "Pyro",
+  Hydro = "Hydro",
+  Cryo = "Cryo",
+  Electro = "Electro",
+  Anemo = "Anemo",
+  Geo = "Geo",
+  Dendro = "Dendro",
+}
 
 export type EnemyPrimitive = {
   id: string;
   name: string;
   hp: number;
   shield: number;
-  elements: string[];
+  elements: EElement[];
   isStunned: boolean;
   effects: string[];
 };
@@ -35,7 +45,7 @@ export type Attack = {
   damage: number;
   isPiercing?: boolean;
   isRange?: boolean;
-  element?: Element;
+  element?: BaseElement;
   player: Player;
 };
 

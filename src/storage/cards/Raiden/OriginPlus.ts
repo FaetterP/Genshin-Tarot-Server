@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -18,7 +18,7 @@ export class OriginPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = target.isContainsElement(new Electro()) ? 5 : 2;
+    const damage = target.isContainsElement(EElement.Electro) ? 5 : 2;
     ctx.addToSteps([
       {
         type: "player_change_energy",
@@ -30,7 +30,7 @@ export class OriginPlus extends Card {
         enemyId: target.ID,
         damage,
         isPiercing: false,
-        element: "Electro",
+        element: EElement.Electro,
       },
     ]);
     ctx.player.addEnergy(2);

@@ -1,10 +1,11 @@
 import { Overheat } from "../cards/misc/Overheat";
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Element } from "./Element";
+import { BaseElement } from "./BaseElement";
+import { EElement } from "../../types/general";
 
-export class Pyro extends Element {
+export class Pyro extends BaseElement {
   public get Name() {
-    return "Pyro";
+    return EElement.Pyro;
   }
 
   reaction(ctx: ElementReactionContext) {

@@ -1,8 +1,7 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
-import { Attack } from "../../types/general";
+import { Attack, EElement } from "../../types/general";
 import { CuttingTorrent } from "../cards/Tartaglia/CuttingTorrent";
 import { RagingTide } from "../cards/Tartaglia/RagingTide";
-import { Hydro } from "../elements/Hydro";
 import { Character } from "./Character";
 
 export class Tartaglia extends Character {
@@ -31,7 +30,7 @@ export class Tartaglia extends Character {
     }
 
     for (const enemy of ctx.selectedEnemies) {
-      if (enemy.isContainsElement(new Hydro())) {
+      if (enemy.isContainsElement(EElement.Hydro)) {
         const attack: Attack = {
           damage: 5,
           isPiercing: true,

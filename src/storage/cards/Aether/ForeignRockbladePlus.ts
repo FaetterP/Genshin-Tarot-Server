@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
@@ -27,7 +27,7 @@ export class ForeignRockbladePlus extends Card {
         enemyId: target.ID,
         damage,
         isPiercing: false,
-        element: "Geo",
+        element: EElement.Geo,
       },
       {
         type: "player_change_energy",

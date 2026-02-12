@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
+import { EElement } from "../../../types/general";
 
 export class SolarIsotomaPlus extends Card {
   public get Name(): string {
@@ -29,7 +30,7 @@ export class SolarIsotomaPlus extends Card {
       ...ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Geo",
+        element: EElement.Geo,
       })),
       {
         type: "player_get_effect",

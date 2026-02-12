@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { EdelBladeworkPlus } from "./EdelBladeworkPlus";
@@ -42,7 +42,7 @@ export class EdelBladework extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       ctx.addToSteps([
-        { type: "enemy_get_element", enemyId: target.ID, element: "Cryo" },
+        { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo },
       ]);
       target.applyElement(new Cryo(), ctx.player);
     }

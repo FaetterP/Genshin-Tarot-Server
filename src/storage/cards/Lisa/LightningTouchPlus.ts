@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
@@ -25,7 +25,7 @@ export class LightningTouchPlus extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Electro",
+        element: EElement.Electro,
       },
       {
         type: "draw_cards",

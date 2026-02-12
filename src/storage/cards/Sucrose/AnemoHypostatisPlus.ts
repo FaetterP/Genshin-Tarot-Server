@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -16,7 +17,7 @@ export class AnemoHypostatisPlus extends Card {
       ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Anemo",
+        element: EElement.Anemo,
       }))
     );
     for (const enemy of ctx.player.Enemies) {

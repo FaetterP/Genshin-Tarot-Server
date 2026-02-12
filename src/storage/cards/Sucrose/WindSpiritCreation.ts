@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { WindSpiritCreationPlus } from "./WindSpiritCreationPlus";
@@ -29,7 +29,7 @@ export class WindSpiritCreation extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Anemo",
+        element: EElement.Anemo,
       },
       {
         type: "player_change_energy",

@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
@@ -34,7 +34,7 @@ export class JumpyDumpty extends Card {
         enemyId: enemies[i].ID,
         damage: 1,
         isPiercing: false,
-        element: "Pyro",
+        element: EElement.Pyro,
       }))
     );
     for (let i = 0; i < 2; i++) {

@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { GuobaFireEffect } from "../../effects/GuobaFireEffect";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
@@ -21,7 +21,7 @@ export class GuobaFirePlus extends Card {
         enemyId: enemy.ID,
         damage: 2,
         isPiercing: false,
-        element: "Pyro",
+        element: EElement.Pyro,
       })),
       {
         type: "player_get_effect",

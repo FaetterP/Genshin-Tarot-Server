@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { FavoniusBladeworkPlus } from "./FavoniusBladeworkPlus";
@@ -30,7 +31,7 @@ export class FavoniusBladework extends Card {
         isPiercing: false,
       },
     ]);
-    if (target.isContainsElement(new Anemo())) {
+    if (target.isContainsElement(EElement.Anemo)) {
       ctx.addToSteps([{
         type: "player_change_energy",
         playerId: ctx.player.ID,
@@ -39,7 +40,7 @@ export class FavoniusBladework extends Card {
     }
 
     target.applyAttack({ damage: 2, player: ctx.player });
-    if (target.isContainsElement(new Anemo())) {
+    if (target.isContainsElement(EElement.Anemo)) {
       ctx.player.addEnergy(2);
     }
   }

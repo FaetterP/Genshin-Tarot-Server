@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { FrostgnawPlus } from "./FrostgnawPlus";
@@ -21,7 +22,7 @@ export class Frostgnaw extends Card {
       ...ctx.player.Enemies.map((enemy) => ({
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
-        element: "Cryo",
+        element: EElement.Cryo,
       })),
       {
         type: "player_change_energy",

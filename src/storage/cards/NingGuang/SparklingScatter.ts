@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+import { Attack, EElement } from "../../../types/general";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { SparklingScatterPlus } from "./SparklingScatterPlus";
@@ -30,7 +30,7 @@ export class SparklingScatter extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
-        element: "Geo",
+        element: EElement.Geo,
       },
       {
         type: "draw_cards",

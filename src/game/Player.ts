@@ -13,7 +13,7 @@ import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
-import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
+import { CardPrimitive, EElement, EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { Freeze } from "../storage/cards/misc/Freeze";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement, randomPermutation } from "../utils/arrays";
@@ -57,15 +57,15 @@ export class Player {
 
   public recordEnemyReaction(
     enemyId: string,
-    element1: string,
-    element2: string
+    element1: EElement,
+    element2: EElement
   ) {
     this._stepsCollector?.([
       { type: "enemy_reaction", enemyId, element1, element2 },
     ]);
   }
 
-  public recordEnemyBlockDamage(enemyId: string, element?: string) {
+  public recordEnemyBlockDamage(enemyId: string, element?: EElement) {
     this._stepsCollector?.([
       { type: "enemy_block_damage", enemyId, ...(element && { element }) },
     ]);

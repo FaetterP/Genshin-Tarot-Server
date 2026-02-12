@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { EElement } from "../../../types/general";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { HeraldOfFrostPlus } from "./HeraldOfFrostPlus";
@@ -23,7 +24,7 @@ export class HeraldOfFrost extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: "Cryo" },
+      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo },
     ]);
     target.applyElement(new Cryo(), ctx.player);
     // TODO следующий, кто ударит этого же врага, отрегенит 2 хп
