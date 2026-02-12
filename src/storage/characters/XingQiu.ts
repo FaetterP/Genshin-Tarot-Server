@@ -30,10 +30,7 @@ export class XingQiu extends Character {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [
-          card1.getPrimitive(),
-          card2.getPrimitive(),
-        ],
+        cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
       {
         type: "player_get_effect",

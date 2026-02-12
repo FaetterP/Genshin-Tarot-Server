@@ -42,11 +42,13 @@ export class StrikeOfFortune extends Card {
 
     if (target.isContainsElement(EElement.Pyro)) {
       ctx.player.addEnergy(2);
-      ctx.addToSteps([{
-        type: "player_change_energy",
-        playerId: ctx.player.ID,
-        delta: 2,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 2,
+        },
+      ]);
     }
   }
 }

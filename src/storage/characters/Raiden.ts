@@ -9,13 +9,7 @@ export class Raiden extends Character {
   }
 
   constructor() {
-    const cards = [
-      new Origin(),
-      new Origin(),
-      new Origin(),
-      new BalefulOmen(),
-      new BalefulOmen(),
-    ];
+    const cards = [new Origin(), new Origin(), new Origin(), new BalefulOmen(), new BalefulOmen()];
     super({ cards, burstCost: 10 });
   }
 

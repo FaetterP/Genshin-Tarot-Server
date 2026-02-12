@@ -18,7 +18,7 @@ export class AnemoHypostatisPlus extends Card {
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
         element: EElement.Anemo,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Anemo(), ctx.player);

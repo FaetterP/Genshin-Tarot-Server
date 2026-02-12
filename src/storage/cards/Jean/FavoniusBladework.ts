@@ -32,11 +32,13 @@ export class FavoniusBladework extends Card {
       },
     ]);
     if (target.isContainsElement(EElement.Anemo)) {
-      ctx.addToSteps([{
-        type: "player_change_energy",
-        playerId: ctx.player.ID,
-        delta: 2,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 2,
+        },
+      ]);
     }
 
     target.applyAttack({ damage: 2, player: ctx.player });

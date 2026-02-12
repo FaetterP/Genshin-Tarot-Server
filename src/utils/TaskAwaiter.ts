@@ -33,9 +33,7 @@ export class TaskAwaiter {
   async done() {
     return new Promise<void>((resolve, reject) => {
       this.e_onTasksCompleted.AddListener(() => {
-        TaskAwaiter.allAwaiters = TaskAwaiter.allAwaiters.filter(
-          (item) => item !== this
-        );
+        TaskAwaiter.allAwaiters = TaskAwaiter.allAwaiters.filter((item) => item !== this);
         resolve();
       });
     });
@@ -46,9 +44,7 @@ export class TaskAwaiter {
       throw new Error("task not found");
     }
 
-    TaskAwaiter.allTasks = TaskAwaiter.allTasks.filter(
-      (item) => item != taskId
-    );
+    TaskAwaiter.allTasks = TaskAwaiter.allTasks.filter((item) => item != taskId);
 
     for (const awaiter of TaskAwaiter.allAwaiters) {
       awaiter.checkTasks();

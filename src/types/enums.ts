@@ -13,4 +13,3 @@ export enum EElement {
   Geo = "Geo",
   Dendro = "Dendro",
 }
-

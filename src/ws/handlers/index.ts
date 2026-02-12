@@ -9,7 +9,9 @@ interface Handlers {
 
 export function buildHandlers() {
   const handlers: Handlers = {};
-  Object.entries(characters.handlers).forEach(([key, fun]) => (handlers[`characters.${key}`] = fun));
+  Object.entries(characters.handlers).forEach(
+    ([key, fun]) => (handlers[`characters.${key}`] = fun),
+  );
   Object.entries(game.handlers).forEach(([key, fun]) => (handlers[`game.${key}`] = fun));
   Object.entries(task.handlers).forEach(([key, fun]) => (handlers[`task.${key}`] = fun));
   return handlers;

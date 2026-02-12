@@ -18,7 +18,7 @@ export class ClawAndThunderPlus extends Card {
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
         element: EElement.Electro,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Electro(), ctx.player);

@@ -3,8 +3,17 @@ import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsC
 import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
-import { GameUpgradeCardRequest, GameUseBurstRequest, GameUseCardRequest } from "../../types/request";
-import { GameStartGameResponse, GameUpgradeCardResponse, GameUseBurstResponse, GameUseCardResponse } from "../../types/response";
+import {
+  GameUpgradeCardRequest,
+  GameUseBurstRequest,
+  GameUseCardRequest,
+} from "../../types/request";
+import {
+  GameStartGameResponse,
+  GameUpgradeCardResponse,
+  GameUseBurstResponse,
+  GameUseCardResponse,
+} from "../../types/response";
 
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
@@ -60,7 +69,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
 
   if (ws.player.ActionPoints.total < card.Cost)
     throw new Error(
-      `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`
+      `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`,
     );
 
   card.use(ctx);
@@ -193,9 +202,7 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
 
   if (!character.tryUseBurst(ctx)) {
     ws.player.setStepsCollector(null);
-    throw new Error(
-      `not enough energy: need ${character.BurstCost}, have ${ws.player.Energy}`
-    );
+    throw new Error(`not enough energy: need ${character.BurstCost}, have ${ws.player.Energy}`);
   }
 
   steps.unshift({

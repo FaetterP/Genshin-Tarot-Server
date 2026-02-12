@@ -24,9 +24,7 @@ export class Jean extends Character {
     const anemo = new Anemo();
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(anemo, ctx.player);
-      ctx.addToSteps([
-        { type: "enemy_get_element", enemyId: enemy.ID, element: anemo.Name },
-      ]);
+      ctx.addToSteps([{ type: "enemy_get_element", enemyId: enemy.ID, element: anemo.Name }]);
     }
 
     ctx.player.addHealth(2);
@@ -34,9 +32,7 @@ export class Jean extends Character {
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(2);
-      ctx.addToSteps([
-        { type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: 2 },
-      ]);
+      ctx.addToSteps([{ type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: 2 }]);
     }
   }
 }

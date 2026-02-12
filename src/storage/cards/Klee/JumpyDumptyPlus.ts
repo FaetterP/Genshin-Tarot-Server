@@ -31,7 +31,7 @@ export class JumpyDumptyPlus extends Card {
         damage: 2,
         isPiercing: false,
         element: EElement.Pyro,
-      }))
+      })),
     );
     for (let i = 0; i < 2; i++) {
       enemies[i].applyAttack({
@@ -49,7 +49,7 @@ export class JumpyDumptyPlus extends Card {
           damage: 2,
           isPiercing: false,
           element: EElement.Pyro,
-        }))
+        })),
       );
       for (let i = 0; i < 2; i++) {
         enemies[i].applyAttack({

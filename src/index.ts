@@ -1,3 +1,3 @@
 import { startWebsocketServer } from "./ws";
 
-startWebsocketServer()
+startWebsocketServer();

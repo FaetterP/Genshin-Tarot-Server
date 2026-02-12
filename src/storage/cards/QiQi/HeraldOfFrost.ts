@@ -23,9 +23,7 @@ export class HeraldOfFrost extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo },
-    ]);
+    ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }]);
     target.applyElement(new Cryo(), ctx.player);
     // TODO следующий, кто ударит этого же врага, отрегенит 2 хп
   }

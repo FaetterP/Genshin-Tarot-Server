@@ -16,13 +16,15 @@ export class VioletArc extends Card {
   use(ctx: CardUseContext): void {
     for (const enemy of ctx.player.Enemies) {
       if (enemy.isContainsElement(EElement.Electro)) {
-        ctx.addToSteps([{
-          type: "enemy_take_damage",
-          enemyId: enemy.ID,
-          damage: 5,
-          isPiercing: true,
-          element: EElement.Electro,
-        }]);
+        ctx.addToSteps([
+          {
+            type: "enemy_take_damage",
+            enemyId: enemy.ID,
+            damage: 5,
+            isPiercing: true,
+            element: EElement.Electro,
+          },
+        ]);
       }
     }
 

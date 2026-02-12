@@ -19,8 +19,7 @@ export class DivineArcheryPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage =
-      ctx.isUseAlternative && ctx.player.trySpendEnergy(1) ? 3 : 1;
+    const damage = ctx.isUseAlternative && ctx.player.trySpendEnergy(1) ? 3 : 1;
     ctx.addToSteps([
       {
         type: "enemy_take_damage",

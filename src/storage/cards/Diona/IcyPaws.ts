@@ -24,7 +24,7 @@ export class IcyPaws extends Card {
           type: "enemy_get_element" as const,
           enemyId: enemy.ID,
           element: EElement.Cryo,
-        }))
+        })),
       );
       for (const enemy of ctx.player.Enemies) {
         enemy.applyElement(new Cryo(), ctx.player);

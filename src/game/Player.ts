@@ -55,20 +55,12 @@ export class Player {
     this._stepsCollector?.([{ type: "enemy_death", enemyId }]);
   }
 
-  public recordEnemyReaction(
-    enemyId: string,
-    element1: EElement,
-    element2: EElement
-  ) {
-    this._stepsCollector?.([
-      { type: "enemy_reaction", enemyId, element1, element2 },
-    ]);
+  public recordEnemyReaction(enemyId: string, element1: EElement, element2: EElement) {
+    this._stepsCollector?.([{ type: "enemy_reaction", enemyId, element1, element2 }]);
   }
 
   public recordEnemyBlockDamage(enemyId: string, element?: EElement) {
-    this._stepsCollector?.([
-      { type: "enemy_block_damage", enemyId, ...(element && { element }) },
-    ]);
+    this._stepsCollector?.([{ type: "enemy_block_damage", enemyId, ...(element && { element }) }]);
   }
 
   public addSteps(steps: DetailedStep[]) {
@@ -175,9 +167,7 @@ export class Player {
       throw new Error("no have character");
     }
 
-    this.characters = this.characters.filter(
-      (item) => item.Name !== character.Name
-    );
+    this.characters = this.characters.filter((item) => item.Name !== character.Name);
   }
 
   public startGame() {
@@ -224,9 +214,7 @@ export class Player {
 
   public addEnergy(count: number) {
     if (this.hand.some((card) => card.Name === "Freeze")) {
-      this._stepsCollector?.([
-        { type: "energy_freezed", playerId: this.ID, delta: count },
-      ]);
+      this._stepsCollector?.([{ type: "energy_freezed", playerId: this.ID, delta: count }]);
       return;
     }
 
@@ -282,7 +270,7 @@ export class Player {
           type: "trash_card" as const,
           playerId: this.ID,
           card: card.getPrimitive(),
-        }))
+        })),
       );
     }
   }
@@ -340,9 +328,7 @@ export class Player {
     const isElite = this.wave === 4;
 
     for (let i = 0; i < count; i++) {
-      const enemyType = getRandomElement(
-        isElite ? eliteEnemies : normalEnemies
-      );
+      const enemyType = getRandomElement(isElite ? eliteEnemies : normalEnemies);
       const addedEnemy: Enemy = new enemyType();
       addedEnemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
       addedEnemy.OnEndCycle.addListener(this.enemyEndCycleHandler.bind(this));
@@ -360,7 +346,7 @@ export class Player {
         type: "enemy_appearance" as const,
         playerId: this.ID,
         enemy: enemy.getPrimitiveStats(),
-      }))
+      })),
     );
   }
 
@@ -369,9 +355,7 @@ export class Player {
       this.restoreDeck();
     }
 
-    const card = this.deck.reduce((min, c) =>
-      c.deckPosition < min.deckPosition ? c : min
-    );
+    const card = this.deck.reduce((min, c) => (c.deckPosition < min.deckPosition ? c : min));
     this.deck = this.deck.filter((c) => c !== card);
     this.addCardToHand(card, false);
 
@@ -393,15 +377,11 @@ export class Player {
   }
 
   public findTopCardFromDeck(): Card | undefined {
-    if (this.deck.length === 0)
-      this.restoreDeck();
+    if (this.deck.length === 0) this.restoreDeck();
 
-    if (this.deck.length === 0)
-      return undefined;
+    if (this.deck.length === 0) return undefined;
 
-    const card = this.deck.reduce((min, c) =>
-      c.deckPosition < min.deckPosition ? c : min
-    );
+    const card = this.deck.reduce((min, c) => (c.deckPosition < min.deckPosition ? c : min));
     this.deck = this.deck.filter((c) => c !== card);
     return card;
   }
@@ -433,16 +413,13 @@ export class Player {
       this.discard.find((c) => c.ID === cardId) ||
       this.deck.find((c) => c.ID === cardId);
 
-    if (!card)
-      throw new Error(`Card ${cardId} not found in hand, discard or deck`);
+    if (!card) throw new Error(`Card ${cardId} not found in hand, discard or deck`);
 
     this.hand = this.hand.filter((c) => c !== card);
     this.discard = this.discard.filter((c) => c !== card);
     this.deck = this.deck.filter((c) => c !== card);
 
-    this._stepsCollector?.([
-      { type: "trash_card", playerId: this.ID, card: card.getPrimitive() },
-    ]);
+    this._stepsCollector?.([{ type: "trash_card", playerId: this.ID, card: card.getPrimitive() }]);
   }
 
   public discardRandomCard() {
@@ -484,9 +461,7 @@ export class Player {
     for (const card of handSnapshot) {
       this.hand = this.hand.filter((c) => c !== card);
       this.discard.push(card);
-      addToSteps([
-        { type: "discard_card", playerId: this.ID, card: card.getPrimitive() },
-      ]);
+      addToSteps([{ type: "discard_card", playerId: this.ID, card: card.getPrimitive() }]);
     }
     this.isTurnEnds = true;
   }
@@ -511,34 +486,40 @@ export class Player {
 
     if (isPiercing) {
       this.applyDamage(damage, true);
-      ctx.addToSteps([{
-        type: "player_take_damage",
-        playerId: ctx.playerId,
-        damage,
-        isPiercing: true,
-        enemyId: ctx.enemy.ID,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_take_damage",
+          playerId: ctx.playerId,
+          damage,
+          isPiercing: true,
+          enemyId: ctx.enemy.ID,
+        },
+      ]);
     } else {
       const shieldBefore = this.shield;
       this.applyDamage(damage, false);
       const shieldAfter = this.shield;
       const shieldDelta = shieldAfter - shieldBefore;
       if (shieldDelta < 0) {
-        ctx.addToSteps([{
-          type: "player_change_shield",
-          playerId: ctx.playerId,
-          delta: shieldDelta,
-        }]);
+        ctx.addToSteps([
+          {
+            type: "player_change_shield",
+            playerId: ctx.playerId,
+            delta: shieldDelta,
+          },
+        ]);
       }
       const hpDamage = Math.max(0, damage - shieldBefore);
       if (hpDamage > 0) {
-        ctx.addToSteps([{
-          type: "player_take_damage",
-          playerId: ctx.playerId,
-          damage: hpDamage,
-          isPiercing: false,
-          enemyId: ctx.enemy.ID,
-        }]);
+        ctx.addToSteps([
+          {
+            type: "player_take_damage",
+            playerId: ctx.playerId,
+            damage: hpDamage,
+            isPiercing: false,
+            enemyId: ctx.enemy.ID,
+          },
+        ]);
       }
     }
 
@@ -563,7 +544,7 @@ export class Player {
           type: "enemy_appearance" as const,
           playerId: this.ID,
           enemy: enemy.getPrimitiveStats(),
-        }))
+        })),
       );
     }
 
@@ -575,9 +556,7 @@ export class Player {
     this.extraActionPoints = 0;
     this.burnsDrawnThisTurn = 0;
     if (oldShield > 0) {
-      ctx.addToSteps([
-        { type: "player_change_shield", playerId: this.ID, delta: -oldShield },
-      ]);
+      ctx.addToSteps([{ type: "player_change_shield", playerId: this.ID, delta: -oldShield }]);
     }
     ctx.addToSteps([
       {
@@ -592,9 +571,7 @@ export class Player {
       const card = this.drawCard();
       drawnCards.push(card.getPrimitive());
     }
-    ctx.addToSteps([
-      { type: "draw_cards", playerId: this.ID, cards: drawnCards },
-    ]);
+    ctx.addToSteps([{ type: "draw_cards", playerId: this.ID, cards: drawnCards }]);
 
     for (const effect of this.effects) {
       const isRemove = effect.onStartCycle(this);
@@ -611,9 +588,7 @@ export class Player {
         },
       ]);
       if (isRemove) {
-        ctx.addToSteps([
-          { type: "player_lose_effect", playerId: this.ID, effect: effect.Name },
-        ]);
+        ctx.addToSteps([{ type: "player_lose_effect", playerId: this.ID, effect: effect.Name }]);
       }
     }
 

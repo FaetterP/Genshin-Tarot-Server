@@ -10,5 +10,5 @@ export class CryoAbyssMage extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

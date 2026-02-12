@@ -34,9 +34,7 @@ export class CycleController {
   public get OnCycleStart() {
     return {
       addListener: this.e_onCycleStart.AddListener.bind(this.e_onCycleStart),
-      removeListener: this.e_onCycleStart.RemoveListener.bind(
-        this.e_onCycleStart
-      ),
+      removeListener: this.e_onCycleStart.RemoveListener.bind(this.e_onCycleStart),
     };
   }
 
@@ -107,15 +105,13 @@ export class CycleController {
         action: "game.startCycle",
 
         you: you.getPrimitiveStats(),
-        otherPlayers: getAllPlayers().map((player) =>
-          player.getPrimitiveStats()
-        ),
+        otherPlayers: getAllPlayers().map((player) => player.getPrimitiveStats()),
         cycle: this.cycle,
         leylines: leylines.map((line) => line.name),
         steps,
       };
       data.otherPlayers = data.otherPlayers.filter(
-        (player) => player.playerId !== data.you?.playerId
+        (player) => player.playerId !== data.you?.playerId,
       );
       ws.send(JSON.stringify(data));
     }

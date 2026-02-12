@@ -10,5 +10,5 @@ export class PyroAbyssMage extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

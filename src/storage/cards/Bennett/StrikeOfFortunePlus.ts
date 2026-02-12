@@ -29,11 +29,13 @@ export class StrikeOfFortunePlus extends Card {
       },
     ]);
     if (ctx.player.Health <= 7) {
-      ctx.addToSteps([{
-        type: "player_change_energy",
-        playerId: ctx.player.ID,
-        delta: 3,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 3,
+        },
+      ]);
     }
 
     const attack: Attack = { damage, player: ctx.player };

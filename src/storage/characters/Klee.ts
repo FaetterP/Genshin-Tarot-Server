@@ -11,13 +11,7 @@ export class Klee extends Character {
   }
 
   constructor() {
-    const cards = [
-      new Kaboom(),
-      new Kaboom(),
-      new Kaboom(),
-      new JumpyDumpty(),
-      new JumpyDumpty(),
-    ];
+    const cards = [new Kaboom(), new Kaboom(), new Kaboom(), new JumpyDumpty(), new JumpyDumpty()];
     super({ cards, burstCost: 4 });
   }
 

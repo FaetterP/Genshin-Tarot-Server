@@ -25,9 +25,7 @@ export class TemperedSword extends Card {
     const target = ctx.enemies[0];
 
     if (target.Shield > 0) {
-      ctx.addToSteps([
-        { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
-      ]);
+      ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
       target.addShields(-1);
     } else {
       ctx.addToSteps([
@@ -43,9 +41,7 @@ export class TemperedSword extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
-        ctx.addToSteps([
-          { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
-        ]);
+        ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
         target.addShields(-1);
       } else {
         ctx.addToSteps([

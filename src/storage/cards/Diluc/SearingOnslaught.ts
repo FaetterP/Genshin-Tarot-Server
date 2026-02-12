@@ -33,7 +33,7 @@ export class SearingOnslaught extends Card {
         damage: 2,
         isPiercing: false,
         element: EElement.Pyro,
-      }))
+      })),
     );
 
     for (let i = 0; i < 3; i++) {

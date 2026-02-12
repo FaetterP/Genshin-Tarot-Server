@@ -28,7 +28,7 @@ export class StarfellSword extends Card {
         damage,
         isPiercing: true,
         element: EElement.Geo,
-      }))
+      })),
     );
 
     for (const enemy of ctx.player.Enemies) {

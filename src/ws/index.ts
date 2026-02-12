@@ -22,11 +22,7 @@ export function getAllPlayers() {
   return players;
 }
 
-async function onMessage(
-  this: WebSocket,
-  data: WebSocket.RawData,
-  isBinary: boolean
-) {
+async function onMessage(this: WebSocket, data: WebSocket.RawData, isBinary: boolean) {
   try {
     const ws = this as ExtWebSocket;
     const req = JSON.parse(data.toString());
@@ -42,7 +38,7 @@ async function onMessage(
       JSON.stringify({
         status: "error",
         message: e instanceof Error ? e.message : `${e}`,
-      })
+      }),
     );
   }
 }
@@ -75,7 +71,7 @@ export async function startWebsocketServer() {
   await new Promise<void>((resolve, reject) => {
     //@ts-ignore
     wss = new WebSocket.Server({ port: SERVER_PORT }, (err: any) =>
-      err ? reject(err) : resolve()
+      err ? reject(err) : resolve(),
     );
     wss.on("connection", onConnect);
     wss.on("error", (e: any) => {

@@ -25,9 +25,7 @@ export class EdelBladework extends Card {
 
     const target = ctx.enemies[0];
     if (target.Shield > 0) {
-      ctx.addToSteps([
-        { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
-      ]);
+      ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
       target.addShields(-1);
     } else {
       ctx.addToSteps([
@@ -42,9 +40,7 @@ export class EdelBladework extends Card {
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      ctx.addToSteps([
-        { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo },
-      ]);
+      ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }]);
       target.applyElement(new Cryo(), ctx.player);
     }
   }

@@ -10,13 +10,7 @@ export class XiangLing extends Character {
   }
 
   constructor() {
-    const cards = [
-      new DoughFu(),
-      new DoughFu(),
-      new DoughFu(),
-      new GuobaFire(),
-      new GuobaFire(),
-    ];
+    const cards = [new DoughFu(), new DoughFu(), new DoughFu(), new GuobaFire(), new GuobaFire()];
     super({ cards, burstCost: 4 });
   }
 
@@ -30,10 +24,7 @@ export class XiangLing extends Character {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [
-          card1.getPrimitive(),
-          card2.getPrimitive(),
-        ],
+        cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
       {
         type: "player_get_effect",

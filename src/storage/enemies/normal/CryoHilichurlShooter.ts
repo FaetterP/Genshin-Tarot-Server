@@ -10,5 +10,5 @@ export class CryoHilichurlShooter extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

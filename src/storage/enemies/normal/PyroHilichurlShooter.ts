@@ -10,5 +10,5 @@ export class PyroHilichurlShooter extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

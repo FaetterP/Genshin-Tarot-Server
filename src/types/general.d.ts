@@ -1,7 +1,6 @@
 import { Player } from "../game/Player";
 import { BaseElement } from "../storage/elements/BaseElement";
 
-
 export type EnemyPrimitive = {
   id: string;
   name: string;

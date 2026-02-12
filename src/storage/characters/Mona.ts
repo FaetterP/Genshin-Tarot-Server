@@ -20,8 +20,8 @@ export class Mona extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
-    if(!ctx.selectedCharacter){
-      throw new Error("need selectedCharacter")
+    if (!ctx.selectedCharacter) {
+      throw new Error("need selectedCharacter");
     }
 
     // TODO if top deck is selectedCharacter deal 5 piercing damage

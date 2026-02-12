@@ -24,18 +24,14 @@ export class Barbara extends Character {
       throw new Error("need divide");
     }
 
-    const sumHealth = ctx.divide
-      .map((item) => item.count)
-      .reduce((a, b) => a + b);
+    const sumHealth = ctx.divide.map((item) => item.count).reduce((a, b) => a + b);
     if (sumHealth > 5) {
       throw new Error("sumHealth need less then 5");
     }
 
     for (const { player, count } of ctx.divide) {
       player.addHealth(count);
-      ctx.addToSteps([
-        { type: "player_heal", playerId: player.ID, amount: count },
-      ]);
+      ctx.addToSteps([{ type: "player_heal", playerId: player.ID, amount: count }]);
     }
   }
 }

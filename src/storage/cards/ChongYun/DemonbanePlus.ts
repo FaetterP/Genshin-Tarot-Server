@@ -42,7 +42,7 @@ export class DemonbanePlus extends Card {
           enemyId: enemy.ID,
           damage: 2,
           isPiercing: false,
-        }))
+        })),
       );
       for (const enemy of ctx.player.Enemies) {
         enemy.applyAttack({ damage: 2, player: ctx.player });

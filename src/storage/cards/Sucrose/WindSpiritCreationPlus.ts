@@ -31,7 +31,7 @@ export class WindSpiritCreationPlus extends Card {
         damage: 2,
         isPiercing: true,
         element: EElement.Anemo,
-      }))
+      })),
     );
     for (let i = 0; i < 2; i++) {
       enemies[i].applyAttack({

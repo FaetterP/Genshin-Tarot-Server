@@ -21,7 +21,7 @@ export class Freeze extends Card {
         type: "trash_card" as const,
         playerId: ctx.player.ID,
         card: card.getPrimitive(),
-      }))
+      })),
     );
   }
 }

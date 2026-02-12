@@ -20,7 +20,7 @@ export class DanceOfFirePlus extends Card {
         enemyId: enemy.ID,
         damage,
         isPiercing: false,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyAttack({

@@ -135,10 +135,7 @@ export abstract class Enemy {
     if (this.shield <= 0 || attack.isPiercing) {
       this.hp -= totalDamage;
     } else {
-      attack.player.recordEnemyBlockDamage(
-        this.ID,
-        attack.element?.Name
-      );
+      attack.player.recordEnemyBlockDamage(this.ID, attack.element?.Name);
     }
 
     if (attack.element) {
@@ -171,11 +168,7 @@ export abstract class Enemy {
     this.elements = [...this.elements, element];
 
     if (this.elements.length >= 2) {
-      player.recordEnemyReaction(
-        this.ID,
-        this.elements[0].Name,
-        this.elements[1].Name
-      );
+      player.recordEnemyReaction(this.ID, this.elements[0].Name, this.elements[1].Name);
       this.addShields(-1);
 
       this.elements.forEach((el) => {
@@ -222,9 +215,7 @@ export abstract class Enemy {
       ]);
       if (isRemove) {
         toRemove.push(effect);
-        ctx.addToSteps([
-          { type: "enemy_lose_effect", enemyId: this.ID, effect: effect.Name },
-        ]);
+        ctx.addToSteps([{ type: "enemy_lose_effect", enemyId: this.ID, effect: effect.Name }]);
       }
     }
     this.effects = this.effects.filter((e) => !toRemove.includes(e));

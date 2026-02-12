@@ -35,11 +35,13 @@ export class WeissBladework extends Card {
       },
     ]);
     if (target.isContainsElement(EElement.Geo)) {
-      ctx.addToSteps([{
-        type: "player_change_energy",
-        playerId: ctx.player.ID,
-        delta: 2,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 2,
+        },
+      ]);
     }
 
     const attack: Attack = { damage, player: ctx.player };

@@ -24,9 +24,7 @@ export class DanceOfFire extends Card {
 
     const target = ctx.enemies[0];
     if (target.Shield > 0) {
-      ctx.addToSteps([
-        { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
-      ]);
+      ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
       target.addShields(-1);
     } else {
       ctx.addToSteps([
@@ -42,9 +40,7 @@ export class DanceOfFire extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
-        ctx.addToSteps([
-          { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
-        ]);
+        ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
         target.addShields(-1);
       } else {
         ctx.addToSteps([

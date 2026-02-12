@@ -19,8 +19,7 @@ export class KaboomPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage =
-      ctx.isUseAlternative && ctx.player.trySpendEnergy(2) ? 4 : 2;
+    const damage = ctx.isUseAlternative && ctx.player.trySpendEnergy(2) ? 4 : 2;
     ctx.addToSteps([
       {
         type: "enemy_take_damage",

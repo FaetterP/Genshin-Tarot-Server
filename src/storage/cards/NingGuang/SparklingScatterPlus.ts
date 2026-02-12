@@ -31,7 +31,7 @@ export class SparklingScatterPlus extends Card {
         damage: 2,
         isPiercing: true,
         element: EElement.Geo,
-      }))
+      })),
     );
     for (let i = 0; i < 2; i++) {
       enemies[i].applyAttack({

@@ -20,7 +20,7 @@ export class OceanbornPlus extends Card {
         enemyId: enemy.ID,
         damage,
         isPiercing: false,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       const attack: Attack = {

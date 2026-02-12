@@ -18,9 +18,7 @@ export class LetTheShowBeginPlusEffect extends PlayerEffect {
     const target = getRandomElement(allPlayers);
     target.addHealth(1);
 
-    player.addSteps([
-      { type: "player_heal", playerId: target.ID, amount: 1 },
-    ]);
+    player.addSteps([{ type: "player_heal", playerId: target.ID, amount: 1 }]);
 
     return false;
   }

@@ -32,11 +32,13 @@ export class AncientSwordArtPlus extends Card {
       },
     ]);
     if (!hasCryo) {
-      ctx.addToSteps([{
-        type: "player_change_energy",
-        playerId: ctx.player.ID,
-        delta: 2,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_energy",
+          playerId: ctx.player.ID,
+          delta: 2,
+        },
+      ]);
     }
     if (hasCryo) {
       target.applyAttack({ damage: 5, element: new Cryo(), player: ctx.player });

@@ -10,5 +10,5 @@ export class HydroAbyssMage extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

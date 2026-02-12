@@ -10,5 +10,5 @@ export class ElectroHilichurlShooter extends Enemy {
     super(setup);
   }
 
-  // TODO 
+  // TODO
 }

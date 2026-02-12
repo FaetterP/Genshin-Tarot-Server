@@ -1,7 +1,13 @@
 import { ExtWebSocket } from "../../types/wsTypes";
 import { getCharacterByName } from "../../storage/characters";
-import { CharactersAddCharacterRequest, CharactersRemoveCharacterRequest } from "../../types/request";
-import { CharactersAddCharacterResponse, CharactersRemoveCharacterResponse } from "../../types/response";
+import {
+  CharactersAddCharacterRequest,
+  CharactersRemoveCharacterRequest,
+} from "../../types/request";
+import {
+  CharactersAddCharacterResponse,
+  CharactersRemoveCharacterResponse,
+} from "../../types/response";
 import { sendToAll } from "../../utils/wsUtils";
 
 async function addCharacter(ws: ExtWebSocket, payload: any) {

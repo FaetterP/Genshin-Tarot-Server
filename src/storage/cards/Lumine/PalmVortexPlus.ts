@@ -24,12 +24,14 @@ export class PalmVortexPlus extends Card {
         enemy.isContainsElement(EElement.Cryo) ||
         enemy.isContainsElement(EElement.Electro)
       ) {
-        ctx.addToSteps([{
-          type: "enemy_take_damage",
-          enemyId: enemy.ID,
-          damage: 4,
-          isPiercing: false,
-        }]);
+        ctx.addToSteps([
+          {
+            type: "enemy_take_damage",
+            enemyId: enemy.ID,
+            damage: 4,
+            isPiercing: false,
+          },
+        ]);
       }
     }
 

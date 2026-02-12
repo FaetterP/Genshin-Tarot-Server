@@ -3,16 +3,16 @@ import type { PlayerPrimitive } from "./general";
 
 export type OkResponse = {
   status: "ok";
-}
+};
 
 export type ErrorResponse = {
   status: "error";
   message: string;
-}
+};
 
 export type AwaitedResponse<T extends AnyResponse> = T & {
   taskId: string;
-}
+};
 
 export interface WsConnectResponse {
   action: "ws.connect";

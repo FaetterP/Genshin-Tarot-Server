@@ -22,8 +22,7 @@ export class ExplosivePuppet extends Card {
       throw new Error("no enemies");
     }
 
-    if (ctx.player.Enemies.includes(ctx.enemies[0]))
-      throw new Error("enemy is not in range");
+    if (ctx.player.Enemies.includes(ctx.enemies[0])) throw new Error("enemy is not in range");
 
     const effect = new ExplosivePuppetEffect();
     ctx.addToSteps([

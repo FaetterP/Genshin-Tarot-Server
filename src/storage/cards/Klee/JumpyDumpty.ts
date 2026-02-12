@@ -36,7 +36,7 @@ export class JumpyDumpty extends Card {
         damage: 1,
         isPiercing: false,
         element: EElement.Pyro,
-      }))
+      })),
     );
     for (let i = 0; i < 2; i++) {
       const attack: Attack = {

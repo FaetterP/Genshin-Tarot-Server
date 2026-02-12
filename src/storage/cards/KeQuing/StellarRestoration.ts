@@ -23,9 +23,7 @@ export class StellarRestoration extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
-    ]);
+    ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro }]);
     target.applyElement(new Electro(), ctx.player);
     // TODO
   }

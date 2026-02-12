@@ -19,7 +19,7 @@ export class LetTheShowBeginPlus extends Card {
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
         element: EElement.Hydro,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Hydro(), ctx.player);

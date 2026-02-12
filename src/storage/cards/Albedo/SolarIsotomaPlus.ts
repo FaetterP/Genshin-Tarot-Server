@@ -14,8 +14,7 @@ export class SolarIsotomaPlus extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (ctx.selectedCard === this.ID)
-      throw new Error("card cannot trash itself");
+    if (ctx.selectedCard === this.ID) throw new Error("card cannot trash itself");
 
     if (ctx.selectedCard) {
       const inHand = ctx.player.Hand.some((c) => c.ID === ctx.selectedCard);
@@ -44,7 +43,7 @@ export class SolarIsotomaPlus extends Card {
     ctx.player.addEffect(effect);
 
     if (ctx.selectedCard) {
-      ctx.player.trashCardById(ctx.selectedCard)
+      ctx.player.trashCardById(ctx.selectedCard);
       const drawn = ctx.player.drawCard();
       ctx.addToSteps([
         { type: "draw_cards", playerId: ctx.player.ID, cards: [drawn.getPrimitive()] },

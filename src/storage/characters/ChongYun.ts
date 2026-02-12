@@ -29,11 +29,7 @@ export class ChongYun extends Character {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [
-          card1.getPrimitive(),
-          card2.getPrimitive(),
-          card3.getPrimitive(),
-        ],
+        cards: [card1.getPrimitive(), card2.getPrimitive(), card3.getPrimitive()],
       },
     ]);
   }

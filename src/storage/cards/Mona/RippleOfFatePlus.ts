@@ -27,16 +27,16 @@ export class RippleOfFatePlus extends Card {
         card instanceof MirrorReflections ||
         card instanceof MirrorReflectionsPlus
       ) {
-        ctx.addToSteps([{
-          type: "player_change_energy",
-          playerId: ctx.player.ID,
-          delta: 2,
-        }]);
+        ctx.addToSteps([
+          {
+            type: "player_change_energy",
+            playerId: ctx.player.ID,
+            delta: 2,
+          },
+        ]);
         ctx.player.addEnergy(2);
       }
     }
-    ctx.addToSteps([
-      { type: "draw_cards", playerId: ctx.player.ID, cards: drawn },
-    ]);
+    ctx.addToSteps([{ type: "draw_cards", playerId: ctx.player.ID, cards: drawn }]);
   }
 }

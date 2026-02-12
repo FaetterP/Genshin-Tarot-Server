@@ -33,11 +33,13 @@ export class DominusLapidis extends Card {
       },
     ]);
     if (ctx.selectedPlayer) {
-      ctx.addToSteps([{
-        type: "player_change_shield",
-        playerId: ctx.selectedPlayer.ID,
-        delta: 3,
-      }]);
+      ctx.addToSteps([
+        {
+          type: "player_change_shield",
+          playerId: ctx.selectedPlayer.ID,
+          delta: 3,
+        },
+      ]);
     }
     ctx.player.addShield(3);
     if (ctx.selectedPlayer) {

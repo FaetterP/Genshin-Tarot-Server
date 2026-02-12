@@ -41,10 +41,7 @@ export class Lisa extends Character {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [
-          card1.getPrimitive(),
-          card2.getPrimitive(),
-        ],
+        cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
     ]);
   }

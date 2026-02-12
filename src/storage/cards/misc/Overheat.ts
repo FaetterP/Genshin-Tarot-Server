@@ -30,10 +30,7 @@ export class Overheat extends Card {
       {
         type: "draw_cards",
         playerId: ctx.player.ID,
-        cards: [
-          c1.getPrimitive(),
-          c2.getPrimitive(),
-        ],
+        cards: [c1.getPrimitive(), c2.getPrimitive()],
       },
     ]);
   }

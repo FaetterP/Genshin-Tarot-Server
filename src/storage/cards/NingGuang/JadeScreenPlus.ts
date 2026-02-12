@@ -23,7 +23,7 @@ export class JadeScreenPlus extends Card {
           type: "player_change_energy",
           playerId: ctx.selectedPlayer.ID,
           delta: 1,
-        }
+        },
       ]);
       ctx.selectedPlayer.addShield(3);
       ctx.selectedPlayer.addEnergy(1);
@@ -38,7 +38,7 @@ export class JadeScreenPlus extends Card {
         type: "player_change_energy",
         playerId: ctx.player.ID,
         delta: 1,
-      }
+      },
     ]);
 
     ctx.player.addShield(3);

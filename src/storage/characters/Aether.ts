@@ -20,15 +20,11 @@ export class Aether extends Character {
   }
 
   useBurst(ctx: CharacterUseBurstContext): void {
-    const otherPlayers = ctx.allPlayers.filter(
-      (player) => player !== ctx.player
-    );
+    const otherPlayers = ctx.allPlayers.filter((player) => player !== ctx.player);
 
     for (const player of otherPlayers) {
       player.addShield(3);
-      ctx.addToSteps([
-        { type: "player_change_shield", playerId: player.ID, delta: 3 },
-      ]);
+      ctx.addToSteps([{ type: "player_change_shield", playerId: player.ID, delta: 3 }]);
     }
   }
 }

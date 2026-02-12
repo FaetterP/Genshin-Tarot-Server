@@ -23,7 +23,7 @@ export class Breastplate extends Card {
         type: "enemy_get_element" as const,
         enemyId: enemy.ID,
         element: EElement.Geo,
-      }))
+      })),
     );
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
