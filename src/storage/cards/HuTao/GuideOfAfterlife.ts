@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { GuideOfAfterlifePlus } from "./GuideOfAfterlifePlus";
 
@@ -10,7 +10,7 @@ export class GuideOfAfterlife extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   get Upgrade() {

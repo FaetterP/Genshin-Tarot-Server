@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { RainOfStone as RainOfStonePlus } from "./RainOfStonePlus";
 
@@ -10,7 +10,7 @@ export class RainOfStone extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Attack);
+    super(0, ECardType.Attack);
   }
 
   get Upgrade() {

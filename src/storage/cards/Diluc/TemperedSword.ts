@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { TemperedSwordPlus } from "./TemperedSwordPlus";
 
@@ -10,7 +10,7 @@ export class TemperedSword extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   get Upgrade() {

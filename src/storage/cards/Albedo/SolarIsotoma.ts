@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -11,7 +11,7 @@ export class SolarIsotoma extends Card {
   }
 
   constructor() {
-    super(2, ETypeCard.Skill);
+    super(2, ECardType.Skill);
   }
 
   get Upgrade() {

@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { SkywardSonnetPlusEffect } from "../../effects/SkywardSonnetPlusEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
@@ -10,7 +10,7 @@ export class SkywardSonnetPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {

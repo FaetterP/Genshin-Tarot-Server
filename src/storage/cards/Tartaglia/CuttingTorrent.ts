@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { CuttingTorrentPlus } from "./CuttingTorrentPlus";
@@ -11,7 +11,7 @@ export class CuttingTorrent extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Attack);
+    super(0, ECardType.Attack);
   }
 
   get Upgrade() {

@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { WeissBladeworkPlus } from "./WeissBladeworkPlus";
@@ -11,7 +11,7 @@ export class WeissBladework extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   get Upgrade() {

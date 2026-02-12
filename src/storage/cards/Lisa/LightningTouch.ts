@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { LightningTouchPlus } from "./LightningTouchPlus";
@@ -11,7 +11,7 @@ export class LightningTouch extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   get Upgrade() {

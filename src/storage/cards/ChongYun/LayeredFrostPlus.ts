@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { LayeredFrostEffect } from "../../effects/LayeredFrostEffect";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class LayeredFrostPlus extends Card {
@@ -9,7 +9,7 @@ export class LayeredFrostPlus extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Skill);
+    super(0, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {

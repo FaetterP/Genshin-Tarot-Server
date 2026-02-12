@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { Overheat } from "../misc/Overheat";
@@ -10,7 +10,7 @@ export class TidecallerPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {

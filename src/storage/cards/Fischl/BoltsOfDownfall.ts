@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { BoltsOfDownfallPlus } from "./BoltsOfDownfallPlus";
@@ -11,7 +11,7 @@ export class BoltsOfDownfall extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Attack);
+    super(0, ECardType.Attack);
   }
 
   get Upgrade() {

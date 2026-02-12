@@ -2,7 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 
 export class SolarIsotomaPlus extends Card {
   public get Name(): string {
@@ -10,7 +10,7 @@ export class SolarIsotomaPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {

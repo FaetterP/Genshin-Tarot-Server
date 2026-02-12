@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { DivineArcheryPlus } from "./DivineArcheryPlus";
@@ -11,7 +11,7 @@ export class DivineArchery extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Attack);
+    super(0, ECardType.Attack);
   }
 
   get Upgrade() {

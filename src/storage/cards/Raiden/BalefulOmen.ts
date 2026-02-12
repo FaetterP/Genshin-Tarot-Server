@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { BalefulOmenPlus } from "./BalefulOmenPlus";
 
@@ -9,7 +9,7 @@ export class BalefulOmen extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   get Upgrade() {

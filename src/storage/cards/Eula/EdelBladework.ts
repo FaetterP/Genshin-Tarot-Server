@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { EdelBladeworkPlus } from "./EdelBladeworkPlus";
@@ -11,7 +11,7 @@ export class EdelBladework extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   get Upgrade() {

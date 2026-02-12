@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class WhisperOfWaterPlus extends Card {
@@ -8,7 +8,7 @@ export class WhisperOfWaterPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   use(ctx: CardUseContext): void {

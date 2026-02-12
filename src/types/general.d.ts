@@ -42,6 +42,6 @@ export type Attack = {
 export type CardPrimitive = {
   cardId: string;
   name: string;
-  type: ETypeCard;
+  type: ECardType;
   deckPosition?: number;
 };

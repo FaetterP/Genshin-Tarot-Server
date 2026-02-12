@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class Burn extends Card {
@@ -8,7 +8,7 @@ export class Burn extends Card {
   }
 
   constructor() {
-    super(Number.MAX_SAFE_INTEGER, ETypeCard.Other);
+    super(Number.MAX_SAFE_INTEGER, ECardType.Other);
   }
 
   use(ctx: CardUseContext): void {

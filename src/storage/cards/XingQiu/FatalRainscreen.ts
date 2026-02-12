@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { FatalRainscreenPlus } from "./FatalRainscreenPlus";
@@ -10,7 +10,7 @@ export class FatalRainscreen extends Card {
   }
 
   constructor() {
-    super(2, ETypeCard.Skill);
+    super(2, ECardType.Skill);
   }
 
   get Upgrade() {

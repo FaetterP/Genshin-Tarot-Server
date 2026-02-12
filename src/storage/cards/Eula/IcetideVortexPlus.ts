@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
@@ -9,7 +9,7 @@ export class IcetideVortexPlus extends Card {
   }
 
   constructor() {
-    super(0, ETypeCard.Skill);
+    super(0, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {

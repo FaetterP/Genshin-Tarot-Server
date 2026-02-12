@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -11,7 +11,7 @@ export class SparklingScatterPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   use(ctx: CardUseContext): void {

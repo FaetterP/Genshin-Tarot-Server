@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { WhisperOfWaterPlus as WhisperOfWaterPlus } from "./WhisperOfWaterPlus";
@@ -11,7 +11,7 @@ export class WhisperOfWater extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Attack);
+    super(1, ECardType.Attack);
   }
 
   get Upgrade() {

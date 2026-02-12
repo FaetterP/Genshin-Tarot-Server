@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ETypeCard } from "../../../types/enums";
+import { EElement, ECardType } from "../../../types/enums";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
@@ -12,7 +12,7 @@ export class JumpyDumpty extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   get Upgrade() {

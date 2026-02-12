@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ETypeCard } from "../../../types/enums";
+import { ECardType } from "../../../types/enums";
 import { MirrorReflectionsEffect } from "../../effects/MirrorReflectionsEffect";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
@@ -11,7 +11,7 @@ export class MirrorReflectionsPlus extends Card {
   }
 
   constructor() {
-    super(1, ETypeCard.Skill);
+    super(1, ECardType.Skill);
   }
 
   use(ctx: CardUseContext): void {
