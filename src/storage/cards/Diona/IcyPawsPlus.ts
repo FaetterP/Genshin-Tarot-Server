@@ -30,6 +30,9 @@ export class IcyPawsPlus extends Card {
       enemy.applyElement(new Cryo(), ctx.player);
     }
 
-    // TODO Trash all burn cards
+    const burnInDiscard = ctx.player.Discard.find((c) => c.Name === "Burn");
+    if (burnInDiscard) {
+      ctx.player.trashCardById(burnInDiscard.ID);
+    }
   }
 }

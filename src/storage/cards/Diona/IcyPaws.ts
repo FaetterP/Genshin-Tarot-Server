@@ -28,6 +28,10 @@ export class IcyPaws extends Card {
       for (const enemy of ctx.player.Enemies) {
         enemy.applyElement(new Cryo(), ctx.player);
       }
+      const burnInDiscard = ctx.player.Discard.find((c) => c.Name === "Burn");
+      if (burnInDiscard) {
+        ctx.player.trashCardById(burnInDiscard.ID);
+      }
     } else {
       ctx.addToSteps([
         {
@@ -38,7 +42,5 @@ export class IcyPaws extends Card {
       ]);
       ctx.player.addShield(3);
     }
-
-    // TODO trash all burn cards
   }
 }
