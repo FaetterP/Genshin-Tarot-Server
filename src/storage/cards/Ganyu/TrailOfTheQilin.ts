@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { TrailOfTheQilinEffect } from "../../effects/TrailOfTheQilinEffect";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 import { TrailOfTheQilinPlus } from "./TrailOfTheQilinPlus";
 
@@ -9,7 +10,7 @@ export class TrailOfTheQilin extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   get Upgrade() {

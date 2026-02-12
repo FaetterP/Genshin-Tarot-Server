@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { VioletArc as VioletArcPlus } from "./VioletArcPlus";
@@ -10,7 +10,7 @@ export class VioletArc extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   get Upgrade() {

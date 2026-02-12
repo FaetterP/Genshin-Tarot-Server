@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class Freeze extends Card {
@@ -7,7 +8,7 @@ export class Freeze extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Other);
   }
 
   use(ctx: CardUseContext): void {

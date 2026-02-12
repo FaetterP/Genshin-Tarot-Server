@@ -7,7 +7,8 @@ import {
   EnemyStartCycleContext,
 } from "../../types/eventsContext";
 import { v4 } from "uuid";
-import { Attack, EElement, EnemyPrimitive } from "../../types/general";
+import { Attack, EnemyPrimitive } from "../../types/general";
+import { EElement } from "../../types/enums";
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
 import { EnemyEffect } from "../effects/EnemyEffect";

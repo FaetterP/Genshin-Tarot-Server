@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack, EElement } from "../../../types/general";
+import { Attack } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
@@ -16,7 +17,7 @@ export class PassionOverloadPlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {

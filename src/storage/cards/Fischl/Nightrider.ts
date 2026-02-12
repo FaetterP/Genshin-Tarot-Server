@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { NightriderEffect } from "../../effects/NightriderEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
@@ -11,7 +11,7 @@ export class Nightrider extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Skill);
   }
 
   get Upgrade() {

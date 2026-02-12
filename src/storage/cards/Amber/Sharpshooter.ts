@@ -2,7 +2,8 @@ import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SharpshooterPlus } from "./SharpshooterPlus";
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack, EElement } from "../../../types/general";
+import { Attack } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 
 export class Sharpshooter extends Card {
   public get Name(): string {
@@ -10,7 +11,7 @@ export class Sharpshooter extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Attack);
   }
 
   get Upgrade() {

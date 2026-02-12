@@ -1,5 +1,6 @@
 import type { DetailedStep } from "../../../types/detailedStep";
 import type { CardPrimitive } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { MirrorReflections } from "./MirrorReflections";
@@ -12,7 +13,7 @@ export class RippleOfFatePlus extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

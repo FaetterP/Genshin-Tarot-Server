@@ -1,5 +1,5 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { EElement } from "../../types/general";
+import { EElement } from "../../types/enums";
 import { Dash } from "../cards/misc/Dash";
 import { BaseElement } from "./BaseElement";
 

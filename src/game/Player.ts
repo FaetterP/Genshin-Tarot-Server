@@ -13,12 +13,12 @@ import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
-import { CardPrimitive, EElement, EnemyPrimitive, PlayerPrimitive } from "../types/general";
-import { Freeze } from "../storage/cards/misc/Freeze";
+import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
+import { EElement } from "../types/enums";
 
 export class Player {
   public readonly ID: string;

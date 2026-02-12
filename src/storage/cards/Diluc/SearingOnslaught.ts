@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack, EElement } from "../../../types/general";
+import { Attack } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SearingOnslaughtPlus } from "./SearingOnslaughtPlus";
@@ -10,7 +11,7 @@ export class SearingOnslaught extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   get Upgrade() {

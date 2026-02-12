@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
@@ -9,7 +10,7 @@ export class DoughFuPlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

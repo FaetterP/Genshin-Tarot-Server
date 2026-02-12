@@ -1,15 +1,6 @@
 import { Player } from "../game/Player";
 import { BaseElement } from "../storage/elements/BaseElement";
 
-export enum EElement {
-  Pyro = "Pyro",
-  Hydro = "Hydro",
-  Cryo = "Cryo",
-  Electro = "Electro",
-  Anemo = "Anemo",
-  Geo = "Geo",
-  Dendro = "Dendro",
-}
 
 export type EnemyPrimitive = {
   id: string;
@@ -52,5 +43,6 @@ export type Attack = {
 export type CardPrimitive = {
   cardId: string;
   name: string;
+  type: ETypeCard;
   deckPosition?: number;
 };

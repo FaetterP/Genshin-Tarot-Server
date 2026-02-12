@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class MaidsBladeworkPlus extends Card {
@@ -7,7 +8,7 @@ export class MaidsBladeworkPlus extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

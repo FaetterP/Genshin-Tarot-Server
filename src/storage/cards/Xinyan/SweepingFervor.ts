@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SweepingFervorPlus } from "./SweepingFervorPlus";
@@ -10,7 +10,7 @@ export class SweepingFervor extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Skill);
   }
 
   get Upgrade() {

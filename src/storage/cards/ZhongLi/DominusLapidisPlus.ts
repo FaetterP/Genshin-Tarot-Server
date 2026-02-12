@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -10,7 +10,7 @@ export class DominusLapidis extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {

@@ -1,5 +1,6 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
-import { Attack, EElement } from "../../types/general";
+import { Attack } from "../../types/general";
+import { EElement } from "../../types/enums";
 import { YunlaiSwordsmanship } from "../cards/KeQuing/YunlaiSwordsmanship";
 import { StellarRestoration } from "../cards/KeQuing/StellarRestoration";
 import { Electro } from "../elements/Electro";

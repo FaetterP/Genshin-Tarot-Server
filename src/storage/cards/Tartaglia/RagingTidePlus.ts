@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class RagingTidePlus extends Card {
@@ -7,7 +8,7 @@ export class RagingTidePlus extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {

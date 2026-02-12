@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -9,7 +9,7 @@ export class ChihayaburuPlus extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {

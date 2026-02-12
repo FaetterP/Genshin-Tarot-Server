@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
@@ -9,7 +10,7 @@ export class DivineArcheryPlus extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

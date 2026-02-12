@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 import { ExplosivePuppetPlus } from "./ExplosivePuppetPlus";
 
@@ -9,7 +10,7 @@ export class ExplosivePuppet extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   get Upgrade() {

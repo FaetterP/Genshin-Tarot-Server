@@ -1,7 +1,8 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { StarfellSwordPlus } from "./StarfellSwordPlus";
-import { Attack, EElement } from "../../../types/general";
+import { Attack } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 
 export class StarfellSword extends Card {
@@ -10,7 +11,7 @@ export class StarfellSword extends Card {
   }
 
   constructor() {
-    super(2);
+    super(2, ETypeCard.Skill);
   }
 
   get Upgrade() {

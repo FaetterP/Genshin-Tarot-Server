@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 import { WhirlwindThrustPlus } from "./WhirlwindThrustPlus";
 
@@ -9,7 +10,7 @@ export class WhirlwindThrust extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Attack);
   }
 
   get Upgrade() {

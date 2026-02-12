@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class KatzleinStylePlus extends Card {
@@ -8,7 +9,7 @@ export class KatzleinStylePlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

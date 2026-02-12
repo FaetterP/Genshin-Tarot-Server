@@ -1,5 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
+import { ETypeCard } from "../../../types/enums";
 import { Card } from "../Card";
 import { DanceOfFirePlus } from "./DanceOfFirePlus";
 
@@ -9,7 +10,7 @@ export class DanceOfFire extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Attack);
   }
 
   get Upgrade() {

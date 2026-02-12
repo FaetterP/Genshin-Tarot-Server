@@ -1,4 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
+import { ETypeCard } from "../../../types/enums";
 import { OverheatEffect } from "../../effects/OverheatEffect";
 import { Card } from "../Card";
 
@@ -8,7 +9,7 @@ export class Overheat extends Card {
   }
 
   constructor() {
-    super(0);
+    super(0, ETypeCard.Other);
   }
 
   use(ctx: CardUseContext): void {

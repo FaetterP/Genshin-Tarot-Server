@@ -1,6 +1,7 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Attack, EElement } from "../../types/general";
+import { Attack } from "../../types/general";
 import { BaseElement } from "./BaseElement";
+import { EElement } from "../../types/enums";
 
 export class Electro extends BaseElement {
   public get Name() {

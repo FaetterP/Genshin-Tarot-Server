@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
@@ -9,7 +9,7 @@ export class DemonbanePlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Attack);
   }
 
   use(ctx: CardUseContext): void {

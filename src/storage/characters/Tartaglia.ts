@@ -1,5 +1,6 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
-import { Attack, EElement } from "../../types/general";
+import { Attack } from "../../types/general";
+import { EElement } from "../../types/enums";
 import { CuttingTorrent } from "../cards/Tartaglia/CuttingTorrent";
 import { RagingTide } from "../cards/Tartaglia/RagingTide";
 import { Character } from "./Character";

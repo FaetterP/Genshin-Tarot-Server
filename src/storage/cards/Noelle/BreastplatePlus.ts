@@ -1,5 +1,5 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 import { BreastplateEffect } from "../../effects/BreastplateEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
@@ -10,7 +10,7 @@ export class BreastplatePlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {

@@ -2,7 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { LetTheShowBeginPlusEffect } from "../../effects/LetTheShowBeginPlusEffect";
-import { EElement } from "../../../types/general";
+import { EElement, ETypeCard } from "../../../types/enums";
 
 export class LetTheShowBeginPlus extends Card {
   public get Name(): string {
@@ -10,7 +10,7 @@ export class LetTheShowBeginPlus extends Card {
   }
 
   constructor() {
-    super(1);
+    super(1, ETypeCard.Skill);
   }
 
   use(ctx: CardUseContext): void {
