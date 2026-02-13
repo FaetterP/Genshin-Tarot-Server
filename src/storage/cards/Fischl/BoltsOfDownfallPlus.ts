@@ -18,7 +18,7 @@ export class BoltsOfDownfallPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = target.hasEffect("Nightrider") ? 3 : 1;
+    const damage = target.wasHitByNightriderEffectThisTurn ? 3 : 1;
     ctx.addToSteps([
       {
         type: "enemy_take_damage",

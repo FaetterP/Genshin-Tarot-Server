@@ -22,6 +22,7 @@ export class NightriderEffect extends EnemyEffect {
       element: new Electro(),
       player: ctx.player,
     });
+    this.enemy.markHitByNightriderEffect();
     return true;
   }
 }

@@ -30,6 +30,7 @@ export abstract class Enemy {
   protected elements: BaseElement[] = [];
   private isStunned: boolean = false;
   private effects: EnemyEffect[] = [];
+  private hitByNightriderEffectThisTurn: boolean = false;
 
   private e_onDeath = new Event<EnemyDeathContext>();
   private e_onStartCycle = new Event<EnemyStartCycleContext>();
@@ -107,6 +108,15 @@ export abstract class Enemy {
   public hasEffect(effectName: string): boolean {
     return this.effects.some((e) => e.Name === effectName);
   }
+
+  public get wasHitByNightriderEffectThisTurn(): boolean {
+    return this.hitByNightriderEffectThisTurn;
+  }
+
+  public markHitByNightriderEffect(): void {
+    this.hitByNightriderEffectThisTurn = true;
+  }
+
 
   applyAttack(attack: Attack) {
     if (this.Health <= 0) {
@@ -200,6 +210,7 @@ export abstract class Enemy {
 
   startCycle(ctx: EnemyStartCycleContext) {
     this.isStunned = false;
+    this.hitByNightriderEffectThisTurn = false;
     this.e_onStartCycle.Invoke(ctx);
 
     const toRemove: EnemyEffect[] = [];
