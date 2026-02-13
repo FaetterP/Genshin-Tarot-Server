@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { ForeignIronwind } from "../cards/Lumine/ForeignIronwind";
 import { PalmVortex } from "../cards/Lumine/PalmVortex";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Lumine extends Character {
   public get Name() {
-    return "Lumine";
+    return ECharacter.Lumine;
   }
 
   constructor() {

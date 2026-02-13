@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WindSpiritCreation } from "../cards/Sucrose/WindSpiritCreation";
 import { AnemoHypostatis } from "../cards/Sucrose/AnemoHypostatis";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Sucrose extends Character {
   public get Name() {
-    return "Sucrose";
+    return ECharacter.Sucrose;
   }
 
   constructor() {

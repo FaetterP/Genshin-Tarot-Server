@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class DivineArcheryPlus extends Card {
-  public get Name(): string {
-    return "DivineArcheryPlus";
+  public get Name(): ECard {
+    return ECard.DivineArcheryPlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class DivineArcheryPlus extends Card {
     const damage = ctx.isUseAlternative && ctx.player.trySpendEnergy(1) ? 3 : 1;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

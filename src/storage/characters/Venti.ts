@@ -5,13 +5,14 @@ import { Cryo } from "../elements/Cryo";
 import { Electro } from "../elements/Electro";
 import { Hydro } from "../elements/Hydro";
 import { Pyro } from "../elements/Pyro";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { DivineArchery } from "../cards/Venti/DivineArchery";
 import { SkywardSonnet } from "../cards/Venti/SkywardSonnet";
 
 export class Venti extends Character {
   public get Name() {
-    return "Venti";
+    return ECharacter.Venti;
   }
 
   constructor() {

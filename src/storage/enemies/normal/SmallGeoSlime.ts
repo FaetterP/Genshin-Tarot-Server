@@ -1,9 +1,10 @@
 import { Geo } from "../../elements/Geo";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallGeoSlime extends Enemy {
   public get Name() {
-    return "SmallGeoSlime";
+    return EEnemy.SmallGeoSlime;
   }
 
   constructor() {

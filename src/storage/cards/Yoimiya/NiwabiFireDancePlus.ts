@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { NiwabiFireDanceEffect } from "../../effects/NiwabiFireDanceEffect";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class NiwabiFireDancePlus extends Card {
-  public get Name(): string {
-    return "NiwabiFireDancePlus";
+  public get Name(): ECard {
+    return ECard.NiwabiFireDancePlus;
   }
 
   constructor() {
@@ -19,12 +19,12 @@ export class NiwabiFireDancePlus extends Card {
     const effect = new NiwabiFireDanceEffect();
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [c1.getPrimitive(), c2.getPrimitive(), c3.getPrimitive()],
       },
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

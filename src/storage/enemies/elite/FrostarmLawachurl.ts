@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class FrostarmLawachurl extends Enemy {
   public get Name() {
-    return "FrostarmLawachurl";
+    return EEnemy.FrostarmLawachurl;
   }
 
   constructor() {

@@ -1,12 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class DominusLapidis extends Card {
-  public get Name(): string {
-    return "DominusLapidis";
+  public get Name(): ECard {
+    return ECard.DominusLapidisPlus;
   }
 
   constructor() {
@@ -17,17 +18,18 @@ export class DominusLapidis extends Card {
     const effect = new DominusLapidisEffect();
     ctx.addToSteps([
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 3,
       },
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Geo,
-      })),
+      ...ctx.player.Enemies.map((enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Geo,
+        }),
+      ),
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },
@@ -35,7 +37,7 @@ export class DominusLapidis extends Card {
     if (ctx.selectedPlayer) {
       ctx.addToSteps([
         {
-          type: "player_change_shield",
+          type: EDetailedStep.PlayerChangeShield,
           playerId: ctx.selectedPlayer.ID,
           delta: 3,
         },

@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { OriginPlus } from "./OriginPlus";
 
 export class Origin extends Card {
-  public get Name(): string {
-    return "Origin";
+  public get Name(): ECard {
+    return ECard.Origin;
   }
 
   constructor() {
@@ -28,7 +28,7 @@ export class Origin extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: 1,
         },

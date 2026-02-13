@@ -8,7 +8,7 @@ import {
 } from "../../types/eventsContext";
 import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../types/general";
-import { EElement } from "../../types/enums";
+import { EDetailedStep, EElement, EEnemy, EEnemyEffect } from "../../types/enums";
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
 import { EnemyEffect } from "../effects/EnemyEffect";
@@ -21,7 +21,7 @@ type EnemyConstructorType = {
 };
 
 export abstract class Enemy {
-  abstract get Name(): string;
+  abstract get Name(): EEnemy;
   public readonly ID: string;
   private hp: number;
   private shield: number;
@@ -105,7 +105,7 @@ export abstract class Enemy {
     this.effects.push(effect);
   }
 
-  public hasEffect(effectName: string): boolean {
+  public hasEffect(effectName: EEnemyEffect): boolean {
     return this.effects.some((e) => e.Name === effectName);
   }
 
@@ -133,7 +133,7 @@ export abstract class Enemy {
     if (bonus.bonusDamage > 0) {
       attack.player.addSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: this.ID,
           damage: bonus.bonusDamage,
           isPiercing: attack.isPiercing ?? false,
@@ -218,7 +218,7 @@ export abstract class Enemy {
       const isRemove = effect.onStartCycle(ctx);
       ctx.addToSteps([
         {
-          type: "enemy_effect_trigger",
+          type: EDetailedStep.EnemyEffectTrigger,
           enemyId: this.ID,
           effect: effect.Name,
           isRemove,
@@ -226,7 +226,7 @@ export abstract class Enemy {
       ]);
       if (isRemove) {
         toRemove.push(effect);
-        ctx.addToSteps([{ type: "enemy_lose_effect", enemyId: this.ID, effect: effect.Name }]);
+        ctx.addToSteps([{ type: EDetailedStep.EnemyLoseEffect, enemyId: this.ID, effect: effect.Name }]);
       }
     }
     this.effects = this.effects.filter((e) => !toRemove.includes(e));

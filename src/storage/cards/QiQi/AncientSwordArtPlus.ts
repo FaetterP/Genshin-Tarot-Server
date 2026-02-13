@@ -1,13 +1,13 @@
 import type { DetailedStep } from "../../../types/detailedStep";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class AncientSwordArtPlus extends Card {
-  public get Name(): string {
-    return "AncientSwordArtPlus";
+  public get Name(): ECard {
+    return ECard.AncientSwordArtPlus;
   }
 
   constructor() {
@@ -24,7 +24,7 @@ export class AncientSwordArtPlus extends Card {
     const damage = hasCryo ? 5 : 2;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,
@@ -34,7 +34,7 @@ export class AncientSwordArtPlus extends Card {
     if (!hasCryo) {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 2,
         },

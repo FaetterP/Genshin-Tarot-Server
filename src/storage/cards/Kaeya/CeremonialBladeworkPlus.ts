@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { getRandomInteger } from "../../../utils/math";
 import { Card } from "../Card";
 
 export class CeremonialBladeworkPlus extends Card {
-  public get Name(): string {
-    return "CeremonialBladeworkPlus";
+  public get Name(): ECard {
+    return ECard.CeremonialBladeworkPlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class CeremonialBladeworkPlus extends Card {
     const damage = 2 + getRandomInteger(1, 7);
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,

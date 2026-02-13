@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WhirlwindThrust } from "../cards/Xiao/WhirlwindThrust";
 import { LemniscaticWind } from "../cards/Xiao/LemniscaticWind";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Xiao extends Character {
   public get Name() {
-    return "Xiao";
+    return ECharacter.Xiao;
   }
 
   constructor() {
@@ -25,7 +26,7 @@ export class Xiao extends Character {
 
     ctx.addToSteps([
       {
-        type: "player_take_damage",
+        type: EDetailedStep.PlayerTakeDamage,
         playerId: ctx.player.ID,
         damage: 1,
         isPiercing: true,

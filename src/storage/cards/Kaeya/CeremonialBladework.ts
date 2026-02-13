@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { CeremonialBladeworkPlus } from "./CeremonialBladeworkPlus";
 
 export class CeremonialBladework extends Card {
-  public get Name(): string {
-    return "CeremonialBladework";
+  public get Name(): ECard {
+    return ECard.CeremonialBladework;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class CeremonialBladework extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 3,
         isPiercing: false,

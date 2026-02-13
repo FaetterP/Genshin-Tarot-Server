@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
 export class DoughFuPlus extends Card {
-  public get Name(): string {
-    return "DoughFuPlus";
+  public get Name(): ECard {
+    return ECard.DoughFuPlus;
   }
 
   constructor() {
@@ -29,7 +29,7 @@ export class DoughFuPlus extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: 1,
         },

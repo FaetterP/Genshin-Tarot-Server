@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class ExplosivePuppetPlus extends Card {
-  public get Name(): string {
-    return "ExplosivePuppetPlus";
+  public get Name(): ECard {
+    return ECard.ExplosivePuppetPlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class ExplosivePuppetPlus extends Card {
     const effect = new ExplosivePuppetEffect();
     ctx.addToSteps([
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

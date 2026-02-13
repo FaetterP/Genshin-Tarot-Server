@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class HilichurlGuard extends Enemy {
   public get Name() {
-    return "HilichurlGuard";
+    return EEnemy.HilichurlGuard;
   }
 
   constructor() {

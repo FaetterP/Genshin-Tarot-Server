@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
 export class FatalRainscreenPlus extends Card {
-  public get Name(): string {
-    return "FatalRainscreenPlus";
+  public get Name(): ECard {
+    return ECard.FatalRainscreenPlus;
   }
 
   constructor() {
@@ -19,9 +19,9 @@ export class FatalRainscreenPlus extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Hydro },
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Hydro },
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 4,
       },

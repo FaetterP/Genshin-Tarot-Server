@@ -1,13 +1,14 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { SolarIsotomaEffect } from "../../effects/SolarIsotomaEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { SolarIsotomaPlus } from "./SolarIsotomaPlus";
 
 export class SolarIsotoma extends Card {
-  public get Name(): string {
-    return "SolarIsotoma";
+  public get Name(): ECard {
+    return ECard.SolarIsotoma;
   }
 
   constructor() {
@@ -31,13 +32,15 @@ export class SolarIsotoma extends Card {
 
     const effect = new SolarIsotomaEffect();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Geo,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Geo,
+        }),
+      ),
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },
@@ -51,7 +54,7 @@ export class SolarIsotoma extends Card {
       ctx.player.trashCardById(ctx.selectedCard);
       const drawn = ctx.player.drawCard();
       ctx.addToSteps([
-        { type: "draw_cards", playerId: ctx.player.ID, cards: [drawn.getPrimitive()] },
+        { type: EDetailedStep.DrawCards, playerId: ctx.player.ID, cards: [drawn.getPrimitive()] },
       ]);
     }
   }

@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WeissBladework } from "../cards/Albedo/WeissBladework";
 import { SolarIsotoma } from "../cards/Albedo/SolarIsotoma";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Albedo extends Character {
   public get Name() {
-    return "Albedo";
+    return ECharacter.Albedo;
   }
 
   constructor() {

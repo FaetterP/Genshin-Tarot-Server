@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { BalefulOmenPlus } from "./BalefulOmenPlus";
 
 export class BalefulOmen extends Card {
-  public get Name(): string {
-    return "BalefulOmen";
+  public get Name(): ECard {
+    return ECard.BalefulOmen;
   }
 
   constructor() {

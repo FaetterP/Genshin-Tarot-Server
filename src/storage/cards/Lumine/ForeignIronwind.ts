@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { ForeignIronwindPlus } from "./ForeignIronwindPlus";
 
 export class ForeignIronwind extends Card {
-  public get Name(): string {
-    return "ForeignIronwind";
+  public get Name(): ECard {
+    return ECard.ForeignIronwind;
   }
 
   constructor() {
@@ -27,7 +27,7 @@ export class ForeignIronwind extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,

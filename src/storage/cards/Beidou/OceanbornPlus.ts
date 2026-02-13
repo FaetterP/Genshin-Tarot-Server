@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class OceanbornPlus extends Card {
-  public get Name(): string {
-    return "OceanbornPlus";
+  public get Name(): ECard {
+    return ECard.OceanbornPlus;
   }
 
   constructor() {
@@ -16,7 +16,7 @@ export class OceanbornPlus extends Card {
     const damage = ctx.player.IsTookDamageLastTurn ? 4 : 2;
     ctx.addToSteps(
       ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_take_damage" as const,
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemy.ID,
         damage,
         isPiercing: false,

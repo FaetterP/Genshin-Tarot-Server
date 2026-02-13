@@ -2,11 +2,12 @@ import { Attack } from "../../../types/general";
 import { Player } from "../../../game/Player";
 import { BaseElement } from "../../elements/BaseElement";
 import { Pyro } from "../../elements/Pyro";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallDendroSlime extends Enemy {
   public get Name() {
-    return "SmallDendroSlime";
+    return EEnemy.SmallDendroSlime;
   }
 
   constructor() {

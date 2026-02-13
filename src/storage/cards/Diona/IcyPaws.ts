@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { IcyPawsPlus } from "./IcyPawsPlus";
 
 export class IcyPaws extends Card {
-  public get Name(): string {
-    return "IcyPaws";
+  public get Name(): ECard {
+    return ECard.IcyPaws;
   }
 
   constructor() {
@@ -21,7 +21,7 @@ export class IcyPaws extends Card {
     if (ctx.isUseAlternative) {
       ctx.addToSteps(
         ctx.player.Enemies.map((enemy) => ({
-          type: "enemy_get_element" as const,
+          type: EDetailedStep.EnemyGetElement,
           enemyId: enemy.ID,
           element: EElement.Cryo,
         })),
@@ -29,14 +29,14 @@ export class IcyPaws extends Card {
       for (const enemy of ctx.player.Enemies) {
         enemy.applyElement(new Cryo(), ctx.player);
       }
-      const burnInDiscard = ctx.player.Discard.find((c) => c.Name === "Burn");
+      const burnInDiscard = ctx.player.Discard.find((c) => c.Name === ECard.Burn);
       if (burnInDiscard) {
         ctx.player.trashCardById(burnInDiscard.ID);
       }
     } else {
       ctx.addToSteps([
         {
-          type: "player_change_shield",
+          type: EDetailedStep.PlayerChangeShield,
           playerId: ctx.player.ID,
           delta: 3,
         },

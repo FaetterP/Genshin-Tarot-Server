@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { SparklingScatterPlus } from "./SparklingScatterPlus";
 
 export class SparklingScatter extends Card {
-  public get Name(): string {
-    return "SparklingScatter";
+  public get Name(): ECard {
+    return ECard.SparklingScatter;
   }
 
   constructor() {
@@ -27,14 +27,14 @@ export class SparklingScatter extends Card {
     const drawn = ctx.player.drawCard();
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
         element: EElement.Geo,
       },
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [drawn.getPrimitive()],
       },

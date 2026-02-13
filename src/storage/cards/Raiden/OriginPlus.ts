@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
 export class OriginPlus extends Card {
-  public get Name(): string {
-    return "OriginPlus";
+  public get Name(): ECard {
+    return ECard.OriginPlus;
   }
 
   constructor() {
@@ -22,12 +22,12 @@ export class OriginPlus extends Card {
     const damage = target.isContainsElement(EElement.Electro) ? 5 : 2;
     ctx.addToSteps([
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 2,
       },
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,

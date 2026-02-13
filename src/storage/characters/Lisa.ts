@@ -1,13 +1,14 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Card } from "../cards/Card";
 import { Electro } from "../elements/Electro";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 import { LightningTouch } from "../cards/Lisa/LightningTouch";
 import { VioletArc } from "../cards/Lisa/VioletArc";
 
 export class Lisa extends Character {
   public get Name() {
-    return "Lisa";
+    return ECharacter.Lisa;
   }
 
   constructor() {
@@ -30,7 +31,7 @@ export class Lisa extends Character {
       ctx.selectedEnemy.applyElement(electro, ctx.player);
       ctx.addToSteps([
         {
-          type: "enemy_get_element",
+          type: EDetailedStep.EnemyGetElement,
           enemyId: ctx.selectedEnemy.ID,
           element: electro.Name,
         },
@@ -39,7 +40,7 @@ export class Lisa extends Character {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [card1.getPrimitive(), card2.getPrimitive()],
       },

@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class SpearOfWangsheng extends Card {
-  public get Name(): string {
-    return "SpearOfWangsheng";
+  public get Name(): ECard {
+    return ECard.SpearOfWangshengPlus;
   }
 
   constructor() {
@@ -20,13 +20,13 @@ export class SpearOfWangsheng extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "player_take_damage",
+        type: EDetailedStep.PlayerTakeDamage,
         playerId: ctx.player.ID,
         damage: 1,
         isPiercing: false,
       },
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: ctx.player.Health <= 7 ? 4 : 1,
         isPiercing: true,

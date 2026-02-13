@@ -1,14 +1,14 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { MirrorReflectionsEffect } from "../../effects/MirrorReflectionsEffect";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { MirrorReflectionsPlus } from "./MirrorReflectionsPlus";
 
 export class MirrorReflections extends Card {
-  public get Name(): string {
-    return "MirrorReflections";
+  public get Name(): ECard {
+    return ECard.MirrorReflections;
   }
 
   constructor() {
@@ -27,7 +27,7 @@ export class MirrorReflections extends Card {
     const effect = new MirrorReflectionsEffect();
     ctx.addToSteps([
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

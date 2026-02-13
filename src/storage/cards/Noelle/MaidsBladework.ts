@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { MaidsBladeworkPlus } from "./MaidsBladeworkPlus";
 
 export class MaidsBladework extends Card {
-  public get Name(): string {
-    return "MaidsBladework";
+  public get Name(): ECard {
+    return ECard.MaidsBladework;
   }
 
   constructor() {
@@ -24,12 +24,12 @@ export class MaidsBladework extends Card {
 
     const target = ctx.enemies[0];
     if (target.Shield > 0) {
-      ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
+      ctx.addToSteps([{ type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 }]);
       target.addShields(-1);
     } else {
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 2,
           isPiercing: false,
@@ -40,12 +40,12 @@ export class MaidsBladework extends Card {
 
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
-        ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
+        ctx.addToSteps([{ type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 }]);
         target.addShields(-1);
       } else {
         ctx.addToSteps([
           {
-            type: "enemy_take_damage",
+            type: EDetailedStep.EnemyTakeDamage,
             enemyId: target.ID,
             damage: 2,
             isPiercing: false,

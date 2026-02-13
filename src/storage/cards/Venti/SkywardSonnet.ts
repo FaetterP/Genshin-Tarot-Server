@@ -1,13 +1,14 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { SkywardSonnetEffect } from "../../effects/SkywardSonnetEffect";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { SkywardSonnetPlus } from "./SkywardSonnetPlus";
 
 export class SkywardSonnet extends Card {
-  public get Name(): string {
-    return "SkywardSonnet";
+  public get Name(): ECard {
+    return ECard.SkywardSonnet;
   }
 
   constructor() {
@@ -21,13 +22,15 @@ export class SkywardSonnet extends Card {
   use(ctx: CardUseContext): void {
     const effect = new SkywardSonnetEffect();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Anemo,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Anemo,
+        }),
+      ),
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

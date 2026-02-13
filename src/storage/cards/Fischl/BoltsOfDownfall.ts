@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { BoltsOfDownfallPlus } from "./BoltsOfDownfallPlus";
 
 export class BoltsOfDownfall extends Card {
-  public get Name(): string {
-    return "BoltsOfDownfall";
+  public get Name(): ECard {
+    return ECard.BoltsOfDownfall;
   }
 
   constructor() {
@@ -27,11 +27,11 @@ export class BoltsOfDownfall extends Card {
     let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Electro;
-      ctx.addToSteps([{ type: "player_change_energy", playerId: ctx.player.ID, delta: -1 }]);
+      ctx.addToSteps([{ type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -1 }]);
     }
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,

@@ -1,13 +1,14 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SpearOfTheChurch } from "../cards/Rosaria/SpearOfTheChurch";
 import { RavagingConfession } from "../cards/Rosaria/RavagingConfession";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { Attack } from "../../types/general";
 import { Cryo } from "../elements/Cryo";
 
 export class Rosaria extends Character {
   public get Name() {
-    return "Rosaria";
+    return ECharacter.Rosaria;
   }
 
   constructor() {

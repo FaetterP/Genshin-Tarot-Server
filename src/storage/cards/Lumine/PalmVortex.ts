@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Electro } from "../../elements/Electro";
 import { Hydro } from "../../elements/Hydro";
@@ -9,8 +9,8 @@ import { Card } from "../Card";
 import { PalmVortexPlus } from "./PalmVortexPlus";
 
 export class PalmVortex extends Card {
-  public get Name(): string {
-    return "PalmVortex";
+  public get Name(): ECard {
+    return ECard.PalmVortex;
   }
 
   constructor() {
@@ -31,7 +31,7 @@ export class PalmVortex extends Card {
       ) {
         ctx.addToSteps([
           {
-            type: "enemy_take_damage",
+            type: EDetailedStep.EnemyTakeDamage,
             enemyId: enemy.ID,
             damage: 2,
             isPiercing: false,

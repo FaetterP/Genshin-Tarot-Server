@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class BoltsOfDownfallPlus extends Card {
-  public get Name(): string {
-    return "BoltsOfDownfallPlus";
+  public get Name(): ECard {
+    return ECard.BoltsOfDownfallPlus;
   }
 
   constructor() {
@@ -21,7 +21,7 @@ export class BoltsOfDownfallPlus extends Card {
     const damage = target.wasHitByNightriderEffectThisTurn ? 3 : 1;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

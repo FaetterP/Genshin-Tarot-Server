@@ -1,9 +1,10 @@
 import { Electro } from "../../elements/Electro";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallElectroSlime extends Enemy {
   public get Name() {
-    return "SmallElectroSlime";
+    return EEnemy.SmallElectroSlime;
   }
 
   constructor() {

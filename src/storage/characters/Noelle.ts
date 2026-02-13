@@ -1,12 +1,13 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { MaidsBladework } from "../cards/Noelle/MaidsBladework";
 import { Breastplate } from "../cards/Noelle/Breastplate";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { Attack } from "../../types/general";
 
 export class Noelle extends Character {
   public get Name() {
-    return "Noelle";
+    return ECharacter.Noelle;
   }
 
   constructor() {

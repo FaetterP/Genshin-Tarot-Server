@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class WhisperOfWaterPlus extends Card {
-  public get Name(): string {
-    return "WhisperOfWaterPlus";
+  public get Name(): ECard {
+    return ECard.WhisperOfWaterPlus;
   }
 
   constructor() {

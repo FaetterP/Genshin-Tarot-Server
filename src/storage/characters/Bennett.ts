@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { StrikeOfFortune } from "../cards/Bennett/StrikeOfFortune";
 import { PassionOverload } from "../cards/Bennett/PassionOverload";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Bennett extends Character {
   public get Name() {
-    return "Bennett";
+    return ECharacter.Bennett;
   }
 
   constructor() {

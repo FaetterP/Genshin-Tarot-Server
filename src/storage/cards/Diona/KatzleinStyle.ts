@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { KatzleinStylePlus } from "./KatzleinStylePlus";
 
 export class KatzleinStyle extends Card {
-  public get Name(): string {
-    return "KatzleinStyle";
+  public get Name(): ECard {
+    return ECard.KatzleinStyle;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class KatzleinStyle extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: true,

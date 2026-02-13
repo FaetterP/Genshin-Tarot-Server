@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SteelFang } from "../cards/Razor/SteelFang";
 import { ClawAndThunder } from "../cards/Razor/ClawAndThunder";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Razor extends Character {
   public get Name() {
-    return "Razor";
+    return ECharacter.Razor;
   }
 
   constructor() {

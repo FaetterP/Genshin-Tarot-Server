@@ -3,11 +3,12 @@ import { Attack } from "../../types/general";
 import { EElement } from "../../types/enums";
 import { CuttingTorrent } from "../cards/Tartaglia/CuttingTorrent";
 import { RagingTide } from "../cards/Tartaglia/RagingTide";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Tartaglia extends Character {
   public get Name() {
-    return "Tartaglia";
+    return ECharacter.Tartaglia;
   }
 
   constructor() {

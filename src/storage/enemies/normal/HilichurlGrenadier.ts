@@ -1,10 +1,11 @@
 import { getAllPlayers } from "../../../ws";
 import { Burn } from "../../cards/misc/Burn";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class HilichurlGrenadier extends Enemy {
   public get Name() {
-    return "HilichurlGrenadier";
+    return EEnemy.HilichurlGrenadier;
   }
 
   constructor() {

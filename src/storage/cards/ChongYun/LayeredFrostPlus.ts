@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { LayeredFrostEffect } from "../../effects/LayeredFrostEffect";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class LayeredFrostPlus extends Card {
-  public get Name(): string {
-    return "LayeredFrostPlus";
+  public get Name(): ECard {
+    return ECard.LayeredFrostPlus;
   }
 
   constructor() {
@@ -18,12 +18,12 @@ export class LayeredFrostPlus extends Card {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [drawn.getPrimitive()],
       },
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

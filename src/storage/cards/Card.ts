@@ -1,10 +1,10 @@
 import { v4 } from "uuid";
 import type { CardPrimitive } from "../../types/general";
-import { ECardType } from "../../types/enums";
+import { ECardType, ECard } from "../../types/enums";
 import { CardUseContext } from "../../types/functionsContext";
 
 export abstract class Card {
-  public abstract get Name(): string;
+  public abstract get Name(): ECard;
   public readonly ID: string;
   public readonly Cost: number;
   public readonly Type: ECardType;

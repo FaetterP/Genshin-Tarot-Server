@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class SignedEdictPlus extends Card {
-  public get Name(): string {
-    return "SignedEdictPlus";
+  public get Name(): ECard {
+    return ECard.SignedEdictPlus;
   }
 
   constructor() {

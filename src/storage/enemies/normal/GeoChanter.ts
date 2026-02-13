@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class GeoChanter extends Enemy {
   public get Name() {
-    return "GeoChanter";
+    return EEnemy.GeoChanter;
   }
 
   constructor() {

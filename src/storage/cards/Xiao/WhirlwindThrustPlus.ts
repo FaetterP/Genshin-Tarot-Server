@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class WhirlwindThrustPlus extends Card {
-  public get Name(): string {
-    return "WhirlwindThrustPlus";
+  public get Name(): ECard {
+    return ECard.WhirlwindThrustPlus;
   }
 
   constructor() {
@@ -29,7 +29,7 @@ export class WhirlwindThrustPlus extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: 1,
         },

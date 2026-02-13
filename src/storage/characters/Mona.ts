@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { RippleOfFate } from "../cards/Mona/RippleOfFate";
 import { MirrorReflections } from "../cards/Mona/MirrorReflections";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Mona extends Character {
   public get Name() {
-    return "Mona";
+    return ECharacter.Mona;
   }
 
   constructor() {

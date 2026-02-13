@@ -1,11 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class FrostgnawPlus extends Card {
-  public get Name(): string {
-    return "FrostgnawPlus";
+  public get Name(): ECard {
+    return ECard.FrostgnawPlus;
   }
 
   constructor() {
@@ -14,13 +15,15 @@ export class FrostgnawPlus extends Card {
 
   use(ctx: CardUseContext): void {
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Cryo,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Cryo,
+        }),
+      ),
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 2,
       },

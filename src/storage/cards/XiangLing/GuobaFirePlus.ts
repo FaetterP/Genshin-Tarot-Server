@@ -1,13 +1,14 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { GuobaFireEffect } from "../../effects/GuobaFireEffect";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
 export class GuobaFirePlus extends Card {
-  public get Name(): string {
-    return "GuobaFirePlus";
+  public get Name(): ECard {
+    return ECard.GuobaFirePlus;
   }
 
   constructor() {
@@ -17,15 +18,17 @@ export class GuobaFirePlus extends Card {
   use(ctx: CardUseContext): void {
     const effect = new GuobaFireEffect();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_take_damage" as const,
-        enemyId: enemy.ID,
-        damage: 2,
-        isPiercing: false,
-        element: EElement.Pyro,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: enemy.ID,
+          damage: 2,
+          isPiercing: false,
+          element: EElement.Pyro,
+        }),
+      ),
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

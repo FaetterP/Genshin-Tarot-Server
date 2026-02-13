@@ -4,11 +4,12 @@ import { EElement } from "../../types/enums";
 import { YunlaiSwordsmanship } from "../cards/KeQuing/YunlaiSwordsmanship";
 import { StellarRestoration } from "../cards/KeQuing/StellarRestoration";
 import { Electro } from "../elements/Electro";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class KeQing extends Character {
   public get Name() {
-    return "KeQing";
+    return ECharacter.KeQing;
   }
 
   constructor() {

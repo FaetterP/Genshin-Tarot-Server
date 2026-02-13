@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { EdelBladeworkPlus } from "./EdelBladeworkPlus";
 
 export class EdelBladework extends Card {
-  public get Name(): string {
-    return "EdelBladework";
+  public get Name(): ECard {
+    return ECard.EdelBladework;
   }
 
   constructor() {
@@ -25,12 +25,12 @@ export class EdelBladework extends Card {
 
     const target = ctx.enemies[0];
     if (target.Shield > 0) {
-      ctx.addToSteps([{ type: "enemy_change_shield", enemyId: target.ID, delta: -1 }]);
+      ctx.addToSteps([{ type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 }]);
       target.addShields(-1);
     } else {
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 2,
           isPiercing: false,
@@ -40,7 +40,7 @@ export class EdelBladework extends Card {
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
-      ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }]);
+      ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }]);
       target.applyElement(new Cryo(), ctx.player);
     }
   }

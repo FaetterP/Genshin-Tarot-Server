@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { DoughFuPlus } from "./DoughFuPlus";
 
 export class DoughFu extends Card {
-  public get Name(): string {
-    return "DoughFu";
+  public get Name(): ECard {
+    return ECard.DoughFu;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class DoughFu extends Card {
     const e0 = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: e0.ID,
         damage: 1,
         isPiercing: true,
@@ -43,7 +43,7 @@ export class DoughFu extends Card {
       const e1 = ctx.enemies[1];
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: e1.ID,
           damage: 1,
           isPiercing: true,

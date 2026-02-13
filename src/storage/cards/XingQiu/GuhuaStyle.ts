@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { GuhuaStylePlus } from "./GuhuaStylePlus";
 
 export class GuhuaStyle extends Card {
-  public get Name(): string {
-    return "GuhuaStyle";
+  public get Name(): ECard {
+    return ECard.GuhuaStyle;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class GuhuaStyle extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
@@ -34,7 +34,7 @@ export class GuhuaStyle extends Card {
     if (target.isContainsElement(EElement.Hydro)) {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 2,
         },

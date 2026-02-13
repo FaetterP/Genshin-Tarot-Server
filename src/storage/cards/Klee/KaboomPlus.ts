@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
 export class KaboomPlus extends Card {
-  public get Name(): string {
-    return "KaboomPlus";
+  public get Name(): ECard {
+    return ECard.KaboomPlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class KaboomPlus extends Card {
     const damage = ctx.isUseAlternative && ctx.player.trySpendEnergy(2) ? 4 : 2;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

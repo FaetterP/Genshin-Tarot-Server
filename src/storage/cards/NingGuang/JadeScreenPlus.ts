@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class JadeScreenPlus extends Card {
-  public get Name(): string {
-    return "JadeScreenPlus";
+  public get Name(): ECard {
+    return ECard.JadeScreenPlus;
   }
 
   constructor() {
@@ -15,12 +15,12 @@ export class JadeScreenPlus extends Card {
     if (ctx.selectedPlayer) {
       ctx.addToSteps([
         {
-          type: "player_change_shield",
+          type: EDetailedStep.PlayerChangeShield,
           playerId: ctx.selectedPlayer.ID,
           delta: 3,
         },
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.selectedPlayer.ID,
           delta: 1,
         },
@@ -30,12 +30,12 @@ export class JadeScreenPlus extends Card {
     }
     ctx.addToSteps([
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 3,
       },
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 1,
       },

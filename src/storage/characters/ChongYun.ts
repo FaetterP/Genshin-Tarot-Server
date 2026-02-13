@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Demonbane } from "../cards/ChongYun/Demonbane";
 import { LayeredFrost } from "../cards/ChongYun/LayeredFrost";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class ChongYun extends Character {
   public get Name() {
-    return "ChongYun";
+    return ECharacter.ChongYun;
   }
 
   constructor() {
@@ -27,7 +28,7 @@ export class ChongYun extends Character {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [card1.getPrimitive(), card2.getPrimitive(), card3.getPrimitive()],
       },

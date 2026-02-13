@@ -2,13 +2,14 @@ import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Attack } from "../../types/general";
 import { Card } from "../cards/Card";
 import { Geo } from "../elements/Geo";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { SparklingScatter } from "../cards/NingGuang/SparklingScatter";
 import { JadeScreen } from "../cards/NingGuang/JadeScreen";
 
 export class NingGuang extends Character {
   public get Name() {
-    return "NingGuang";
+    return ECharacter.NingGuang;
   }
 
   constructor() {

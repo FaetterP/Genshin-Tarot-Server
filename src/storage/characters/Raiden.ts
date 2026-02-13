@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Origin } from "../cards/Raiden/Origin";
 import { BalefulOmen } from "../cards/Raiden/BalefulOmen";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Raiden extends Character {
   public get Name() {
-    return "Raiden";
+    return ECharacter.Raiden;
   }
 
   constructor() {

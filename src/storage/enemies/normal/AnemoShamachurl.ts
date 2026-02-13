@@ -1,9 +1,10 @@
 import { getAllPlayers } from "../../../ws";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class AnemoShamachurl extends Enemy {
   public get Name() {
-    return "AnemoShamachurl";
+    return EEnemy.AnemoShamachurl;
   }
 
   constructor() {

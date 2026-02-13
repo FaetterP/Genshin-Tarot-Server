@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 import { WeissBladeworkPlus } from "./WeissBladeworkPlus";
 
 export class WeissBladework extends Card {
-  public get Name(): string {
-    return "WeissBladework";
+  public get Name(): ECard {
+    return ECard.WeissBladework;
   }
 
   constructor() {
@@ -28,7 +28,7 @@ export class WeissBladework extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,
@@ -37,7 +37,7 @@ export class WeissBladework extends Card {
     if (target.isContainsElement(EElement.Geo)) {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 2,
         },

@@ -1,12 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { BreastplateEffect } from "../../effects/BreastplateEffect";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class BreastplatePlus extends Card {
-  public get Name(): string {
-    return "BreastplatePlus";
+  public get Name(): ECard {
+    return ECard.BreastplatePlus;
   }
 
   constructor() {
@@ -16,13 +17,15 @@ export class BreastplatePlus extends Card {
   use(ctx: CardUseContext): void {
     const effect = new BreastplateEffect();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Geo,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Geo,
+        }),
+      ),
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

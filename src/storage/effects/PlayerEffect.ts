@@ -1,9 +1,10 @@
+import type { EPlayerEffect } from "../../types/enums";
 import type { PlayerEndTurnContext, PlayerUseCardContext } from "../../types/eventsContext";
 import { Player } from "../../game/Player";
 import { Enemy } from "../enemies/Enemy";
 
 export abstract class PlayerEffect {
-  public abstract get Name(): string;
+  public abstract get Name(): EPlayerEffect;
 
   public onStartCycle(player: Player): boolean {
     return true;

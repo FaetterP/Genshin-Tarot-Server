@@ -11,6 +11,7 @@ import {
   GameUseBurstRequest,
   GameUseCardRequest,
 } from "../../types/request";
+import { ECard, EDetailedStep } from "../../types/enums";
 import {
   GameStartGameResponse,
   GameUpgradeCardResponse,
@@ -63,7 +64,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     throw new Error("card not Card");
   }
 
-  if (card.Name === "Burn") {
+  if (card.Name === ECard.Burn) {
     throw new Error("Burn card cannot be used");
   }
 
@@ -97,14 +98,14 @@ async function useCard(ws: ExtWebSocket, payload: any) {
 
   ws.player.trySpendActonPoints(card.Cost);
   steps.push({
-    type: "player_change_action_points",
+    type: EDetailedStep.PlayerChangeActionPoints,
     playerId: ws.player.ID,
     delta: -card.Cost,
   });
 
   if (ws.player.Hand.some((c) => c.ID === card.ID)) {
     steps.push({
-      type: "discard_card",
+      type: EDetailedStep.DiscardCard,
       playerId: ws.player.ID,
       card: card.getPrimitive(),
     });
@@ -115,6 +116,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
   sendToAll<GameUseCardResponse>({
     action: "game.useCard",
     cardId: card.ID,
+    card: card.Name,
     player: ws.player.getPrimitiveStats(),
     steps,
   });
@@ -145,15 +147,15 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
   ws.player.addCardToHand(newCard);
 
   const steps: DetailedStep[] = [
-    { type: "player_change_mora", playerId: ws.player.ID, delta: -UPGRADE_MORA_COST },
+    { type: EDetailedStep.PlayerChangeMora, playerId: ws.player.ID, delta: -UPGRADE_MORA_COST },
     {
-      type: "add_card",
+      type: EDetailedStep.AddCard,
       playerId: ws.player.ID,
       card: newCard.getPrimitive(),
       to: "hand",
     },
     {
-      type: "upgrade_card",
+      type: EDetailedStep.UpgradeCard,
       playerId: ws.player.ID,
       oldCard: oldCardPrimitive,
       newCard: newCard.getPrimitive(),
@@ -163,6 +165,7 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
   sendToAll<GameUpgradeCardResponse>({
     action: "game.upgradeCard",
     cardId,
+    card: newCard.Name,
     player: ws.player.getPrimitiveStats(),
     steps,
   });
@@ -227,7 +230,7 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
   }
 
   steps.unshift({
-    type: "player_change_energy",
+    type: EDetailedStep.PlayerChangeEnergy,
     playerId: ws.player.ID,
     delta: -character.BurstCost,
   });

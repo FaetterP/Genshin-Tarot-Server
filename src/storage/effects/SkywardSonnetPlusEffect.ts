@@ -1,11 +1,12 @@
+import { EPlayerEffect } from "../../types/enums";
 import { Attack } from "../../types/general";
 import { Player } from "../../game/Player";
 import { Enemy } from "../enemies/Enemy";
 import { PlayerEffect } from "./PlayerEffect";
 
 export class SkywardSonnetPlusEffect extends PlayerEffect {
-  public get Name(): string {
-    return "SkywardSonnetPlus";
+  public get Name(): EPlayerEffect {
+    return EPlayerEffect.SkywardSonnetPlus;
   }
 
   public override onStartCycle(player: Player): boolean {

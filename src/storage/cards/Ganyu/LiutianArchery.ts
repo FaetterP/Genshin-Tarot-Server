@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { LiutianArcheryPlus } from "./LiutianArcheryPlus";
 
 export class LiutianArchery extends Card {
-  public get Name(): string {
-    return "LiutianArchery";
+  public get Name(): ECard {
+    return ECard.LiutianArchery;
   }
 
   constructor() {
@@ -28,13 +28,13 @@ export class LiutianArchery extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Cryo;
       ctx.addToSteps([
-        { type: "player_change_energy", playerId: ctx.player.ID, delta: -1 },
-        { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }
+        { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -1 },
+        { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }
       ]);
     }
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,

@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class DemonbanePlus extends Card {
-  public get Name(): string {
-    return "DemonbanePlus";
+  public get Name(): ECard {
+    return ECard.DemonbanePlus;
   }
 
   constructor() {
@@ -23,7 +23,7 @@ export class DemonbanePlus extends Card {
       }
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 4,
           isPiercing: false,
@@ -38,7 +38,7 @@ export class DemonbanePlus extends Card {
     } else {
       ctx.addToSteps(
         ctx.player.Enemies.map((enemy) => ({
-          type: "enemy_take_damage" as const,
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: enemy.ID,
           damage: 2,
           isPiercing: false,

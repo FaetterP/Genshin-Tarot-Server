@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
 export class StarfellSwordPlus extends Card {
-  public get Name(): string {
-    return "StarfellSwordPlus";
+  public get Name(): ECard {
+    return ECard.StarfellSwordPlus;
   }
 
   constructor() {
@@ -18,7 +18,7 @@ export class StarfellSwordPlus extends Card {
 
     ctx.addToSteps(
       ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_take_damage" as const,
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemy.ID,
         damage,
         isPiercing: true,

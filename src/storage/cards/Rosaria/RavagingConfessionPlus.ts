@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class RavagingConfessionPlus extends Card {
-  public get Name(): string {
-    return "RavagingConfessionPlus";
+  public get Name(): ECard {
+    return ECard.RavagingConfessionPlus;
   }
 
   constructor() {

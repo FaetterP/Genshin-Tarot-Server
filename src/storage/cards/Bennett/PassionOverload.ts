@@ -1,20 +1,20 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { PassionOverloadPlus } from "./PassionOverloadPlus";
 
-const BENNETT_CARD_NAMES = new Set([
-  "PassionOverload",
-  "PassionOverloadPlus",
-  "StrikeOfFortune",
-  "StrikeOfFortunePlus",
+const BENNETT_CARD_NAMES = new Set<ECard>([
+  ECard.PassionOverload,
+  ECard.PassionOverloadPlus,
+  ECard.StrikeOfFortune,
+  ECard.StrikeOfFortunePlus,
 ]);
 
 export class PassionOverload extends Card {
-  public get Name(): string {
-    return "PassionOverload";
+  public get Name(): ECard {
+    return ECard.PassionOverload;
   }
 
   constructor() {
@@ -39,7 +39,7 @@ export class PassionOverload extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
@@ -50,17 +50,17 @@ export class PassionOverload extends Card {
 
     const topCard = ctx.player.findTopCardFromDeck();
     if (topCard) {
-      const isBurn = topCard.Name === "Burn";
+      const isBurn = topCard.Name === ECard.Burn;
       const isBennettCard = BENNETT_CARD_NAMES.has(topCard.Name);
 
       if (isBurn) {
         ctx.addToSteps([
-          { type: "trash_card", playerId: ctx.player.ID, card: topCard.getPrimitive() },
+          { type: EDetailedStep.TrashCard, playerId: ctx.player.ID, card: topCard.getPrimitive() },
         ]);
       } else {
         ctx.player.addCardToDiscard(topCard);
         ctx.addToSteps([
-          { type: "discard_card", playerId: ctx.player.ID, card: topCard.getPrimitive() },
+          { type: EDetailedStep.DiscardCard, playerId: ctx.player.ID, card: topCard.getPrimitive() },
         ]);
       }
 
@@ -68,7 +68,7 @@ export class PassionOverload extends Card {
         ctx.player.applyDamage(1, true);
         ctx.addToSteps([
           {
-            type: "player_take_damage",
+            type: EDetailedStep.PlayerTakeDamage,
             playerId: ctx.player.ID,
             damage: 1,
             isPiercing: true,
@@ -82,7 +82,7 @@ export class PassionOverload extends Card {
         for (const enemy of ctx.player.Enemies) {
           ctx.addToSteps([
             {
-              type: "enemy_take_damage",
+              type: EDetailedStep.EnemyTakeDamage,
               enemyId: enemy.ID,
               damage: 1,
               isPiercing: false,

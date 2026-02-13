@@ -1,12 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SweepingFervorPlus } from "./SweepingFervorPlus";
 
 export class SweepingFervor extends Card {
-  public get Name(): string {
-    return "SweepingFervor";
+  public get Name(): ECard {
+    return ECard.SweepingFervor;
   }
 
   constructor() {
@@ -20,15 +21,17 @@ export class SweepingFervor extends Card {
   use(ctx: CardUseContext): void {
     ctx.addToSteps([
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 3,
       },
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Pyro,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Pyro,
+        }),
+      ),
     ]);
     ctx.player.addShield(3);
     for (const enemy of ctx.player.Enemies) {

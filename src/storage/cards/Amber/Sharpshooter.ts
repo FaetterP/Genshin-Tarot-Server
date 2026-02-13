@@ -3,11 +3,11 @@ import { Card } from "../Card";
 import { SharpshooterPlus } from "./SharpshooterPlus";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 
 export class Sharpshooter extends Card {
-  public get Name(): string {
-    return "Sharpshooter";
+  public get Name(): ECard {
+    return ECard.Sharpshooter;
   }
 
   constructor() {
@@ -32,7 +32,7 @@ export class Sharpshooter extends Card {
       element = EElement.Pyro;
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: -1,
         },
@@ -41,7 +41,7 @@ export class Sharpshooter extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing,

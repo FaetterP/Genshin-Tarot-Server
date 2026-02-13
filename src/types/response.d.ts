@@ -1,3 +1,4 @@
+import type { ECharacter, ECard, EEnemy, ELeyline } from "./enums";
 import type { DetailedStep } from "./detailedStep";
 import type { PlayerPrimitive } from "./general";
 
@@ -34,7 +35,7 @@ export interface GameStartCycleResponse {
   you: PlayerPrimitive | undefined;
   otherPlayers: PlayerPrimitive[];
   cycle: number;
-  leylines: string[];
+  leylines: ELeyline[];
   steps: DetailedStep[];
 }
 
@@ -46,6 +47,7 @@ export interface GameEndCycleResponse {
 export interface GameUseCardResponse {
   action: "game.useCard";
   cardId: string;
+  card: ECard;
   player: PlayerPrimitive;
   steps: DetailedStep[];
 }
@@ -53,13 +55,14 @@ export interface GameUseCardResponse {
 export interface GameUpgradeCardResponse {
   action: "game.upgradeCard";
   cardId: string;
+  card: ECard;
   player: PlayerPrimitive;
   steps: DetailedStep[];
 }
 
 export interface GameUseBurstResponse {
   action: "game.useBurst";
-  character: string;
+  character: ECharacter;
   player: PlayerPrimitive;
   steps: DetailedStep[];
 }
@@ -67,13 +70,13 @@ export interface GameUseBurstResponse {
 export interface CharactersAddCharacterResponse {
   action: "characters.addCharacter";
   player: string;
-  character: string;
+  character: ECharacter;
 }
 
 export interface CharactersRemoveCharacterResponse {
   action: "characters.removeCharacter";
   player: string;
-  character: string;
+  character: ECharacter;
 }
 
 export type AnyResponse =

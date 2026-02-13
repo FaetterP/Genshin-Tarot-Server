@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SealOfApproval } from "../cards/Yanfei/SealOfApproval";
 import { SignedEdict } from "../cards/Yanfei/SignedEdict";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Yanfei extends Character {
   public get Name() {
-    return "Yanfei";
+    return ECharacter.Yanfei;
   }
 
   constructor() {

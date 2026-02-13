@@ -1,8 +1,9 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
+import { ECharacter } from "../../types/enums";
 import { Card } from "../cards/Card";
 
 export abstract class Character {
-  public abstract get Name(): string;
+  public abstract get Name(): ECharacter;
   private cards: Card[];
   private burstCost: number;
 

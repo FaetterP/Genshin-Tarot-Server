@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class PyroRegisvine extends Enemy {
   public get Name() {
-    return "PyroRegisvine";
+    return EEnemy.PyroRegisvine;
   }
 
   constructor() {

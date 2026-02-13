@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { TrailOfTheQilinEffect } from "../../effects/TrailOfTheQilinEffect";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class TrailOfTheQilinPlus extends Card {
-  public get Name(): string {
-    return "TrailOfTheQilinPlus";
+  public get Name(): ECard {
+    return ECard.TrailOfTheQilinPlus;
   }
 
   constructor() {
@@ -20,7 +20,7 @@ export class TrailOfTheQilinPlus extends Card {
     const effect = new TrailOfTheQilinEffect();
     ctx.addToSteps([
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

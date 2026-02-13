@@ -2,11 +2,12 @@ import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { DoughFu } from "../cards/XiangLing/DoughFu";
 import { GuobaFire } from "../cards/XiangLing/GuobaFire";
 import { PyronadoEffect } from "../effects/PyronadoEffect";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class XiangLing extends Character {
   public get Name() {
-    return "XiangLing";
+    return ECharacter.XiangLing;
   }
 
   constructor() {
@@ -22,12 +23,12 @@ export class XiangLing extends Character {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: new PyronadoEffect().Name,
       },

@@ -1,3 +1,4 @@
+import { EDetailedStep, EPlayerEffect } from "../../types/enums";
 import type { PlayerEndTurnContext, PlayerUseCardContext } from "../../types/eventsContext";
 import { Player } from "../../game/Player";
 import { Enemy } from "../enemies/Enemy";
@@ -11,8 +12,8 @@ const EULA_CARD_NAMES = [
 ] as const;
 
 export class GlacialIlluminationEffect extends PlayerEffect {
-  public get Name(): string {
-    return "GlacialIllumination";
+  public get Name(): EPlayerEffect {
+    return EPlayerEffect.GlacialIllumination;
   }
 
   public override onStartCycle(_player: Player): boolean {
@@ -37,12 +38,12 @@ export class GlacialIlluminationEffect extends PlayerEffect {
     }
     for (const enemy of enemies) {
       ctx.addToSteps([
-        { type: "enemy_take_damage", enemyId: enemy.ID, damage: 2, isPiercing: false },
+        { type: EDetailedStep.EnemyTakeDamage, enemyId: enemy.ID, damage: 2, isPiercing: false },
       ]);
       enemy.applyAttack({ damage: 2, player: ctx.player, isRange: true });
     }
     ctx.player.snowflakes = 0;
-    ctx.addToSteps([{ type: "player_lose_effect", playerId: ctx.player.ID, effect: this.Name }]);
+    ctx.addToSteps([{ type: EDetailedStep.PlayerLoseEffect, playerId: ctx.player.ID, effect: this.Name }]);
     return true;
   }
 }

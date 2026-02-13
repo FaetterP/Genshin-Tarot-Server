@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class AnemoHypostatisPlus extends Card {
-  public get Name(): string {
-    return "AnemoHypostatisPlus";
+  public get Name(): ECard {
+    return ECard.AnemoHypostatisPlus;
   }
 
   constructor() {
@@ -15,7 +15,7 @@ export class AnemoHypostatisPlus extends Card {
   use(ctx: CardUseContext): void {
     ctx.addToSteps(
       ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
+        type: EDetailedStep.EnemyGetElement,
         enemyId: enemy.ID,
         element: EElement.Anemo,
       })),

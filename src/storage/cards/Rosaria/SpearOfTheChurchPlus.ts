@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class SpearOfTheChurchPlus extends Card {
-  public get Name(): string {
-    return "SpearOfTheChurchPlus";
+  public get Name(): ECard {
+    return ECard.SpearOfTheChurchPlus;
   }
 
   constructor() {
@@ -28,7 +28,7 @@ export class SpearOfTheChurchPlus extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: 1,
         },

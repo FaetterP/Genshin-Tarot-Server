@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
 export class StellarRestorationPlus extends Card {
-  public get Name(): string {
-    return "StellarRestorationPlus";
+  public get Name(): ECard {
+    return ECard.StellarRestorationPlus;
   }
 
   constructor() {
@@ -19,11 +19,11 @@ export class StellarRestorationPlus extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
-      { type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro },
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 2,
       },

@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class IcetideVortexPlus extends Card {
-  public get Name(): string {
-    return "IcetideVortexPlus";
+  public get Name(): ECard {
+    return ECard.IcetideVortexPlus;
   }
 
   constructor() {
@@ -30,7 +30,7 @@ export class IcetideVortexPlus extends Card {
         ctx.player.addCardToHand(fromDeck, false);
         ctx.addToSteps([
           {
-            type: "add_card",
+            type: EDetailedStep.AddCard,
             playerId: ctx.player.ID,
             card: fromDeck.getPrimitive(),
             to: "hand",
@@ -43,7 +43,7 @@ export class IcetideVortexPlus extends Card {
           ctx.player.addCardToHand(c, true);
           ctx.addToSteps([
             {
-              type: "add_card",
+              type: EDetailedStep.AddCard,
               playerId: ctx.player.ID,
               card: c.getPrimitive(),
               to: "hand",
@@ -59,7 +59,7 @@ export class IcetideVortexPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }]);
+    ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }]);
     target.applyElement(new Cryo(), ctx.player);
   }
 }

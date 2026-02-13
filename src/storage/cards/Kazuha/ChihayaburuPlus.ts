@@ -1,11 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class ChihayaburuPlus extends Card {
-  public get Name(): string {
-    return "ChihayaburuPlus";
+  public get Name(): ECard {
+    return ECard.ChihayaburuPlus;
   }
 
   constructor() {
@@ -16,13 +17,15 @@ export class ChihayaburuPlus extends Card {
     const c1 = ctx.player.drawCard();
     const c2 = ctx.player.drawCard();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Anemo,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Anemo,
+        }),
+      ),
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [c1.getPrimitive(), c2.getPrimitive()],
       },

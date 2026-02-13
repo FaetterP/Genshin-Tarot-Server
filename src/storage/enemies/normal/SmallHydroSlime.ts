@@ -1,9 +1,10 @@
 import { Hydro } from "../../elements/Hydro";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallHydroSlime extends Enemy {
   public get Name() {
-    return "SmallHydroSlime";
+    return EEnemy.SmallHydroSlime;
   }
 
   constructor() {

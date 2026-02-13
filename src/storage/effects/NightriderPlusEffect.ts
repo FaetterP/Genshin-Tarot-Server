@@ -1,11 +1,12 @@
+import { EEnemyEffect } from "../../types/enums";
 import { Electro } from "../elements/Electro";
 import { Enemy } from "../enemies/Enemy";
 import { EnemyEffect } from "./EnemyEffect";
 import type { EnemyStartCycleContext } from "../../types/eventsContext";
 
 export class NightriderPlusEffect extends EnemyEffect {
-  public get Name(): string {
-    return "NightriderPlus";
+  public get Name(): EEnemyEffect {
+    return EEnemyEffect.NightriderPlus;
   }
 
   private enemy: Enemy;

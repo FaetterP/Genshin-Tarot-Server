@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class SharpshooterPlus extends Card {
-  public get Name(): string {
-    return "SharpshooterPlus";
+  public get Name(): ECard {
+    return ECard.SharpshooterPlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class SharpshooterPlus extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

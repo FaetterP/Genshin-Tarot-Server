@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { StellarRestorationPlus } from "./StellarRestorationPlus";
 
 export class StellarRestoration extends Card {
-  public get Name(): string {
-    return "StellarRestoration";
+  public get Name(): ECard {
+    return ECard.StellarRestoration;
   }
 
   constructor() {
@@ -23,7 +23,7 @@ export class StellarRestoration extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Electro }]);
+    ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro }]);
     target.applyElement(new Electro(), ctx.player);
     // TODO
   }

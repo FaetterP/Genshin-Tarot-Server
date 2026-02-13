@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { VioletArc as VioletArcPlus } from "./VioletArcPlus";
 
 export class VioletArc extends Card {
-  public get Name(): string {
-    return "VioletArc";
+  public get Name(): ECard {
+    return ECard.VioletArc;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class VioletArc extends Card {
       if (enemy.isContainsElement(EElement.Electro)) {
         ctx.addToSteps([
           {
-            type: "enemy_take_damage",
+            type: EDetailedStep.EnemyTakeDamage,
             enemyId: enemy.ID,
             damage: 5,
             isPiercing: true,

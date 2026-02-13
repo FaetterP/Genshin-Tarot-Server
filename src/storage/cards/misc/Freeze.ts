@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class Freeze extends Card {
-  public get Name(): string {
-    return "Freeze";
+  public get Name(): ECard {
+    return ECard.Freeze;
   }
 
   constructor() {
@@ -12,13 +12,13 @@ export class Freeze extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    const freezeCards = [...ctx.player.Hand].filter((c) => c.Name === "Freeze");
+    const freezeCards = [...ctx.player.Hand].filter((c) => c.Name === ECard.Freeze);
     for (const card of freezeCards) {
       ctx.player.trashCardById(card.ID);
     }
     ctx.addToSteps(
       freezeCards.map((card) => ({
-        type: "trash_card" as const,
+        type: EDetailedStep.TrashCard as const,
         playerId: ctx.player.ID,
         card: card.getPrimitive(),
       })),

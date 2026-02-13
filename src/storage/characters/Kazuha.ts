@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { GaryuuBladework } from "../cards/Kazuha/GaryuuBladework";
 import { Chihayaburu } from "../cards/Kazuha/Chihayaburu";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Kazuha extends Character {
   public get Name() {
-    return "Kazuha";
+    return ECharacter.Kazuha;
   }
 
   constructor() {

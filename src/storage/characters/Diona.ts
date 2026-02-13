@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { KatzleinStyle } from "../cards/Diona/KatzleinStyle";
 import { IcyPaws } from "../cards/Diona/IcyPaws";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Diona extends Character {
   public get Name() {
-    return "Diona";
+    return ECharacter.Diona;
   }
 
   constructor() {

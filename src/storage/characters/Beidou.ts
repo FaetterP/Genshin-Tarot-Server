@@ -2,11 +2,12 @@ import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Oceanborn } from "../cards/Beidou/Oceanborn";
 import { Tidecaller } from "../cards/Beidou/Tidecaller";
 import { StormbreakerEffect } from "../effects/StormbreakerEffect";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Beidou extends Character {
   public get Name() {
-    return "Beidou";
+    return ECharacter.Beidou;
   }
 
   constructor() {
@@ -28,12 +29,12 @@ export class Beidou extends Character {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: new StormbreakerEffect().Name,
       },

@@ -1,9 +1,10 @@
 import { Cryo } from "../../elements/Cryo";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallCryoSlime extends Enemy {
   public get Name() {
-    return "SmallCryoSlime";
+    return EEnemy.SmallCryoSlime;
   }
 
   constructor() {

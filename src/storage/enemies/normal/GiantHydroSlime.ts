@@ -1,9 +1,10 @@
 import { getAllPlayers } from "../../../ws";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class GiantHydroSlime extends Enemy {
   public get Name() {
-    return "GiantHydroSlime";
+    return EEnemy.GiantHydroSlime;
   }
 
   constructor() {

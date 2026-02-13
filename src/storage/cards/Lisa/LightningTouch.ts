@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { LightningTouchPlus } from "./LightningTouchPlus";
 
 export class LightningTouch extends Card {
-  public get Name(): string {
-    return "LightningTouch";
+  public get Name(): ECard {
+    return ECard.LightningTouch;
   }
 
   constructor() {
@@ -27,14 +27,14 @@ export class LightningTouch extends Card {
     const drawn = ctx.player.drawCard();
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
         element: EElement.Electro,
       },
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [drawn.getPrimitive()],
       },

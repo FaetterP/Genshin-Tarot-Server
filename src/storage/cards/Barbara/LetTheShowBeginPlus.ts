@@ -2,11 +2,11 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 import { LetTheShowBeginPlusEffect } from "../../effects/LetTheShowBeginPlusEffect";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 
 export class LetTheShowBeginPlus extends Card {
-  public get Name(): string {
-    return "LetTheShowBeginPlus";
+  public get Name(): ECard {
+    return ECard.LetTheShowBeginPlus;
   }
 
   constructor() {
@@ -16,7 +16,7 @@ export class LetTheShowBeginPlus extends Card {
   use(ctx: CardUseContext): void {
     ctx.addToSteps(
       ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
+        type: EDetailedStep.EnemyGetElement,
         enemyId: enemy.ID,
         element: EElement.Hydro,
       })),
@@ -28,7 +28,7 @@ export class LetTheShowBeginPlus extends Card {
     const effect = new LetTheShowBeginPlusEffect();
     ctx.addToSteps([
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

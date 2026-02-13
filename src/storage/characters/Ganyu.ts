@@ -1,6 +1,6 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Attack } from "../../types/general";
-import { EElement } from "../../types/enums";
+import { ECharacter, EElement } from "../../types/enums";
 import { getRandomInteger } from "../../utils/math";
 import { LiutianArchery } from "../cards/Ganyu/LiutianArchery";
 import { TrailOfTheQilin } from "../cards/Ganyu/TrailOfTheQilin";
@@ -9,7 +9,7 @@ import { Character } from "./Character";
 
 export class Ganyu extends Character {
   public get Name() {
-    return "Ganyu";
+    return ECharacter.Ganyu;
   }
 
   constructor() {

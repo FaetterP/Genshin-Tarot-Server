@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 
 export class StrikeOfFortunePlus extends Card {
-  public get Name(): string {
-    return "StrikeOfFortunePlus";
+  public get Name(): ECard {
+    return ECard.StrikeOfFortunePlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class StrikeOfFortunePlus extends Card {
     const damage = ctx.player.Health <= 7 ? 4 : 3;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,
@@ -31,7 +31,7 @@ export class StrikeOfFortunePlus extends Card {
     if (ctx.player.Health <= 7) {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 3,
         },

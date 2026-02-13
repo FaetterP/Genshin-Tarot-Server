@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { GaryuuBladeworkPlus } from "./GaryuuBladeworkPlus";
 
 export class GaryuuBladework extends Card {
-  public get Name(): string {
-    return "GaryuuBladework";
+  public get Name(): ECard {
+    return ECard.GaryuuBladework;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class GaryuuBladework extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 3,
         isPiercing: false,

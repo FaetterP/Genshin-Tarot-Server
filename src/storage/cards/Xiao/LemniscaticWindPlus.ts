@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { Dash } from "../misc/Dash";
 
 export class LemniscaticWindPlus extends Card {
-  public get Name(): string {
-    return "LemniscaticWindPlus";
+  public get Name(): ECard {
+    return ECard.LemniscaticWindPlus;
   }
 
   constructor() {
@@ -23,7 +23,7 @@ export class LemniscaticWindPlus extends Card {
     const damage = ctx.player.LastCard instanceof Dash ? 5 : 2;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

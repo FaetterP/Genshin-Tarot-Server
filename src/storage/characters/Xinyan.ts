@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { DanceOfFire } from "../cards/Xinyan/DanceOfFire";
 import { SweepingFervor } from "../cards/Xinyan/SweepingFervor";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Xinyan extends Character {
   public get Name() {
-    return "Xinyan";
+    return ECharacter.Xinyan;
   }
 
   constructor() {

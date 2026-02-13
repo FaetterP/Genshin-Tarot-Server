@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { WhirlwindThrustPlus } from "./WhirlwindThrustPlus";
 
 export class WhirlwindThrust extends Card {
-  public get Name(): string {
-    return "WhirlwindThrust";
+  public get Name(): ECard {
+    return ECard.WhirlwindThrust;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class WhirlwindThrust extends Card {
     const e0 = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: e0.ID,
         damage: 1,
         isPiercing: true,
@@ -43,7 +43,7 @@ export class WhirlwindThrust extends Card {
       const e1 = ctx.enemies[1];
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: e1.ID,
           damage: 1,
           isPiercing: true,

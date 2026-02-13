@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { CeremonialBladework } from "../cards/Kaeya/CeremonialBladework";
 import { Frostgnaw } from "../cards/Kaeya/Frostgnaw";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Kaeya extends Character {
   public get Name() {
-    return "Kaeya";
+    return ECharacter.Kaeya;
   }
 
   constructor() {

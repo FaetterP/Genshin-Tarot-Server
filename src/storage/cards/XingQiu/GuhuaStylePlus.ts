@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
 export class GuhuaStylePlus extends Card {
-  public get Name(): string {
-    return "GuhuaStylePlus";
+  public get Name(): ECard {
+    return ECard.GuhuaStylePlus;
   }
 
   constructor() {
@@ -22,7 +22,7 @@ export class GuhuaStylePlus extends Card {
     const damage = target.isContainsElement(EElement.Hydro) ? 5 : 3;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,

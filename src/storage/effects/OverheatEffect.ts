@@ -1,8 +1,9 @@
+import { EPlayerEffect } from "../../types/enums";
 import { PlayerEffect } from "./PlayerEffect";
 
 export class OverheatEffect extends PlayerEffect {
-  public get Name(): string {
-    return "Overheat";
+  public get Name(): EPlayerEffect {
+    return EPlayerEffect.Overheat;
   }
 
   public override getAttackBonus(): { bonusDamage: number; energyOnKill: number } {

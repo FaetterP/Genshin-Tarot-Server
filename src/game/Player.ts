@@ -19,7 +19,7 @@ import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
-import { EElement } from "../types/enums";
+import { ECard, EDetailedStep, EElement, EPlayerEffect } from "../types/enums";
 
 export class Player {
   public readonly ID: string;
@@ -54,15 +54,15 @@ export class Player {
   }
 
   public recordEnemyDeath(enemyId: string) {
-    this._stepsCollector?.([{ type: "enemy_death", enemyId }]);
+    this._stepsCollector?.([{ type: EDetailedStep.EnemyDeath, enemyId }]);
   }
 
   public recordEnemyReaction(enemyId: string, element1: EElement, element2: EElement) {
-    this._stepsCollector?.([{ type: "enemy_reaction", enemyId, element1, element2 }]);
+    this._stepsCollector?.([{ type: EDetailedStep.EnemyReaction, enemyId, element1, element2 }]);
   }
 
   public recordEnemyBlockDamage(enemyId: string, element?: EElement) {
-    this._stepsCollector?.([{ type: "enemy_block_damage", enemyId, ...(element && { element }) }]);
+    this._stepsCollector?.([{ type: EDetailedStep.EnemyBlockDamage, enemyId, ...(element && { element }) }]);
   }
 
   public addSteps(steps: DetailedStep[]) {
@@ -137,7 +137,7 @@ export class Player {
       enemies.push(enemy.getPrimitiveStats());
     }
 
-    const effects: string[] = [];
+    const effects: EPlayerEffect[] = [];
     for (const effect of this.effects) {
       effects.push(effect.Name);
     }
@@ -245,8 +245,8 @@ export class Player {
   }
 
   public addEnergy(count: number) {
-    if (this.hand.some((card) => card.Name === "Freeze")) {
-      this._stepsCollector?.([{ type: "energy_freezed", playerId: this.ID, delta: count }]);
+    if (this.hand.some((card) => card.Name === ECard.Freeze)) {
+      this._stepsCollector?.([{ type: EDetailedStep.EnergyFreezed, playerId: this.ID, delta: count }]);
       return;
     }
 
@@ -258,7 +258,7 @@ export class Player {
       return false;
     }
 
-    if (this.hand.some((card) => card.Name === "Freeze")) {
+    if (this.hand.some((card) => card.Name === ECard.Freeze)) {
       throw new Error("energy freezed");
     }
 
@@ -284,7 +284,7 @@ export class Player {
     this.effects = this.effects.filter((e) => !toRemove.includes(e));
     for (const effect of toRemove) {
       this._stepsCollector?.([
-        { type: "player_lose_effect", playerId: this.ID, effect: effect.Name },
+        { type: EDetailedStep.PlayerLoseEffect, playerId: this.ID, effect: effect.Name },
       ]);
     }
     return { bonusDamage: totalDamage, energyOnKill: totalEnergyOnKill };
@@ -292,14 +292,14 @@ export class Player {
 
   /** Удаляет все карты Burn из руки (при применении Гидро/Крио на врага в зоне игрока). */
   public trashAllBurnCardsInHand() {
-    const burnCards = this.hand.filter((card) => card.Name === "Burn");
+    const burnCards = this.hand.filter((card) => card.Name === ECard.Burn);
     for (const card of burnCards) {
       this.hand = this.hand.filter((c) => c !== card);
     }
     if (burnCards.length > 0) {
       this._stepsCollector?.(
         burnCards.map((card) => ({
-          type: "trash_card" as const,
+          type: EDetailedStep.TrashCard,
           playerId: this.ID,
           card: card.getPrimitive(),
         })),
@@ -375,7 +375,7 @@ export class Player {
 
     this._stepsCollector?.(
       this.enemies.map((enemy) => ({
-        type: "enemy_appearance" as const,
+        type: EDetailedStep.EnemyAppearance,
         playerId: this.ID,
         enemy: enemy.getPrimitiveStats(),
       })),
@@ -391,13 +391,13 @@ export class Player {
     this.deck = this.deck.filter((c) => c !== card);
     this.addCardToHand(card, false);
 
-    if (card.Name === "Burn") {
+    if (card.Name === ECard.Burn) {
       this.burnsDrawnThisTurn++;
       const damage = this.burnsDrawnThisTurn >= 2 ? 2 : 1;
       this.applyDamage(damage, true);
       this._stepsCollector?.([
         {
-          type: "player_take_damage",
+          type: EDetailedStep.PlayerTakeDamage,
           playerId: this.ID,
           damage,
           isPiercing: true,
@@ -451,7 +451,7 @@ export class Player {
     this.discard = this.discard.filter((c) => c !== card);
     this.deck = this.deck.filter((c) => c !== card);
 
-    this._stepsCollector?.([{ type: "trash_card", playerId: this.ID, card: card.getPrimitive() }]);
+    this._stepsCollector?.([{ type: EDetailedStep.TrashCard, playerId: this.ID, card: card.getPrimitive() }]);
   }
 
   public discardRandomCard() {
@@ -493,7 +493,7 @@ export class Player {
     for (const card of handSnapshot) {
       this.hand = this.hand.filter((c) => c !== card);
       this.discard.push(card);
-      addToSteps([{ type: "discard_card", playerId: this.ID, card: card.getPrimitive() }]);
+      addToSteps([{ type: EDetailedStep.DiscardCard, playerId: this.ID, card: card.getPrimitive() }]);
     }
     this.isTurnEnds = true;
   }
@@ -520,7 +520,7 @@ export class Player {
       this.applyDamage(damage, true);
       ctx.addToSteps([
         {
-          type: "player_take_damage",
+          type: EDetailedStep.PlayerTakeDamage,
           playerId: ctx.playerId,
           damage,
           isPiercing: true,
@@ -535,7 +535,7 @@ export class Player {
       if (shieldDelta < 0) {
         ctx.addToSteps([
           {
-            type: "player_change_shield",
+            type: EDetailedStep.PlayerChangeShield,
             playerId: ctx.playerId,
             delta: shieldDelta,
           },
@@ -545,7 +545,7 @@ export class Player {
       if (hpDamage > 0) {
         ctx.addToSteps([
           {
-            type: "player_take_damage",
+            type: EDetailedStep.PlayerTakeDamage,
             playerId: ctx.playerId,
             damage: hpDamage,
             isPiercing: false,
@@ -557,7 +557,7 @@ export class Player {
 
     ctx.addToSteps([
       {
-        type: "enemy_attack",
+        type: EDetailedStep.EnemyAttack,
         enemyId: ctx.enemy.ID,
         playerId: this.ID,
         damage: ctx.enemy.Damage,
@@ -573,7 +573,7 @@ export class Player {
       this.createWave();
       ctx.addToSteps(
         this.enemies.map((enemy) => ({
-          type: "enemy_appearance" as const,
+          type: EDetailedStep.EnemyAppearance,
           playerId: this.ID,
           enemy: enemy.getPrimitiveStats(),
         })),
@@ -588,11 +588,11 @@ export class Player {
     this.extraActionPoints = 0;
     this.burnsDrawnThisTurn = 0;
     if (oldShield > 0) {
-      ctx.addToSteps([{ type: "player_change_shield", playerId: this.ID, delta: -oldShield }]);
+      ctx.addToSteps([{ type: EDetailedStep.PlayerChangeShield, playerId: this.ID, delta: -oldShield }]);
     }
     ctx.addToSteps([
       {
-        type: "player_change_action_points",
+        type: EDetailedStep.PlayerChangeActionPoints,
         playerId: this.ID,
         delta: 3,
       },
@@ -603,7 +603,7 @@ export class Player {
       const card = this.drawCard();
       drawnCards.push(card.getPrimitive());
     }
-    ctx.addToSteps([{ type: "draw_cards", playerId: this.ID, cards: drawnCards }]);
+    ctx.addToSteps([{ type: EDetailedStep.DrawCards, playerId: this.ID, cards: drawnCards }]);
 
     for (const effect of this.effects) {
       const isRemove = effect.onStartCycle(this);
@@ -613,14 +613,14 @@ export class Player {
 
       ctx.addToSteps([
         {
-          type: "effect_trigger",
+          type: EDetailedStep.EffectTrigger,
           playerId: this.ID,
           effect: effect.Name,
           isRemove,
         },
       ]);
       if (isRemove) {
-        ctx.addToSteps([{ type: "player_lose_effect", playerId: this.ID, effect: effect.Name }]);
+        ctx.addToSteps([{ type: EDetailedStep.PlayerLoseEffect, playerId: this.ID, effect: effect.Name }]);
       }
     }
 

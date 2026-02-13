@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { DemonbanePlus } from "./DemonbanePlus";
 
 export class Demonbane extends Card {
-  public get Name(): string {
-    return "Demonbane";
+  public get Name(): ECard {
+    return ECard.Demonbane;
   }
 
   constructor() {
@@ -27,7 +27,7 @@ export class Demonbane extends Card {
     if (target.Shield > 0) {
       ctx.addToSteps([
         {
-          type: "enemy_change_shield",
+          type: EDetailedStep.EnemyChangeShield,
           enemyId: target.ID,
           delta: -1,
         },
@@ -36,7 +36,7 @@ export class Demonbane extends Card {
     } else {
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 2,
           isPiercing: false,
@@ -48,7 +48,7 @@ export class Demonbane extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: -1,
         },
@@ -57,7 +57,7 @@ export class Demonbane extends Card {
       if (target.Shield > 0) {
         ctx.addToSteps([
           {
-            type: "enemy_change_shield",
+            type: EDetailedStep.EnemyChangeShield,
             enemyId: target.ID,
             delta: -1,
           },
@@ -66,7 +66,7 @@ export class Demonbane extends Card {
       } else {
         ctx.addToSteps([
           {
-            type: "enemy_take_damage",
+            type: EDetailedStep.EnemyTakeDamage,
             enemyId: target.ID,
             damage: 2,
             isPiercing: false,

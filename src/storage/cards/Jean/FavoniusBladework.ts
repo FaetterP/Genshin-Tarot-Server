@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { FavoniusBladeworkPlus } from "./FavoniusBladeworkPlus";
 
 export class FavoniusBladework extends Card {
-  public get Name(): string {
-    return "FavoniusBladework";
+  public get Name(): ECard {
+    return ECard.FavoniusBladework;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class FavoniusBladework extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
@@ -34,7 +34,7 @@ export class FavoniusBladework extends Card {
     if (target.isContainsElement(EElement.Anemo)) {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 2,
         },

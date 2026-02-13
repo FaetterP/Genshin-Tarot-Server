@@ -1,3 +1,5 @@
+import type { ECharacter, ECard, EEnemy } from "./enums";
+
 export type GameStartRequest = { action: "game.startGame" };
 
 export type GameEndTurnRequest = {
@@ -8,6 +10,7 @@ export type GameEndTurnRequest = {
 export type GameUseCardRequest = {
   action: "game.useCard";
   cardId: string;
+  card?: ECard;
   enemies?: string[];
   isUseAlternative?: boolean;
   selectedPlayer?: string;
@@ -17,26 +20,27 @@ export type GameUseCardRequest = {
 export type GameUpgradeCardRequest = {
   action: "game.upgradeCard";
   cardId: string;
+  card?: ECard;
 };
 
 export type GameUseBurstRequest = {
   action: "game.useBurst";
-  character: string;
+  character: ECharacter;
   selectedPlayer?: string;
   selectedEnemy?: string;
   selectedEnemies?: string[];
   divide?: { playerId: string; count: number }[];
-  selectedCharacter?: string;
+  selectedCharacter?: ECharacter;
 };
 
 export type CharactersAddCharacterRequest = {
   action: "characters.addCharacter";
-  character: string;
+  character: ECharacter;
 };
 
 export type CharactersRemoveCharacterRequest = {
   action: "characters.removeCharacter";
-  character: string;
+  character: ECharacter;
 };
 
 export type TaskCompleteTaskRequest = {

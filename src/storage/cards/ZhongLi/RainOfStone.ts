@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { RainOfStone as RainOfStonePlus } from "./RainOfStonePlus";
 
 export class RainOfStone extends Card {
-  public get Name(): string {
-    return "RainOfStone";
+  public get Name(): ECard {
+    return ECard.RainOfStone;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class RainOfStone extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
@@ -42,7 +42,7 @@ export class RainOfStone extends Card {
       }
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 1,
           isPiercing: true,

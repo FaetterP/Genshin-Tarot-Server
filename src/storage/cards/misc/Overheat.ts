@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { OverheatEffect } from "../../effects/OverheatEffect";
 import { Card } from "../Card";
 
 export class Overheat extends Card {
-  public get Name(): string {
-    return "Overheat";
+  public get Name(): ECard {
+    return ECard.Overheat;
   }
 
   constructor() {
@@ -18,7 +18,7 @@ export class Overheat extends Card {
     ctx.player.trashCardById(this.ID);
     ctx.addToSteps([
       {
-        type: "trash_card",
+        type: EDetailedStep.TrashCard,
         playerId: ctx.player.ID,
         card: this.getPrimitive(),
       },
@@ -28,7 +28,7 @@ export class Overheat extends Card {
     const c2 = ctx.player.drawCard();
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [c1.getPrimitive(), c2.getPrimitive()],
       },

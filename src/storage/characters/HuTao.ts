@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { SpearOfWangsheng } from "../cards/HuTao/SpearOfWangsheng";
 import { GuideOfAfterlife } from "../cards/HuTao/GuideOfAfterlife";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class HuTao extends Character {
   public get Name() {
-    return "HuTao";
+    return ECharacter.HuTao;
   }
 
   constructor() {

@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { NightriderPlusEffect } from "../../effects/NightriderPlusEffect";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
 export class NightriderPlus extends Card {
-  public get Name(): string {
-    return "NightriderPlus";
+  public get Name(): ECard {
+    return ECard.NightriderPlus;
   }
 
   constructor() {
@@ -22,14 +22,14 @@ export class NightriderPlus extends Card {
     const effect = new NightriderPlusEffect(target);
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: true,
         element: EElement.Electro,
       },
       {
-        type: "enemy_get_effect",
+        type: EDetailedStep.EnemyGetEffect,
         enemyId: target.ID,
         effect: effect.Name,
       },

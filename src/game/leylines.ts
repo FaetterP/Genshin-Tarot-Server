@@ -6,6 +6,7 @@ import { Cryo } from "../storage/elements/Cryo";
 import { Electro } from "../storage/elements/Electro";
 import { Hydro } from "../storage/elements/Hydro";
 import { Pyro } from "../storage/elements/Pyro";
+import { ELeyline } from "../types/enums";
 import { getRandomElement } from "../utils/arrays";
 import { Player } from "./Player";
 
@@ -137,27 +138,30 @@ function SheerCold() {
   // TODO all players without Freeze in hand take Freeze to top deck
 }
 
-export function getRandomEffect() {
+export function getRandomEffect(): {
+  use: (players: Player[]) => void;
+  name: ELeyline;
+} {
   const effects: {
     use: (players: Player[]) => void;
-    name: string;
+    name: ELeyline;
   }[] = [
-    { use: EngulfingStorm, name: "EngulfingStorm" },
-    { use: SmolderingFlames, name: "SmolderingFlames" },
-    { use: MonsterAttendants, name: "MonsterAttendants" },
-    { use: Adrenaline, name: "Adrenaline" },
-    { use: CondensedIce, name: "CondensedIce" },
-    { use: LightingBolts, name: "LightingBolts" },
-    { use: ReinforcedShields, name: "ReinforcedShields" },
-    { use: ElementalRefresh, name: "ElementalRefresh" },
-    { use: SlowingWater, name: "SlowingWater" },
-    { use: ChaosCluster, name: "ChaosCluster" },
-    { use: HighEnergyCores, name: "HighEnergyCores" },
-    { use: IcicleBlast, name: "IcicleBlast" },
-    { use: PlasmaField, name: "PlasmaField" },
-    { use: EnergyTides, name: "EnergyTides" },
-    { use: WindCurrent, name: "WindCurrent" },
-    { use: SheerCold, name: "SheerCold" },
+    { use: EngulfingStorm, name: ELeyline.EngulfingStorm },
+    { use: SmolderingFlames, name: ELeyline.SmolderingFlames },
+    { use: MonsterAttendants, name: ELeyline.MonsterAttendants },
+    { use: Adrenaline, name: ELeyline.Adrenaline },
+    { use: CondensedIce, name: ELeyline.CondensedIce },
+    { use: LightingBolts, name: ELeyline.LightingBolts },
+    { use: ReinforcedShields, name: ELeyline.ReinforcedShields },
+    { use: ElementalRefresh, name: ELeyline.ElementalRefresh },
+    { use: SlowingWater, name: ELeyline.SlowingWater },
+    { use: ChaosCluster, name: ELeyline.ChaosCluster },
+    { use: HighEnergyCores, name: ELeyline.HighEnergyCores },
+    { use: IcicleBlast, name: ELeyline.IcicleBlast },
+    { use: PlasmaField, name: ELeyline.PlasmaField },
+    { use: EnergyTides, name: ELeyline.EnergyTides },
+    { use: WindCurrent, name: ELeyline.WindCurrent },
+    { use: SheerCold, name: ELeyline.SheerCold },
   ];
 
   const effect = getRandomElement(effects);

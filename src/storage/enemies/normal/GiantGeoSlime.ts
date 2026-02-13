@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class GiantGeoSlime extends Enemy {
   public get Name() {
-    return "GiantGeoSlime";
+    return EEnemy.GiantGeoSlime;
   }
 
   constructor() {

@@ -1,11 +1,12 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { WhisperOfWater } from "../cards/Barbara/WhisperOfWater";
 import { LetTheShowBegin } from "../cards/Barbara/LetTheShowBegin";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Barbara extends Character {
   public get Name() {
-    return "Barbara";
+    return ECharacter.Barbara;
   }
 
   constructor() {
@@ -31,7 +32,7 @@ export class Barbara extends Character {
 
     for (const { player, count } of ctx.divide) {
       player.addHealth(count);
-      ctx.addToSteps([{ type: "player_heal", playerId: player.ID, amount: count }]);
+      ctx.addToSteps([{ type: EDetailedStep.PlayerHeal, playerId: player.ID, amount: count }]);
     }
   }
 }

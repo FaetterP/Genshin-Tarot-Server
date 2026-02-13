@@ -3,11 +3,12 @@ import { Attack } from "../../types/general";
 import { BoltsOfDownfall } from "../cards/Fischl/BoltsOfDownfall";
 import { Nightrider } from "../cards/Fischl/Nightrider";
 import { Electro } from "../elements/Electro";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 
 export class Fischl extends Character {
   public get Name() {
-    return "Fischl";
+    return ECharacter.Fischl;
   }
 
   constructor() {

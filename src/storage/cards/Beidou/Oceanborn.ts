@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { OceanbornPlus } from "./OceanbornPlus";
 
 export class Oceanborn extends Card {
-  public get Name(): string {
-    return "Oceanborn";
+  public get Name(): ECard {
+    return ECard.Oceanborn;
   }
 
   constructor() {
@@ -27,7 +27,7 @@ export class Oceanborn extends Card {
     if (target.Shield > 0) {
       ctx.addToSteps([
         {
-          type: "enemy_change_shield",
+          type: EDetailedStep.EnemyChangeShield,
           enemyId: target.ID,
           delta: -1,
         },
@@ -36,7 +36,7 @@ export class Oceanborn extends Card {
     } else {
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 2,
           isPiercing: false,
@@ -49,7 +49,7 @@ export class Oceanborn extends Card {
       if (target.Shield > 0) {
         ctx.addToSteps([
           {
-            type: "enemy_change_shield",
+            type: EDetailedStep.EnemyChangeShield,
             enemyId: target.ID,
             delta: -1,
           },
@@ -58,7 +58,7 @@ export class Oceanborn extends Card {
       } else {
         ctx.addToSteps([
           {
-            type: "enemy_take_damage",
+            type: EDetailedStep.EnemyTakeDamage,
             enemyId: target.ID,
             damage: 2,
             isPiercing: false,

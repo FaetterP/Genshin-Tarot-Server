@@ -1,13 +1,14 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { Kaboom } from "../cards/Klee/Kaboom";
 import { JumpyDumpty } from "../cards/Klee/JumpyDumpty";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { getRandomInteger } from "../../utils/math";
 import { Attack } from "../../types/general";
 
 export class Klee extends Character {
   public get Name() {
-    return "Klee";
+    return ECharacter.Klee;
   }
 
   constructor() {

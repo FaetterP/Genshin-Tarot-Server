@@ -1,20 +1,20 @@
-import { EElement } from "../../types/enums";
+import { EDetailedStep, EElement, EPlayerEffect } from "../../types/enums";
 import { Attack } from "../../types/general";
 import { Player } from "../../game/Player";
 import { Cryo } from "../elements/Cryo";
 import { PlayerEffect } from "./PlayerEffect";
 
 export class TrailOfTheQilinEffect extends PlayerEffect {
-  public get Name(): string {
-    return "TrailOfTheQilin";
+  public get Name(): EPlayerEffect {
+    return EPlayerEffect.TrailOfTheQilin;
   }
 
   public override onStartCycle(player: Player): boolean {
     for (const enemy of player.Enemies) {
-      player.addSteps([{ type: "enemy_get_element", enemyId: enemy.ID, element: EElement.Cryo }]);
+      player.addSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: enemy.ID, element: EElement.Cryo }]);
       player.addSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: enemy.ID,
           damage: 2,
           isPiercing: false,

@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class WindSpiritCreationPlus extends Card {
-  public get Name(): string {
-    return "WindSpiritCreationPlus";
+  public get Name(): ECard {
+    return ECard.WindSpiritCreationPlus;
   }
 
   constructor() {
@@ -26,7 +26,7 @@ export class WindSpiritCreationPlus extends Card {
 
     ctx.addToSteps(
       [0, 1].map((i) => ({
-        type: "enemy_take_damage" as const,
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemies[i].ID,
         damage: 2,
         isPiercing: true,

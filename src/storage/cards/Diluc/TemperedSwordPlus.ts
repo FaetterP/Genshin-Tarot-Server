@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class TemperedSwordPlus extends Card {
-  public get Name(): string {
-    return "TemperedSwordPlus";
+  public get Name(): ECard {
+    return ECard.TemperedSwordPlus;
   }
 
   constructor() {
@@ -21,7 +21,7 @@ export class TemperedSwordPlus extends Card {
     if (target.Shield > 0) {
       ctx.addToSteps([
         {
-          type: "enemy_change_shield",
+          type: EDetailedStep.EnemyChangeShield,
           enemyId: target.ID,
           delta: -target.Shield,
         },
@@ -30,7 +30,7 @@ export class TemperedSwordPlus extends Card {
     } else {
       ctx.addToSteps([
         {
-          type: "enemy_take_damage",
+          type: EDetailedStep.EnemyTakeDamage,
           enemyId: target.ID,
           damage: 4,
           isPiercing: false,

@@ -1,11 +1,11 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class SteelFangPlus extends Card {
-  public get Name(): string {
-    return "SteelFangPlus";
+  public get Name(): ECard {
+    return ECard.SteelFangPlus;
   }
 
   constructor() {
@@ -19,9 +19,9 @@ export class SteelFangPlus extends Card {
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
-      { type: "enemy_change_shield", enemyId: target.ID, delta: -1 },
+      { type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 },
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,

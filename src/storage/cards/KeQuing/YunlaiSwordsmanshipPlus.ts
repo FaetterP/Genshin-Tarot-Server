@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 
 export class YunlaiSwordsmanshipPlus extends Card {
-  public get Name(): string {
-    return "YunlaiSwordsmanshipPlus";
+  public get Name(): ECard {
+    return ECard.YunlaiSwordsmanshipPlus;
   }
 
   constructor() {
@@ -21,14 +21,14 @@ export class YunlaiSwordsmanshipPlus extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 3,
         isPiercing: false,
         element: EElement.Electro,
       },
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 2,
       },

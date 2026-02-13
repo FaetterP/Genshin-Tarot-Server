@@ -1,14 +1,14 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { JumpyDumptyPlus } from "./JumpyDumptyPlus";
 
 export class JumpyDumpty extends Card {
-  public get Name(): string {
-    return "JumpyDumpty";
+  public get Name(): ECard {
+    return ECard.JumpyDumpty;
   }
 
   constructor() {
@@ -31,7 +31,7 @@ export class JumpyDumpty extends Card {
 
     ctx.addToSteps(
       [0, 1].map((i) => ({
-        type: "enemy_take_damage" as const,
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemies[i].ID,
         damage: 1,
         isPiercing: false,

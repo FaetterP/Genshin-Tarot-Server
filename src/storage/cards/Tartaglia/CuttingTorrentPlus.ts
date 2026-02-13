@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
 
 export class CuttingTorrentPlus extends Card {
-  public get Name(): string {
-    return "CuttingTorrentPlus";
+  public get Name(): ECard {
+    return ECard.CuttingTorrentPlus;
   }
 
   constructor() {
@@ -23,7 +23,7 @@ export class CuttingTorrentPlus extends Card {
     const damage = hasHydro ? 3 : 1;
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: true,

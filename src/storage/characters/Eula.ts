@@ -1,12 +1,13 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { EdelBladework } from "../cards/Eula/EdelBladework";
 import { IcetideVortex } from "../cards/Eula/IcetideVortex";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 import { GlacialIlluminationEffect } from "../effects/GlacialIlluminationEffect";
 
 export class Eula extends Character {
   public get Name() {
-    return "Eula";
+    return ECharacter.Eula;
   }
 
   constructor() {
@@ -24,6 +25,6 @@ export class Eula extends Character {
     ctx.player.snowflakes = 0;
     const effect = new GlacialIlluminationEffect();
     ctx.player.addEffect(effect);
-    ctx.addToSteps([{ type: "player_get_effect", playerId: ctx.player.ID, effect: effect.Name }]);
+    ctx.addToSteps([{ type: EDetailedStep.PlayerGetEffect, playerId: ctx.player.ID, effect: effect.Name }]);
   }
 }

@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { RavagingConfessionPlus } from "./RavagingConfessionPlus";
 
 export class RavagingConfession extends Card {
-  public get Name(): string {
-    return "RavagingConfession";
+  public get Name(): ECard {
+    return ECard.RavagingConfession;
   }
 
   constructor() {
@@ -25,7 +25,7 @@ export class RavagingConfession extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,

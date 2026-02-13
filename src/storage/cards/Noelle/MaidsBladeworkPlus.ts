@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class MaidsBladeworkPlus extends Card {
-  public get Name(): string {
-    return "MaidsBladeworkPlus";
+  public get Name(): ECard {
+    return ECard.MaidsBladeworkPlus;
   }
 
   constructor() {
@@ -17,12 +17,12 @@ export class MaidsBladeworkPlus extends Card {
     const c3 = ctx.player.drawCard();
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [c1.getPrimitive(), c2.getPrimitive(), c3.getPrimitive()],
       },
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 2,
       },

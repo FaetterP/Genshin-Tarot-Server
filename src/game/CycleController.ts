@@ -1,4 +1,5 @@
 import type { DetailedStep } from "../types/detailedStep";
+import { EDetailedStep, ELeyline } from "../types/enums";
 import { CycleEndContext, CycleStartContext } from "../types/eventsContext";
 import { ExtWebSocket } from "../types/wsTypes";
 import { Event } from "../utils/Event";
@@ -80,7 +81,7 @@ export class CycleController {
     }
 
     const countEffects = Math.floor(this.cycle / 3);
-    const leylines: { name: string; use: (player: Player[]) => void }[] = [];
+    const leylines: { name: ELeyline; use: (player: Player[]) => void }[] = [];
 
     for (let i = 0; i < countEffects; i++) {
       leylines.push(getRandomEffect());
@@ -89,7 +90,7 @@ export class CycleController {
     const steps: DetailedStep[] = [];
     for (const line of leylines) {
       line.use(this.players);
-      steps.push({ type: "use_leyline", name: line.name });
+      steps.push({ type: EDetailedStep.UseLeyline, name: line.name });
     }
 
     this.e_onCycleStart.Invoke({

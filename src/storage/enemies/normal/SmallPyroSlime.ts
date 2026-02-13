@@ -1,9 +1,10 @@
 import { Pyro } from "../../elements/Pyro";
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class SmallPyroSlime extends Enemy {
   public get Name() {
-    return "SmallPyroSlime";
+    return EEnemy.SmallPyroSlime;
   }
 
   constructor() {

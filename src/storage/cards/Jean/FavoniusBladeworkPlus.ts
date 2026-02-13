@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class FavoniusBladeworkPlus extends Card {
-  public get Name(): string {
-    return "FavoniusBladeworkPlus";
+  public get Name(): ECard {
+    return ECard.FavoniusBladeworkPlus;
   }
 
   constructor() {
@@ -21,13 +21,13 @@ export class FavoniusBladeworkPlus extends Card {
     const target = ctx.enemies[0];
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 2,
         isPiercing: false,
       },
       {
-        type: "player_change_energy",
+        type: EDetailedStep.PlayerChangeEnergy,
         playerId: ctx.player.ID,
         delta: 2,
       },

@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { GuideOfAfterlifePlus } from "./GuideOfAfterlifePlus";
 
 export class GuideOfAfterlife extends Card {
-  public get Name(): string {
-    return "GuideOfAfterlife";
+  public get Name(): ECard {
+    return ECard.GuideOfAfterlife;
   }
 
   constructor() {
@@ -20,7 +20,7 @@ export class GuideOfAfterlife extends Card {
   use(ctx: CardUseContext): void {
     ctx.addToSteps([
       {
-        type: "player_take_damage",
+        type: EDetailedStep.PlayerTakeDamage,
         playerId: ctx.player.ID,
         damage: 1,
         isPiercing: false,
@@ -33,7 +33,7 @@ export class GuideOfAfterlife extends Card {
       const c2 = ctx.player.drawCard();
       ctx.addToSteps([
         {
-          type: "draw_cards",
+          type: EDetailedStep.DrawCards,
           playerId: ctx.player.ID,
           cards: [c1.getPrimitive(), c2.getPrimitive()],
         },
@@ -41,7 +41,7 @@ export class GuideOfAfterlife extends Card {
     } else {
       ctx.addToSteps([
         {
-          type: "player_change_energy",
+          type: EDetailedStep.PlayerChangeEnergy,
           playerId: ctx.player.ID,
           delta: 1,
         },
@@ -51,7 +51,7 @@ export class GuideOfAfterlife extends Card {
     const effect = new GuideOfAfterlifeEffect();
     ctx.addToSteps([
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: effect.Name,
       },

@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { FireworkFlareUpPlus } from "./FireworkFlareUpPlus";
 
 export class FireworkFlareUp extends Card {
-  public get Name(): string {
-    return "FireworkFlareUp";
+  public get Name(): ECard {
+    return ECard.FireworkFlareUp;
   }
 
   constructor() {
@@ -29,7 +29,7 @@ export class FireworkFlareUp extends Card {
     if (ctx.enemies[0].isContainsElement(EElement.Pyro)) {
       ctx.addToSteps([
         {
-          type: "player_change_action_points",
+          type: EDetailedStep.PlayerChangeActionPoints,
           playerId: ctx.player.ID,
           delta: 1,
         },

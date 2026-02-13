@@ -1,11 +1,12 @@
+import { EPlayerEffect } from "../../types/enums";
 import { Attack } from "../../types/general";
 import { Player } from "../../game/Player";
 import { Pyro } from "../elements/Pyro";
 import { PlayerEffect } from "./PlayerEffect";
 
 export class GuobaFireEffect extends PlayerEffect {
-  public get Name(): string {
-    return "GuobaFire";
+  public get Name(): EPlayerEffect {
+    return EPlayerEffect.GuobaFire;
   }
 
   public override onStartCycle(player: Player): boolean {

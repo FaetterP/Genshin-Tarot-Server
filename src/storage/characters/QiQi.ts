@@ -2,11 +2,12 @@ import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { AncientSwordArt } from "../cards/QiQi/AncientSwordArt";
 import { HeraldOfFrost } from "../cards/QiQi/HeraldOfFrost";
 import { Cryo } from "../elements/Cryo";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 
 export class QiQi extends Character {
   public get Name() {
-    return "QiQi";
+    return ECharacter.QiQi;
   }
 
   constructor() {
@@ -24,15 +25,15 @@ export class QiQi extends Character {
     const cryo = new Cryo();
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(cryo, ctx.player);
-      ctx.addToSteps([{ type: "enemy_get_element", enemyId: enemy.ID, element: cryo.Name }]);
+      ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: enemy.ID, element: cryo.Name }]);
     }
 
     ctx.player.addHealth(2);
-    ctx.addToSteps([{ type: "player_heal", playerId: ctx.player.ID, amount: 2 }]);
+    ctx.addToSteps([{ type: EDetailedStep.PlayerHeal, playerId: ctx.player.ID, amount: 2 }]);
 
     if (ctx.selectedPlayer) {
       ctx.selectedPlayer.addHealth(2);
-      ctx.addToSteps([{ type: "player_heal", playerId: ctx.selectedPlayer.ID, amount: 2 }]);
+      ctx.addToSteps([{ type: EDetailedStep.PlayerHeal, playerId: ctx.selectedPlayer.ID, amount: 2 }]);
     }
   }
 }

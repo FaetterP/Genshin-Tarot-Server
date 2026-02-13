@@ -1,12 +1,13 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { GuhuaStyle } from "../cards/XingQiu/GuhuaStyle";
 import { FatalRainscreen } from "../cards/XingQiu/FatalRainscreen";
+import { ECharacter, EDetailedStep } from "../../types/enums";
 import { Character } from "./Character";
 import { RaincutterEffect } from "../effects/RaincutterEffect";
 
 export class XingQiu extends Character {
   public get Name() {
-    return "XingQiu";
+    return ECharacter.XingQiu;
   }
 
   constructor() {
@@ -28,12 +29,12 @@ export class XingQiu extends Character {
 
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [card1.getPrimitive(), card2.getPrimitive()],
       },
       {
-        type: "player_get_effect",
+        type: EDetailedStep.PlayerGetEffect,
         playerId: ctx.player.ID,
         effect: new RaincutterEffect().Name,
       },

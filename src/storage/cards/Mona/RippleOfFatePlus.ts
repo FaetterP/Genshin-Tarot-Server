@@ -1,6 +1,6 @@
 import type { DetailedStep } from "../../../types/detailedStep";
 import type { CardPrimitive } from "../../../types/general";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Card } from "../Card";
 import { MirrorReflections } from "./MirrorReflections";
@@ -8,8 +8,8 @@ import { MirrorReflectionsPlus } from "./MirrorReflectionsPlus";
 import { RippleOfFate } from "./RippleOfFate";
 
 export class RippleOfFatePlus extends Card {
-  public get Name(): string {
-    return "RippleOfFatePlus";
+  public get Name(): ECard {
+    return ECard.RippleOfFatePlus;
   }
 
   constructor() {
@@ -29,7 +29,7 @@ export class RippleOfFatePlus extends Card {
       ) {
         ctx.addToSteps([
           {
-            type: "player_change_energy",
+            type: EDetailedStep.PlayerChangeEnergy,
             playerId: ctx.player.ID,
             delta: 2,
           },
@@ -37,6 +37,6 @@ export class RippleOfFatePlus extends Card {
         ctx.player.addEnergy(2);
       }
     }
-    ctx.addToSteps([{ type: "draw_cards", playerId: ctx.player.ID, cards: drawn }]);
+    ctx.addToSteps([{ type: EDetailedStep.DrawCards, playerId: ctx.player.ID, cards: drawn }]);
   }
 }

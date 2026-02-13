@@ -35,6 +35,7 @@ import { Xinyan } from "./Xinyan";
 import { Yanfei } from "./Yanfei";
 import { Yoimiya } from "./Yoimiya";
 import { ZhongLi } from "./ZhongLi";
+import type { ECharacter } from "../../types/enums";
 
 const characters = [
   Aether,
@@ -76,7 +77,7 @@ const characters = [
   ZhongLi,
 ];
 
-export function getCharacterByName(name: string) {
+export function getCharacterByName(name: ECharacter) {
   const foundCharacter = characters.find((item) => item.name === name);
   return foundCharacter;
 }

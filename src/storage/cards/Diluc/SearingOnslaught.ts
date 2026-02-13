@@ -1,13 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SearingOnslaughtPlus } from "./SearingOnslaughtPlus";
 
 export class SearingOnslaught extends Card {
-  public get Name(): string {
-    return "SearingOnslaught";
+  public get Name(): ECard {
+    return ECard.SearingOnslaught;
   }
 
   constructor() {
@@ -28,7 +28,7 @@ export class SearingOnslaught extends Card {
 
     ctx.addToSteps(
       [0, 1, 2].map((i) => ({
-        type: "enemy_take_damage" as const,
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemies[i].ID,
         damage: 2,
         isPiercing: false,

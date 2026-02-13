@@ -1,12 +1,13 @@
 import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { RainOfStone } from "../cards/ZhongLi/RainOfStone";
 import { DominusLapidis } from "../cards/ZhongLi/DominusLapidis";
+import { ECharacter } from "../../types/enums";
 import { Character } from "./Character";
 import { Attack } from "../../types/general";
 
 export class ZhongLi extends Character {
   public get Name() {
-    return "ZhongLi";
+    return ECharacter.ZhongLi;
   }
 
   constructor() {

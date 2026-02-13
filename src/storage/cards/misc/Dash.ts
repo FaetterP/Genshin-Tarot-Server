@@ -1,10 +1,10 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
 export class Dash extends Card {
-  public get Name(): string {
-    return "Dash";
+  public get Name(): ECard {
+    return ECard.Dash;
   }
 
   constructor() {
@@ -15,7 +15,7 @@ export class Dash extends Card {
     ctx.player.trashCardById(this.ID);
     ctx.addToSteps([
       {
-        type: "trash_card",
+        type: EDetailedStep.TrashCard,
         playerId: ctx.player.ID,
         card: this.getPrimitive(),
       },
@@ -25,12 +25,12 @@ export class Dash extends Card {
     const c2 = ctx.player.drawCard();
     ctx.addToSteps([
       {
-        type: "draw_cards",
+        type: EDetailedStep.DrawCards,
         playerId: ctx.player.ID,
         cards: [c1.getPrimitive(), c2.getPrimitive()],
       },
       {
-        type: "player_change_action_points",
+        type: EDetailedStep.PlayerChangeActionPoints,
         playerId: ctx.player.ID,
         delta: 1,
       },

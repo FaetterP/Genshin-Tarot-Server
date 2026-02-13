@@ -1,12 +1,12 @@
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 
 export class ForeignIronwindPlus extends Card {
-  public get Name(): string {
-    return "ForeignIronwindPlus";
+  public get Name(): ECard {
+    return ECard.ForeignIronwindPlus;
   }
 
   constructor() {
@@ -23,13 +23,13 @@ export class ForeignIronwindPlus extends Card {
 
     ctx.addToSteps([
       {
-        type: "enemy_take_damage",
+        type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage,
         isPiercing: false,
         element: EElement.Anemo,
       },
-      { type: "player_change_energy", playerId: ctx.player.ID, delta: 2 },
+      { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: 2 },
     ]);
 
     const attack: Attack = {

@@ -1,8 +1,9 @@
+import { EEnemy } from "../../../types/enums";
 import { Enemy } from "../Enemy";
 
 export class ShieldBearerMitachurl extends Enemy {
   public get Name() {
-    return "ShieldBearerMitachurl";
+    return EEnemy.ShieldBearerMitachurl;
   }
 
   constructor() {

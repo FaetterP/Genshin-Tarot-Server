@@ -1,12 +1,13 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { EElement, ECardType } from "../../../types/enums";
+import type { DetailedStep } from "../../../types/detailedStep";
+import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
 import { Overheat } from "../misc/Overheat";
 
 export class TidecallerPlus extends Card {
-  public get Name(): string {
-    return "TidecallerPlus";
+  public get Name(): ECard {
+    return ECard.TidecallerPlus;
   }
 
   constructor() {
@@ -16,18 +17,20 @@ export class TidecallerPlus extends Card {
   use(ctx: CardUseContext): void {
     const overheatCard = new Overheat();
     ctx.addToSteps([
-      ...ctx.player.Enemies.map((enemy) => ({
-        type: "enemy_get_element" as const,
-        enemyId: enemy.ID,
-        element: EElement.Electro,
-      })),
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Electro,
+        }),
+      ),
       {
-        type: "player_change_shield",
+        type: EDetailedStep.PlayerChangeShield,
         playerId: ctx.player.ID,
         delta: 3,
       },
       {
-        type: "add_card",
+        type: EDetailedStep.AddCard,
         playerId: ctx.player.ID,
         card: overheatCard.getPrimitive(),
         to: "hand",
