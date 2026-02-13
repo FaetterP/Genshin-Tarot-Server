@@ -29,6 +29,8 @@ export type PlayerPrimitive = {
   hand: CardPrimitive[];
   discard: CardPrimitive[];
   deck: CardPrimitive[];
+
+  eulaSnowflakes: number;
 };
 
 export type Attack = {

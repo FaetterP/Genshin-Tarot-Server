@@ -136,8 +136,8 @@ export class CycleController {
     this.startCycle();
   }
 
-  playerEndTurn(player: Player) {
-    const steps: DetailedStep[] = [];
+  playerEndTurn(player: Player, preSteps: DetailedStep[] = []) {
+    const steps: DetailedStep[] = [...preSteps];
     player.endTurn((data) => steps.push(...data));
     sendToAll<GameEndTurnResponse>({ action: "game.endTurn", playerID: player.ID, steps });
 

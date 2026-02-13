@@ -1,6 +1,9 @@
 export type GameStartRequest = { action: "game.startGame" };
 
-export type GameEndTurnRequest = { action: "game.endTurn" };
+export type GameEndTurnRequest = {
+  action: "game.endTurn";
+  eulaBurstTargets?: string[];
+};
 
 export type GameUseCardRequest = {
   action: "game.useCard";

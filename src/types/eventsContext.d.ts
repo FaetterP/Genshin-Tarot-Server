@@ -1,6 +1,7 @@
 import type { DetailedStep } from "./detailedStep";
 import { Player } from "../game/Player";
 import { Enemy } from "../storage/enemies/Enemy";
+import type { Card } from "../storage/cards/Card";
 
 export type EnemyDeathContext = {
   enemy: Enemy;
@@ -31,4 +32,16 @@ export type CycleStartContext = {
 export type CycleEndContext = {
   cycle: number;
   addToSteps: (data: DetailedStep[]) => void;
+};
+
+export type PlayerUseCardContext = {
+  player: Player;
+  usedCard: Card;
+};
+
+export type PlayerEndTurnContext = {
+  player: Player;
+  addToSteps: (data: DetailedStep[]) => void;
+
+  eulaSelectedEnemies?: Enemy[];
 };

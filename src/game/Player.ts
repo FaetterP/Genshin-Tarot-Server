@@ -5,8 +5,9 @@ import {
   CycleStartContext,
   EnemyDeathContext,
   EnemyEndCycleContext,
-  EnemyStartCycleContext,
   PlayerEndsWavesContext,
+  PlayerEndTurnContext,
+  PlayerUseCardContext,
 } from "../types/eventsContext";
 import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
@@ -40,6 +41,7 @@ export class Player {
 
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
+  public snowflakes: number = 0;
   private burnsDrawnThisTurn: number = 0;
   private isTookDamageThisTurn: boolean = false;
   private isTookDamageLastTurn: boolean = false;
@@ -101,6 +103,17 @@ export class Player {
   public get Discard(): ReadonlyArray<Card> {
     return this.discard;
   }
+  /** Колода (при пустой колоде перед возвратом вызывается тасовка сброса). */
+  public get Deck(): ReadonlyArray<Card> {
+    if (this.deck.length === 0) this.restoreDeck();
+    return this.deck;
+  }
+  public removeFromDeck(card: Card): void {
+    this.deck = this.deck.filter((c) => c !== card);
+  }
+  public removeFromDiscard(card: Card): void {
+    this.discard = this.discard.filter((c) => c !== card);
+  }
   public get LastCard(): Card | undefined {
     return this.lastCard;
   }
@@ -143,6 +156,7 @@ export class Player {
       },
       enemies,
       effects,
+      eulaSnowflakes: this.snowflakes,
       characters: this.characters.map((character) => character.Name),
       hand: this.hand.map((card) => card.getPrimitive()),
       discard: this.discard.map((card) => card.getPrimitive()),
@@ -210,6 +224,24 @@ export class Player {
 
   public isContainsEffect(effect: PlayerEffect) {
     return this.effects.map((effect) => effect.Name).includes(effect.Name);
+  }
+
+  public triggerUseCardEffects(ctx: PlayerUseCardContext): void {
+    for (const effect of this.effects) {
+      effect.onUseCard(ctx);
+    }
+  }
+
+  public triggerEndTurnEffects(ctx: PlayerEndTurnContext): void {
+    const prevCollector = this._stepsCollector;
+    this._stepsCollector = (data) => ctx.addToSteps(data);
+
+    for (const effect of [...this.effects]) {
+      const remove = effect.onEndTurn(ctx);
+      if (remove) this.effects = this.effects.filter((e) => e !== effect);
+    }
+
+    this._stepsCollector = prevCollector;
   }
 
   public addEnergy(count: number) {

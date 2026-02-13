@@ -1,7 +1,10 @@
 import type { DetailedStep } from "../../types/detailedStep";
+import type { PlayerEndTurnContext } from "../../types/eventsContext";
+import type { GameEndTurnRequest } from "../../types/request";
 import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsContext";
 import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
+import { Enemy } from "../../storage/enemies/Enemy";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 import {
   GameUpgradeCardRequest,
@@ -23,7 +26,23 @@ async function startGame(ws: ExtWebSocket, payload: any) {
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
-  ws.cycleController.playerEndTurn(ws.player);
+  const { eulaBurstTargets } = (payload ?? {}) as GameEndTurnRequest;
+  const preSteps: DetailedStep[] = [];
+
+  const eulaSelectedEnemies: Enemy[] =
+    eulaBurstTargets
+      ?.map((id) => ws.cycleController.getEnemyById(id))
+      .filter((e): e is Enemy => e != null) ?? [];
+
+  const ctx: PlayerEndTurnContext = {
+    player: ws.player,
+    addToSteps: (data) => preSteps.push(...data),
+    eulaSelectedEnemies,
+  };
+
+  ws.player.triggerEndTurnEffects(ctx);
+
+  ws.cycleController.playerEndTurn(ws.player, preSteps);
 }
 
 async function useCard(ws: ExtWebSocket, payload: any) {
@@ -73,6 +92,8 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     );
 
   card.use(ctx);
+
+  ws.player.triggerUseCardEffects({ player: ws.player, usedCard: card });
 
   ws.player.trySpendActonPoints(card.Cost);
   steps.push({

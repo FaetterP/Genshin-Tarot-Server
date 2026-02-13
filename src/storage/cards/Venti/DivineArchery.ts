@@ -24,7 +24,7 @@ export class DivineArchery extends Card {
     }
 
     const target = ctx.enemies[0];
-    let element: string | undefined;
+    let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Anemo;
     }

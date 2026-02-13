@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
@@ -33,6 +32,5 @@ export class EdelBladeworkPlus extends Card {
       element: new Cryo(),
       player: ctx.player,
     });
-    // TODO
   }
 }

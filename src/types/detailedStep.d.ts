@@ -1,4 +1,5 @@
-import type { CardPrimitive, EElement, EnemyPrimitive } from "./general";
+import type { CardPrimitive, EnemyPrimitive } from "./general";
+import { EElement } from "./enums";
 
 export type DetailedStep =
   | { type: "add_card"; playerId: string; card: CardPrimitive; to: "hand" | "deck" | "discard" } //Карта взялась не из колоды, а например из эффекта
@@ -9,7 +10,7 @@ export type DetailedStep =
       enemyId: string;
       damage: number;
       isPiercing: boolean;
-      element?: string;
+      element?: EElement;
     }
   | { type: "enemy_block_damage"; enemyId: string; element?: EElement }
   | { type: "enemy_death"; enemyId: string }
