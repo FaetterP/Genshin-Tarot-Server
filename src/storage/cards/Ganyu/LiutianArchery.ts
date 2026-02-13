@@ -3,7 +3,7 @@ import { Attack } from "../../../types/general";
 import { EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
-import { LiutianArchery as LiutianArcheryPlus } from "./LiutianArcheryPlus";
+import { LiutianArcheryPlus } from "./LiutianArcheryPlus";
 
 export class LiutianArchery extends Card {
   public get Name(): string {
@@ -27,6 +27,10 @@ export class LiutianArchery extends Card {
     let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Cryo;
+      ctx.addToSteps([
+        { type: "player_change_energy", playerId: ctx.player.ID, delta: -1 },
+        { type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }
+      ]);
     }
     ctx.addToSteps([
       {

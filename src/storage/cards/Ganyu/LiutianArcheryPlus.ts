@@ -4,9 +4,9 @@ import { EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
-export class LiutianArchery extends Card {
+export class LiutianArcheryPlus extends Card {
   public get Name(): string {
-    return "LiutianArchery";
+    return "LiutianArcheryPlus";
   }
 
   constructor() {
@@ -24,6 +24,8 @@ export class LiutianArchery extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       element = EElement.Cryo;
       damage *= 3;
+      ctx.addToSteps([{ type: "player_change_energy", playerId: ctx.player.ID, delta: -2 }]);
+      ctx.addToSteps([{ type: "enemy_get_element", enemyId: target.ID, element: EElement.Cryo }]);
     }
     ctx.addToSteps([
       {
