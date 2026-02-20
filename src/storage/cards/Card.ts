@@ -22,9 +22,9 @@ export abstract class Card {
     return null;
   }
 
-  public getPrimitive(): CardPrimitive {
+  public getPrimitive(forAdmin?: boolean): CardPrimitive {
     const base = { cardId: this.ID, name: this.Name, type: this.Type };
-    if (this.revealDeckPositionToClient) {
+    if (forAdmin || this.revealDeckPositionToClient) {
       return { ...base, deckPosition: this.deckPosition };
     }
     return base;

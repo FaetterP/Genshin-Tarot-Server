@@ -1,3 +1,4 @@
-import { startWebsocketServer } from "./ws";
+import { startGameWSS, startAdminWSS } from "./ws";
 
-startWebsocketServer();
+startGameWSS();
+startAdminWSS();

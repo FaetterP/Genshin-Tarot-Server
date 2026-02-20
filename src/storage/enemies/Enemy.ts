@@ -101,6 +101,16 @@ export abstract class Enemy {
     };
   }
 
+  public adminSetStats(stats: { hp?: number; shield?: number; isStunned?: boolean }) {
+    if (stats.hp !== undefined) this.hp = Math.max(0, stats.hp);
+    if (stats.shield !== undefined) this.shield = Math.max(0, stats.shield);
+    if (stats.isStunned !== undefined) this.isStunned = stats.isStunned;
+  }
+
+  public kill() {
+    this.e_onDeath.Invoke({ enemy: this });
+  }
+
   public addEffect(effect: EnemyEffect) {
     this.effects.push(effect);
   }

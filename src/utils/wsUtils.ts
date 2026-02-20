@@ -1,10 +1,14 @@
 import { v4 } from "uuid";
 import { WebSocket } from "ws";
+import { ExtWebSocket } from "../types/wsTypes";
 import { TaskAwaiter } from "./TaskAwaiter";
-import { getAllClients } from "../ws";
+import { getAllClients, sendResponseToAdmin } from "../ws";
 import { AnyResponse } from "../types/response";
 
 export async function sendAndWait(ws: WebSocket, payload: any) {
+  const targetPlayerId = (ws as ExtWebSocket).player?.ID;
+  sendResponseToAdmin(payload, "send", targetPlayerId);
+
   const taskAwaiter = new TaskAwaiter();
   const taskId = `task-${v4()}`;
   taskAwaiter.addTask(taskId);
@@ -14,6 +18,8 @@ export async function sendAndWait(ws: WebSocket, payload: any) {
 }
 
 export async function sendToAllAndWait<T extends AnyResponse>(payload: T) {
+  sendResponseToAdmin(payload, "sendToAllAndWait");
+
   const taskAwaiter = new TaskAwaiter();
 
   for (const ws of getAllClients()) {
@@ -26,6 +32,8 @@ export async function sendToAllAndWait<T extends AnyResponse>(payload: T) {
 }
 
 export function sendToAll<T extends AnyResponse>(payload: T) {
+  sendResponseToAdmin(payload, "sendToAll");
+
   for (const ws of getAllClients()) {
     ws.send(JSON.stringify({ ...payload }));
   }

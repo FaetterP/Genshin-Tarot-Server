@@ -79,6 +79,13 @@ export interface CharactersRemoveCharacterResponse {
   character: ECharacter;
 }
 
+export interface AdminChangeStatsResponse {
+  action: "admin.changeStats";
+  you: PlayerPrimitive;
+  otherPlayers: PlayerPrimitive[];
+  cycle: number;
+}
+
 export type AnyResponse =
   | WsConnectResponse
   | GameStartGameResponse
@@ -89,4 +96,5 @@ export type AnyResponse =
   | GameUpgradeCardResponse
   | GameUseBurstResponse
   | CharactersAddCharacterResponse
-  | CharactersRemoveCharacterResponse;
+  | CharactersRemoveCharacterResponse
+  | AdminChangeStatsResponse;

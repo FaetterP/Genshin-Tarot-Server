@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1a1b26;
+  color: #c0caf5;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.5rem 0;
+  color: #7aa2f7;
+}
+
+button {
+  cursor: pointer;
+  background: #3b4261;
+  color: #c0caf5;
+  border: 1px solid #565f89;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+button:hover {
+  background: #414868;
+}
+
+input, select {
+  background: #24283b;
+  color: #c0caf5;
+  border: 1px solid #565f89;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: #a9b1d6;
+}
+
+.card {
+  background: #24283b;
+  border: 1px solid #565f89;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.badge--effect { background: #2d4a3e; color: #9ece6a; }
+.badge--enemy { background: #4a2d3e; color: #f7768e; }
+.badge--card { background: #3d3d5c; color: #bb9af7; }
+
+.status {
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.status--ok { background: #2d4a3e; color: #9ece6a; }
+.status--error { background: #4a2d2d; color: #f7768e; }
+.status--loading { background: #2d3d4a; color: #7aa2f7; }
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+}

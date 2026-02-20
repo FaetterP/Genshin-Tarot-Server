@@ -4,7 +4,7 @@ import { CycleEndContext, CycleStartContext } from "../types/eventsContext";
 import { ExtWebSocket } from "../types/wsTypes";
 import { Event } from "../utils/Event";
 import { sendToAll, sendToAllAndWait } from "../utils/wsUtils";
-import { getAllClients, getAllPlayers } from "../ws";
+import { sendResponseToAdmin, getAllClients, getAllPlayers } from "../ws";
 import { Player } from "./Player";
 import { getRandomEffect } from "./leylines";
 import { GameEndCycleResponse, GameEndTurnResponse } from "../types/response";
@@ -116,6 +116,10 @@ export class CycleController {
       );
       ws.send(JSON.stringify(data));
     }
+    sendResponseToAdmin(
+      { action: "game.startCycle", cycle: this.cycle, leylines: leylines.map((l) => l.name), stepsCount: steps.length },
+      "sendToAll",
+    );
   }
 
   private async endCycle() {
@@ -165,6 +169,13 @@ export class CycleController {
         }
       }
     }
+  }
+
+  getPlayerByEnemyId(enemyId: string): Player | undefined {
+    for (const player of this.players) {
+      if (player.Enemies.some((e) => e.ID === enemyId)) return player;
+    }
+    return undefined;
   }
 
   getPlayerCard(cardId: string, player: Player) {

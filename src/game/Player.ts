@@ -131,7 +131,7 @@ export class Player {
     cycleController.OnCycleStart.addListener(this.cycleStartHandler.bind(this));
   }
 
-  public getPrimitiveStats(): PlayerPrimitive {
+  public getPrimitiveStats(forAdmin?: boolean): PlayerPrimitive {
     const enemies: EnemyPrimitive[] = [];
     for (const enemy of this.enemies) {
       enemies.push(enemy.getPrimitiveStats());
@@ -158,9 +158,9 @@ export class Player {
       effects,
       eulaSnowflakes: this.snowflakes,
       characters: this.characters.map((character) => character.Name),
-      hand: this.hand.map((card) => card.getPrimitive()),
-      discard: this.discard.map((card) => card.getPrimitive()),
-      deck: this.deck.map((card) => card.getPrimitive()),
+      hand: this.hand.map((card) => card.getPrimitive(forAdmin === true)),
+      discard: this.discard.map((card) => card.getPrimitive(forAdmin === true)),
+      deck: this.deck.map((card) => card.getPrimitive(forAdmin === true)),
     };
   }
 
@@ -338,6 +338,24 @@ export class Player {
     this.shield = clamp(this.shield + count, 0, 12);
   }
 
+  public adminSetStats(stats: {
+    hp?: number;
+    energy?: number;
+    shield?: number;
+    mora?: number;
+    actionPoints?: { normal?: number; extra?: number };
+  }) {
+    if (stats.hp !== undefined) this.hp = clamp(stats.hp, 0, 12);
+    if (stats.energy !== undefined) this.energy = clamp(stats.energy, 0, 12);
+    if (stats.shield !== undefined) this.shield = clamp(stats.shield, 0, 12);
+    if (stats.mora !== undefined) this.mora = Math.max(0, stats.mora);
+    if (stats.actionPoints !== undefined) {
+      const { normal, extra } = stats.actionPoints;
+      this.actionPoints = clamp(normal ?? 0, 0, 3);
+      this.extraActionPoints = clamp(extra ?? 0, 0, 3);
+    }
+  }
+
   public addExtraActionPoints(count: number) {
     this.extraActionPoints = clamp(this.extraActionPoints + count, 0, 3);
   }
@@ -478,6 +496,23 @@ export class Player {
     card.deckPosition = 1;
     card.revealDeckPositionToClient = false;
     this.deck.push(card);
+  }
+
+  public adminMoveCard(
+    cardId: string,
+    from: "hand" | "discard" | "deck",
+    to: "hand" | "discard" | "deck",
+  ): void {
+    if (from === to) return;
+    const fromArr = from === "hand" ? this.hand : from === "discard" ? this.discard : this.deck;
+    const card = fromArr.find((c) => c.ID === cardId);
+    if (!card) throw new Error(`Card ${cardId} not found in ${from}`);
+    if (from === "hand") this.hand = this.hand.filter((c) => c !== card);
+    else if (from === "discard") this.discard = this.discard.filter((c) => c !== card);
+    else this.deck = this.deck.filter((c) => c !== card);
+    if (to === "hand") this.addCardToHand(card, false);
+    else if (to === "discard") this.addCardToDiscard(card);
+    else this.addCardToDeck(card);
   }
 
   public useAttackEffects(enemy: Enemy) {
