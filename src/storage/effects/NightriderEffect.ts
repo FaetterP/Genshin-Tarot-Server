@@ -1,4 +1,4 @@
-import { EEnemyEffect } from "../../types/enums";
+import { EEnemyEffect, EDetailedStep, EElement } from "../../types/enums";
 import { Electro } from "../elements/Electro";
 import { Enemy } from "../enemies/Enemy";
 import { EnemyEffect } from "./EnemyEffect";
@@ -17,6 +17,15 @@ export class NightriderEffect extends EnemyEffect {
   }
 
   public onStartCycle(ctx: EnemyStartCycleContext): boolean {
+    ctx.addToSteps([
+      {
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: this.enemy.ID,
+        damage: 1,
+        isPiercing: true,
+        element: EElement.Electro,
+      },
+    ]);
     this.enemy.applyAttack({
       damage: 1,
       isPiercing: true,

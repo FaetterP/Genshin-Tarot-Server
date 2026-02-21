@@ -43,7 +43,9 @@ export class GlacialIlluminationEffect extends PlayerEffect {
       enemy.applyAttack({ damage: 2, player: ctx.player, isRange: true });
     }
     ctx.player.snowflakes = 0;
-    ctx.addToSteps([{ type: EDetailedStep.PlayerLoseEffect, playerId: ctx.player.ID, effect: this.Name }]);
+    ctx.addToSteps([
+      { type: EDetailedStep.PlayerLoseEffect, playerId: ctx.player.ID, effect: this.Name },
+    ]);
     return true;
   }
 }

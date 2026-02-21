@@ -382,4 +382,5 @@ export enum EDetailedStep {
   EnemyGetEffect = "EnemyGetEffect",
   EnemyLoseEffect = "EnemyLoseEffect",
   EnemyEffectTrigger = "EnemyEffectTrigger",
+  EnemiesSwap = "EnemiesSwap",
 }

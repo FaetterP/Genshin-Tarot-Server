@@ -23,26 +23,20 @@ export class SearingOnslaught extends Card {
       throw new Error("no enemies");
     }
 
-    const enemies = [...ctx.enemies, ...ctx.enemies, ...ctx.enemies];
-    enemies.length = 3;
-
-    ctx.addToSteps(
-      [0, 1, 2].map((i) => ({
-        type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemies[i].ID,
-        damage: 2,
-        isPiercing: false,
-        element: EElement.Pyro,
-      })),
-    );
+    const target = ctx.enemies[0];
+    const attack: Attack = { damage: 2, element: new Pyro(), player: ctx.player };
 
     for (let i = 0; i < 3; i++) {
-      const attack: Attack = {
-        damage: 2,
-        element: new Pyro(),
-        player: ctx.player,
-      };
-      enemies[i].applyAttack(attack);
+      ctx.addToSteps([
+        {
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: target.ID,
+          damage: 2,
+          isPiercing: false,
+          element: EElement.Pyro,
+        },
+      ]);
+      target.applyAttack(attack);
     }
   }
 }

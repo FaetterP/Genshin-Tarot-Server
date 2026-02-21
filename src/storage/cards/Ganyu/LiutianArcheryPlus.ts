@@ -24,8 +24,12 @@ export class LiutianArcheryPlus extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       element = EElement.Cryo;
       damage *= 3;
-      ctx.addToSteps([{ type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -2 }]);
-      ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }]);
+      ctx.addToSteps([
+        { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -2 },
+      ]);
+      ctx.addToSteps([
+        { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo },
+      ]);
     }
     ctx.addToSteps([
       {

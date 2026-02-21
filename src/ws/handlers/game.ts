@@ -84,6 +84,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     selectedPlayer,
     selectedCard,
     addToSteps: (data) => steps.push(...data),
+    players: ws.cycleController.getPlayers(),
   };
   ws.player.setStepsCollector((data) => steps.push(...data));
 

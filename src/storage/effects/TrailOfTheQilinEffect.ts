@@ -11,7 +11,9 @@ export class TrailOfTheQilinEffect extends PlayerEffect {
 
   public override onStartCycle(player: Player): boolean {
     for (const enemy of player.Enemies) {
-      player.addSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: enemy.ID, element: EElement.Cryo }]);
+      player.addSteps([
+        { type: EDetailedStep.EnemyGetElement, enemyId: enemy.ID, element: EElement.Cryo },
+      ]);
       player.addSteps([
         {
           type: EDetailedStep.EnemyTakeDamage,

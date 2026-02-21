@@ -29,7 +29,7 @@ export class LiutianArchery extends Card {
       element = EElement.Cryo;
       ctx.addToSteps([
         { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -1 },
-        { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }
+        { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo },
       ]);
     }
     ctx.addToSteps([

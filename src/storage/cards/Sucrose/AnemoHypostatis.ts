@@ -23,7 +23,9 @@ export class AnemoHypostatis extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Anemo }]);
+    ctx.addToSteps([
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Anemo },
+    ]);
     target.applyElement(new Anemo(), ctx.player);
     // TODO
   }

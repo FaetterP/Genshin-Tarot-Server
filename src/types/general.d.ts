@@ -1,6 +1,14 @@
 import { Player } from "../game/Player";
 import { BaseElement } from "../storage/elements/BaseElement";
-import type { ECard, ECardType, ECharacter, EElement, EEnemy, EEnemyEffect, EPlayerEffect } from "./enums";
+import type {
+  ECard,
+  ECardType,
+  ECharacter,
+  EElement,
+  EEnemy,
+  EEnemyEffect,
+  EPlayerEffect,
+} from "./enums";
 
 export type EnemyPrimitive = {
   id: string;

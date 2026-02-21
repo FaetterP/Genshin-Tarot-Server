@@ -15,6 +15,7 @@ export type CardUseContext = {
   selectedCard?: string;
   isUseAlternative?: boolean;
   addToSteps: (data: DetailedStep[]) => void;
+  players: Player[];
 };
 
 export type CharacterUseBurstContext = {

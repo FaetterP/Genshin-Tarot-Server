@@ -1,3 +1,4 @@
+import type { PlayerEndTurnContext } from "../../types/eventsContext";
 import { EPlayerEffect } from "../../types/enums";
 import { Player } from "../../game/Player";
 import { Pyro } from "../elements/Pyro";
@@ -12,5 +13,9 @@ export class GuideOfAfterlifeEffect extends PlayerEffect {
   public override onAttack(player: Player, enemy: Enemy): boolean {
     enemy.applyElement(new Pyro(), player);
     return false;
+  }
+
+  public override onEndTurn(ctx: PlayerEndTurnContext): boolean {
+    return true;
   }
 }

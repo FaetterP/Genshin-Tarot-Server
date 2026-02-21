@@ -68,11 +68,7 @@ function sendGameMessageToAdmin(playerId: string, request: unknown) {
 
 export type OutgoingKind = "sendToAll" | "sendToAllAndWait" | "send";
 
-export function sendResponseToAdmin(
-  payload: unknown,
-  kind: OutgoingKind,
-  targetPlayerId?: string,
-) {
+export function sendResponseToAdmin(payload: unknown, kind: OutgoingKind, targetPlayerId?: string) {
   if (!adminWss) return;
   const msg = JSON.stringify({
     action: "admin.gameOutgoing",

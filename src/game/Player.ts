@@ -62,7 +62,9 @@ export class Player {
   }
 
   public recordEnemyBlockDamage(enemyId: string, element?: EElement) {
-    this._stepsCollector?.([{ type: EDetailedStep.EnemyBlockDamage, enemyId, ...(element && { element }) }]);
+    this._stepsCollector?.([
+      { type: EDetailedStep.EnemyBlockDamage, enemyId, ...(element && { element }) },
+    ]);
   }
 
   public addSteps(steps: DetailedStep[]) {
@@ -87,6 +89,22 @@ export class Player {
   public get Enemies(): ReadonlyArray<Enemy> {
     return this.enemies;
   }
+
+  public removeEnemy(enemy: Enemy): void {
+    const i = this.enemies.indexOf(enemy);
+    if (i === -1) throw new Error("enemy not in player zone");
+    this.enemies.splice(i, 1);
+  }
+
+  public addEnemy(enemy: Enemy): void {
+    this.enemies.push(enemy);
+  }
+
+  public moveEnemyTo(toPlayer: Player, enemy: Enemy): void {
+    this.removeEnemy(enemy);
+    toPlayer.addEnemy(enemy);
+  }
+
   public get ActionPoints() {
     return {
       actionPoints: this.actionPoints,
@@ -238,7 +256,12 @@ export class Player {
 
     for (const effect of [...this.effects]) {
       const remove = effect.onEndTurn(ctx);
-      if (remove) this.effects = this.effects.filter((e) => e !== effect);
+      if (remove) {
+        this.effects = this.effects.filter((e) => e !== effect);
+        this._stepsCollector?.([
+          { type: EDetailedStep.PlayerLoseEffect, playerId: this.ID, effect: effect.Name },
+        ]);
+      }
     }
 
     this._stepsCollector = prevCollector;
@@ -246,7 +269,9 @@ export class Player {
 
   public addEnergy(count: number) {
     if (this.hand.some((card) => card.Name === ECard.Freeze)) {
-      this._stepsCollector?.([{ type: EDetailedStep.EnergyFreezed, playerId: this.ID, delta: count }]);
+      this._stepsCollector?.([
+        { type: EDetailedStep.EnergyFreezed, playerId: this.ID, delta: count },
+      ]);
       return;
     }
 
@@ -469,7 +494,9 @@ export class Player {
     this.discard = this.discard.filter((c) => c !== card);
     this.deck = this.deck.filter((c) => c !== card);
 
-    this._stepsCollector?.([{ type: EDetailedStep.TrashCard, playerId: this.ID, card: card.getPrimitive() }]);
+    this._stepsCollector?.([
+      { type: EDetailedStep.TrashCard, playerId: this.ID, card: card.getPrimitive() },
+    ]);
   }
 
   public discardRandomCard() {
@@ -496,6 +523,15 @@ export class Player {
     card.deckPosition = 1;
     card.revealDeckPositionToClient = false;
     this.deck.push(card);
+  }
+
+  public moveCardFromHandToDeck(card: Card) {
+    if (!this.hand.includes(card)) return;
+    this.hand = this.hand.filter((c) => c !== card);
+    this.addCardToDeck(card);
+    this._stepsCollector?.([
+      { type: EDetailedStep.AddCard, playerId: this.ID, card: card.getPrimitive(), to: "deck" },
+    ]);
   }
 
   public adminMoveCard(
@@ -528,7 +564,9 @@ export class Player {
     for (const card of handSnapshot) {
       this.hand = this.hand.filter((c) => c !== card);
       this.discard.push(card);
-      addToSteps([{ type: EDetailedStep.DiscardCard, playerId: this.ID, card: card.getPrimitive() }]);
+      addToSteps([
+        { type: EDetailedStep.DiscardCard, playerId: this.ID, card: card.getPrimitive() },
+      ]);
     }
     this.isTurnEnds = true;
   }
@@ -623,7 +661,9 @@ export class Player {
     this.extraActionPoints = 0;
     this.burnsDrawnThisTurn = 0;
     if (oldShield > 0) {
-      ctx.addToSteps([{ type: EDetailedStep.PlayerChangeShield, playerId: this.ID, delta: -oldShield }]);
+      ctx.addToSteps([
+        { type: EDetailedStep.PlayerChangeShield, playerId: this.ID, delta: -oldShield },
+      ]);
     }
     ctx.addToSteps([
       {
@@ -655,7 +695,9 @@ export class Player {
         },
       ]);
       if (isRemove) {
-        ctx.addToSteps([{ type: EDetailedStep.PlayerLoseEffect, playerId: this.ID, effect: effect.Name }]);
+        ctx.addToSteps([
+          { type: EDetailedStep.PlayerLoseEffect, playerId: this.ID, effect: effect.Name },
+        ]);
       }
     }
 

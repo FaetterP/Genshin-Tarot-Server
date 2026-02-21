@@ -8,20 +8,22 @@ const ADMIN_WS_URL = "ws://localhost:8998";
 export type GameLogEntry =
   | { id: number; dir: "in"; time: number; playerId: string; request: unknown }
   | {
-    id: number;
-    dir: "out";
-    time: number;
-    kind: string;
-    payload: unknown;
-    targetPlayerId: string | null;
-  };
+      id: number;
+      dir: "out";
+      time: number;
+      kind: string;
+      payload: unknown;
+      targetPlayerId: string | null;
+    };
 
 const MAX_GAME_LOG = 200;
 
 function App() {
   const [state, setState] = useState<AdminStateSnapshot | null>(null);
   const [gameLog, setGameLog] = useState<GameLogEntry[]>([]);
-  const [wsStatus, setWsStatus] = useState<"connecting" | "open" | "closed" | "error">("connecting");
+  const [wsStatus, setWsStatus] = useState<"connecting" | "open" | "closed" | "error">(
+    "connecting",
+  );
   const [error, setError] = useState<string | null>(null);
   const [ws, setWs] = useState<WebSocket | null>(null);
   const nextId = useRef(0);
@@ -72,7 +74,7 @@ function App() {
             return [...prev, entry].sort((a, b) => a.time - b.time).slice(-MAX_GAME_LOG);
           });
         }
-      } catch (error) { }
+      } catch (error) {}
     };
 
     setWs(socket);
@@ -85,13 +87,15 @@ function App() {
         ws.send(JSON.stringify({ action, ...payload }));
       }
     },
-    [ws]
+    [ws],
   );
 
   return (
     <div>
       <h1>Genshin Tarot Admin</h1>
-      <div className={`status status--${wsStatus === "open" ? "ok" : wsStatus === "error" ? "error" : "loading"}`}>
+      <div
+        className={`status status--${wsStatus === "open" ? "ok" : wsStatus === "error" ? "error" : "loading"}`}
+      >
         WebSocket: {wsStatus}
         {error && ` • ${error}`}
       </div>
@@ -102,25 +106,27 @@ function App() {
           </p>
           <div className="grid">
             {state.players.map((player) => (
-              <PlayerCard
-                key={player.playerId}
-                player={player}
-                onSend={sendAdmin}
-              />
+              <PlayerCard key={player.playerId} player={player} onSend={sendAdmin} />
             ))}
           </div>
         </>
       )}
-      {state && state.players.length === 0 && (
-        <p className="card">Нет подключённых игроков.</p>
-      )}
+      {state && state.players.length === 0 && <p className="card">Нет подключённых игроков.</p>}
 
       <section className="card" style={{ marginTop: "1.5rem" }}>
         <h2>Лог запросов (game WS) — по порядку</h2>
         {gameLog.length === 0 ? (
           <p style={{ color: "#a9b1d6", fontSize: "0.9rem" }}>Пока нет сообщений</p>
         ) : (
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, maxHeight: "500px", overflowY: "auto" }}>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              maxHeight: "500px",
+              overflowY: "auto",
+            }}
+          >
             {gameLog.map((entry) => (
               <li
                 key={entry.id}
@@ -137,18 +143,38 @@ function App() {
                 {entry.dir === "in" ? (
                   <>
                     <span style={{ color: "#f7768e", marginRight: "0.5rem" }}>in</span>
-                    <span style={{ color: "#9ece6a", marginRight: "0.5rem" }}>{entry.playerId}</span>
-                    <pre style={{ margin: "0.25rem 0 0 0", whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                    <span style={{ color: "#9ece6a", marginRight: "0.5rem" }}>
+                      {entry.playerId}
+                    </span>
+                    <pre
+                      style={{
+                        margin: "0.25rem 0 0 0",
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-all",
+                      }}
+                    >
                       {JSON.stringify(entry.request)}
                     </pre>
                   </>
                 ) : (
                   <>
-                    <span style={{ color: "#bb9af7", marginRight: "0.5rem" }}>{"out "}{entry.kind}</span>
+                    <span style={{ color: "#bb9af7", marginRight: "0.5rem" }}>
+                      {"out "}
+                      {entry.kind}
+                    </span>
                     {entry.targetPlayerId && (
-                      <span style={{ color: "#9ece6a", marginRight: "0.5rem" }}>{" -> "}{entry.targetPlayerId}</span>
+                      <span style={{ color: "#9ece6a", marginRight: "0.5rem" }}>
+                        {" -> "}
+                        {entry.targetPlayerId}
+                      </span>
                     )}
-                    <pre style={{ margin: "0.25rem 0 0 0", whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                    <pre
+                      style={{
+                        margin: "0.25rem 0 0 0",
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-all",
+                      }}
+                    >
                       {JSON.stringify(entry.payload)}
                     </pre>
                   </>
@@ -201,12 +227,18 @@ function PlayerCard({
   const normalLeft = player.actionPoints.normal;
   const normalSpent = 3 - normalLeft;
   const apStr =
-    "◻".repeat(normalSpent) + "⬜".repeat(normalLeft) + " " + "🟧".repeat(player.actionPoints.extra);
+    "◻".repeat(normalSpent) +
+    "⬜".repeat(normalLeft) +
+    " " +
+    "🟧".repeat(player.actionPoints.extra);
 
   const deckSorted = [...player.deck].sort((a, b) => (a.deckPosition ?? 0) - (b.deckPosition ?? 0));
 
   const handleDragStart = (e: React.DragEvent, cardId: string, from: CardPile) => {
-    e.dataTransfer.setData("application/json", JSON.stringify({ playerId: player.playerId, cardId, from }));
+    e.dataTransfer.setData(
+      "application/json",
+      JSON.stringify({ playerId: player.playerId, cardId, from }),
+    );
     e.dataTransfer.effectAllowed = "move";
   };
 
@@ -220,7 +252,11 @@ function PlayerCard({
     try {
       const raw = e.dataTransfer.getData("application/json");
       if (!raw) return;
-      const { playerId, cardId, from } = JSON.parse(raw) as { playerId: string; cardId: string; from: CardPile };
+      const { playerId, cardId, from } = JSON.parse(raw) as {
+        playerId: string;
+        cardId: string;
+        from: CardPile;
+      };
       if (from === to || playerId !== player.playerId) return;
       onSend("admin.moveCard", { playerId, cardId, from, to });
     } catch (_) {
@@ -231,36 +267,42 @@ function PlayerCard({
   return (
     <div className="card">
       <h3>{player.playerId}</h3>
-      <p>
-        Персонажи: {player.characters.join(", ") || "—"}
-      </p>
+      <p>Персонажи: {player.characters.join(", ") || "—"}</p>
       <p style={{ fontSize: "1.1rem" }}>
-        {player.hp}♥ {" "}
-        {player.shields}🛡 {" "}
-        {player.energy}⚛ {" "}
-        {player.mora}💰 {" "}
-        <span title="обычные / доп">{apStr}</span>
-        {" "} Волна {player.wave}
+        {player.hp}♥ {player.shields}🛡 {player.energy}⚛ {player.mora}💰{" "}
+        <span title="обычные / доп">{apStr}</span> Волна {player.wave}
       </p>
       <p>
         Эффекты:{" "}
-        {player.effects.length ? player.effects.map((e) => <span key={e} className="badge badge--effect">{e}</span>) : "—"}
+        {player.effects.length
+          ? player.effects.map((e) => (
+              <span key={e} className="badge badge--effect">
+                {e}
+              </span>
+            ))
+          : "—"}
       </p>
       <p>
         Враги:{" "}
         {player.enemies.length
           ? player.enemies.map((e) => (
-            <span key={e.id} className="badge badge--enemy">
-              {e.name} {e.hp}♥
-            </span>
-          ))
+              <span key={e.id} className="badge badge--enemy">
+                {e.name} {e.hp}♥
+              </span>
+            ))
           : "—"}
       </p>
 
       <details style={{ marginTop: "0.5rem" }}>
         <summary>Рука ({player.hand.length})</summary>
         <ul
-          style={{ listStyle: "none", padding: 0, margin: "0.25rem 0 0 0", fontSize: "0.9rem", minHeight: "1.5rem" }}
+          style={{
+            listStyle: "none",
+            padding: 0,
+            margin: "0.25rem 0 0 0",
+            fontSize: "0.9rem",
+            minHeight: "1.5rem",
+          }}
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, "hand")}
         >
@@ -272,7 +314,11 @@ function PlayerCard({
               style={{ cursor: "grab", padding: "0.15rem 0" }}
             >
               {i + 1}. {c.name}
-              {c.deckPosition != null && <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>(pos {c.deckPosition})</span>}
+              {c.deckPosition != null && (
+                <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>
+                  (pos {c.deckPosition})
+                </span>
+              )}
             </li>
           ))}
           {player.hand.length === 0 && <li style={{ color: "#565f89" }}>—</li>}
@@ -281,7 +327,13 @@ function PlayerCard({
       <details style={{ marginTop: "0.25rem" }}>
         <summary>Сброс ({player.discard.length})</summary>
         <ul
-          style={{ listStyle: "none", padding: 0, margin: "0.25rem 0 0 0", fontSize: "0.9rem", minHeight: "1.5rem" }}
+          style={{
+            listStyle: "none",
+            padding: 0,
+            margin: "0.25rem 0 0 0",
+            fontSize: "0.9rem",
+            minHeight: "1.5rem",
+          }}
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, "discard")}
         >
@@ -293,7 +345,11 @@ function PlayerCard({
               style={{ cursor: "grab", padding: "0.15rem 0" }}
             >
               {i + 1}. {c.name}
-              {c.deckPosition != null && <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>(pos {c.deckPosition})</span>}
+              {c.deckPosition != null && (
+                <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>
+                  (pos {c.deckPosition})
+                </span>
+              )}
             </li>
           ))}
           {player.discard.length === 0 && <li style={{ color: "#565f89" }}>—</li>}
@@ -302,7 +358,13 @@ function PlayerCard({
       <details style={{ marginTop: "0.25rem" }}>
         <summary>Колода добора ({player.deck.length})</summary>
         <ul
-          style={{ listStyle: "none", padding: 0, margin: "0.25rem 0 0 0", fontSize: "0.9rem", minHeight: "1.5rem" }}
+          style={{
+            listStyle: "none",
+            padding: 0,
+            margin: "0.25rem 0 0 0",
+            fontSize: "0.9rem",
+            minHeight: "1.5rem",
+          }}
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, "deck")}
         >
@@ -314,7 +376,11 @@ function PlayerCard({
               style={{ cursor: "grab", padding: "0.15rem 0" }}
             >
               {i + 1}. {c.name}
-              {c.deckPosition != null && <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>(pos {c.deckPosition})</span>}
+              {c.deckPosition != null && (
+                <span style={{ color: "#565f89", marginLeft: "0.25rem" }}>
+                  (pos {c.deckPosition})
+                </span>
+              )}
             </li>
           ))}
           {player.deck.length === 0 && <li style={{ color: "#565f89" }}>—</li>}

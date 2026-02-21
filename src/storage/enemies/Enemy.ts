@@ -127,7 +127,6 @@ export abstract class Enemy {
     this.hitByNightriderEffectThisTurn = true;
   }
 
-
   applyAttack(attack: Attack) {
     if (this.Health <= 0) {
       return;
@@ -236,7 +235,9 @@ export abstract class Enemy {
       ]);
       if (isRemove) {
         toRemove.push(effect);
-        ctx.addToSteps([{ type: EDetailedStep.EnemyLoseEffect, enemyId: this.ID, effect: effect.Name }]);
+        ctx.addToSteps([
+          { type: EDetailedStep.EnemyLoseEffect, enemyId: this.ID, effect: effect.Name },
+        ]);
       }
     }
     this.effects = this.effects.filter((e) => !toRemove.includes(e));

@@ -2,7 +2,12 @@ import type { CardPrimitive, EnemyPrimitive } from "./general";
 import type { EDetailedStep, EElement, EEnemyEffect, ELeyline, EPlayerEffect } from "./enums";
 
 export type DetailedStep =
-  | { type: EDetailedStep.AddCard; playerId: string; card: CardPrimitive; to: "hand" | "deck" | "discard" } //Карта взялась не из колоды, а например из эффекта
+  | {
+      type: EDetailedStep.AddCard;
+      playerId: string;
+      card: CardPrimitive;
+      to: "hand" | "deck" | "discard";
+    }
   | { type: EDetailedStep.DiscardCard; playerId: string; card: CardPrimitive }
   | { type: EDetailedStep.DrawCards; playerId: string; cards: CardPrimitive[] }
   | {
@@ -33,12 +38,28 @@ export type DetailedStep =
   | { type: EDetailedStep.EnemyReaction; enemyId: string; element1: EElement; element2: EElement }
   | { type: EDetailedStep.EnemyChangeShield; enemyId: string; delta: number }
   | { type: EDetailedStep.EnemyHeal; enemyId: string; amount: number }
-  | { type: EDetailedStep.UpgradeCard; playerId: string; oldCard: CardPrimitive; newCard: CardPrimitive }
+  | {
+      type: EDetailedStep.UpgradeCard;
+      playerId: string;
+      oldCard: CardPrimitive;
+      newCard: CardPrimitive;
+    }
   | { type: EDetailedStep.EnergyFreezed; playerId: string; delta: number }
   | { type: EDetailedStep.TrashCard; playerId: string; card: CardPrimitive }
   | { type: EDetailedStep.UseLeyline; name: ELeyline }
-  | { type: EDetailedStep.EffectTrigger; playerId: string; effect: EPlayerEffect; isRemove: boolean }
+  | {
+      type: EDetailedStep.EffectTrigger;
+      playerId: string;
+      effect: EPlayerEffect;
+      isRemove: boolean;
+    }
   | { type: EDetailedStep.EnemyAttack; enemyId: string; playerId: string; damage: number }
   | { type: EDetailedStep.EnemyGetEffect; enemyId: string; effect: EEnemyEffect }
   | { type: EDetailedStep.EnemyLoseEffect; enemyId: string; effect: EEnemyEffect }
-  | { type: EDetailedStep.EnemyEffectTrigger; enemyId: string; effect: EEnemyEffect; isRemove: boolean };
+  | {
+      type: EDetailedStep.EnemyEffectTrigger;
+      enemyId: string;
+      effect: EEnemyEffect;
+      isRemove: boolean;
+    }
+  | { type: EDetailedStep.EnemiesSwap; playerId: string; enemyId1: string; enemyId2: string };

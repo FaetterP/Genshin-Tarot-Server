@@ -31,6 +31,7 @@ export class FavoniusBladeworkPlus extends Card {
         playerId: ctx.player.ID,
         delta: 2,
       },
+      { type: EDetailedStep.PlayerHeal, playerId: ctx.player.ID, amount: 2 },
     ]);
     target.applyAttack({ damage: 2, player: ctx.player });
     ctx.player.addEnergy(2);

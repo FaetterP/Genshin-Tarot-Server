@@ -25,6 +25,8 @@ export class Eula extends Character {
     ctx.player.snowflakes = 0;
     const effect = new GlacialIlluminationEffect();
     ctx.player.addEffect(effect);
-    ctx.addToSteps([{ type: EDetailedStep.PlayerGetEffect, playerId: ctx.player.ID, effect: effect.Name }]);
+    ctx.addToSteps([
+      { type: EDetailedStep.PlayerGetEffect, playerId: ctx.player.ID, effect: effect.Name },
+    ]);
   }
 }

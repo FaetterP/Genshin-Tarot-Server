@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -25,19 +24,26 @@ export class SpearOfWangsheng extends Card {
         damage: 1,
         isPiercing: false,
       },
+    ]);
+    ctx.player.applyDamage(1);
+
+    const damage = ctx.player.Health <= 7 ? 4 : 1;
+    ctx.addToSteps([
       {
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
-        damage: ctx.player.Health <= 7 ? 4 : 1,
+        damage,
         isPiercing: true,
       },
     ]);
-    ctx.player.applyDamage(1);
     target.applyAttack({
-      damage: ctx.player.Health <= 7 ? 4 : 1,
+      damage,
       isPiercing: true,
       player: ctx.player,
     });
-    // TODO
+
+    if (ctx.player.Health <= 7) {
+      ctx.player.moveCardFromHandToDeck(this);
+    }
   }
 }

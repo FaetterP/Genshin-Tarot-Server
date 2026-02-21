@@ -55,7 +55,11 @@ export class PassionOverloadPlus extends Card {
       } else {
         ctx.player.addCardToDiscard(topCard);
         ctx.addToSteps([
-          { type: EDetailedStep.DiscardCard, playerId: ctx.player.ID, card: topCard.getPrimitive() },
+          {
+            type: EDetailedStep.DiscardCard,
+            playerId: ctx.player.ID,
+            card: topCard.getPrimitive(),
+          },
         ]);
       }
 

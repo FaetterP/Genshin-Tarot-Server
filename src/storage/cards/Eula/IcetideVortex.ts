@@ -63,7 +63,9 @@ export class IcetideVortex extends Card {
     }
 
     const target = ctx.enemies[0];
-    ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo }]);
+    ctx.addToSteps([
+      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo },
+    ]);
     target.applyElement(new Cryo(), ctx.player);
   }
 }

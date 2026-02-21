@@ -117,7 +117,12 @@ export class CycleController {
       ws.send(JSON.stringify(data));
     }
     sendResponseToAdmin(
-      { action: "game.startCycle", cycle: this.cycle, leylines: leylines.map((l) => l.name), stepsCount: steps.length },
+      {
+        action: "game.startCycle",
+        cycle: this.cycle,
+        leylines: leylines.map((l) => l.name),
+        stepsCount: steps.length,
+      },
       "sendToAll",
     );
   }

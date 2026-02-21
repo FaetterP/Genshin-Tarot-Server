@@ -22,7 +22,8 @@ export class DominusLapidis extends Card {
         playerId: ctx.player.ID,
         delta: 3,
       },
-      ...ctx.player.Enemies.map((enemy): DetailedStep => ({
+      ...ctx.player.Enemies.map(
+        (enemy): DetailedStep => ({
           type: EDetailedStep.EnemyGetElement,
           enemyId: enemy.ID,
           element: EElement.Geo,

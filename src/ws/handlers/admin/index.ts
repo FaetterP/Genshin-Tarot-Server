@@ -84,7 +84,8 @@ async function killEnemy(ctx: AdminContext, ws: WebSocket, payload: unknown) {
 
 async function moveCard(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   const { playerId, cardId, from, to } = payload as AdminMoveCardPayload;
-  if (!playerId || !cardId || !from || !to) throw new Error("playerId, cardId, from, to are required");
+  if (!playerId || !cardId || !from || !to)
+    throw new Error("playerId, cardId, from, to are required");
   await withPlayer(ctx, ws, playerId, (p) => p.adminMoveCard(cardId, from, to));
 }
 
