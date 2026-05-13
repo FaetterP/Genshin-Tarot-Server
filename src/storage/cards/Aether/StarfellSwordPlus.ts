@@ -17,13 +17,20 @@ export class StarfellSwordPlus extends Card {
     const damage = 2;
 
     ctx.addToSteps(
-      ctx.player.Enemies.map((enemy) => ({
-        type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemy.ID,
-        damage,
-        isPiercing: true,
-        element: EElement.Geo,
-      })),
+      ctx.player.Enemies.flatMap((enemy) => [
+        {
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: enemy.ID,
+          damage,
+          isPiercing: true,
+          element: EElement.Geo,
+        },
+        {
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemy.ID,
+          element: EElement.Geo,
+        },
+      ]),
     );
 
     for (const enemy of ctx.player.Enemies) {

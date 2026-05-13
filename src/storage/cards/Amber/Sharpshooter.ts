@@ -28,7 +28,8 @@ export class Sharpshooter extends Card {
     const isPiercing = true;
     let element: EElement | undefined;
 
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative) {
+      if (!ctx.player.trySpendEnergy(1)) throw new Error("not enough energy");
       element = EElement.Pyro;
       ctx.addToSteps([
         {

@@ -18,8 +18,20 @@ export class WeissBladeworkPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 3, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
+    const target = ctx.enemies[0];
+    const damage = 3;
+
+    ctx.addToSteps([
+      {
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: target.ID,
+        damage,
+        isPiercing: false,
+      },
+    ]);
+
+    const attack: Attack = { damage, player: ctx.player };
+    target.applyAttack(attack);
 
     if (ctx.player.isContainsEffect(new SolarIsotomaEffect())) {
       ctx.addToSteps([
@@ -31,7 +43,14 @@ export class WeissBladeworkPlus extends Card {
         },
       ]);
       ctx.player.addExtraActionPoints(1);
-      ctx.player.drawCard();
+      const drawn = ctx.player.drawCard();
+      ctx.addToSteps([
+        {
+          type: EDetailedStep.DrawCards,
+          playerId: ctx.player.ID,
+          cards: [drawn.getPrimitive()],
+        },
+      ]);
     }
   }
 }

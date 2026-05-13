@@ -31,6 +31,11 @@ export class ForeignRockbladePlus extends Card {
         element: EElement.Geo,
       },
       {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Geo,
+      },
+      {
         type: EDetailedStep.PlayerStatChange,
         stat: "energy",
         playerId: ctx.player.ID,
