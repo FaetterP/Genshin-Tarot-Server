@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
@@ -29,7 +29,8 @@ export class FireworkFlareUp extends Card {
     if (ctx.enemies[0].isContainsElement(EElement.Pyro)) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeActionPoints,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "actionPoints",
           playerId: ctx.player.ID,
           delta: 1,
         },

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { OverheatEffect } from "../../effects/OverheatEffect";
 import { Card } from "../Card";
@@ -18,7 +18,8 @@ export class Overheat extends Card {
     ctx.player.trashCardById(this.ID);
     ctx.addToSteps([
       {
-        type: EDetailedStep.TrashCard,
+        type: EDetailedStep.MoveCard,
+        to: "trash",
         playerId: ctx.player.ID,
         card: this.getPrimitive(),
       },

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import type { DetailedStep } from "../../../types/detailedStep";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
@@ -28,7 +28,8 @@ export class Frostgnaw extends Card {
         }),
       ),
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 1,
       },

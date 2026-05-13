@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import type { DetailedStep } from "../../../types/detailedStep";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
@@ -28,7 +28,8 @@ export class Tidecaller extends Card {
         }),
       ),
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 2,
       },

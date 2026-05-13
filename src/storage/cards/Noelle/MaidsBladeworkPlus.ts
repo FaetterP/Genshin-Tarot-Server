@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -22,7 +22,8 @@ export class MaidsBladeworkPlus extends Card {
         cards: [c1.getPrimitive(), c2.getPrimitive(), c3.getPrimitive()],
       },
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 2,
       },

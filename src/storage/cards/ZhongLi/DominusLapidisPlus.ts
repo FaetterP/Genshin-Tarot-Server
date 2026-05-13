@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import type { DetailedStep } from "../../../types/detailedStep";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { DominusLapidisEffect } from "../../effects/DominusLapidisEffect";
@@ -18,7 +18,8 @@ export class DominusLapidis extends Card {
     const effect = new DominusLapidisEffect();
     ctx.addToSteps([
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 3,
       },
@@ -38,7 +39,8 @@ export class DominusLapidis extends Card {
     if (ctx.selectedPlayer) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeShield,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "shield",
           playerId: ctx.selectedPlayer.ID,
           delta: 3,
         },

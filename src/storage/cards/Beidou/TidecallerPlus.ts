@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import type { DetailedStep } from "../../../types/detailedStep";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
@@ -25,12 +25,13 @@ export class TidecallerPlus extends Card {
         }),
       ),
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 3,
       },
       {
-        type: EDetailedStep.AddCard,
+        type: EDetailedStep.MoveCard,
         playerId: ctx.player.ID,
         card: overheatCard.getPrimitive(),
         to: "hand",

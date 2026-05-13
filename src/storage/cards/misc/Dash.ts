@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -15,7 +15,8 @@ export class Dash extends Card {
     ctx.player.trashCardById(this.ID);
     ctx.addToSteps([
       {
-        type: EDetailedStep.TrashCard,
+        type: EDetailedStep.MoveCard,
+        to: "trash",
         playerId: ctx.player.ID,
         card: this.getPrimitive(),
       },
@@ -30,7 +31,8 @@ export class Dash extends Card {
         cards: [c1.getPrimitive(), c2.getPrimitive()],
       },
       {
-        type: EDetailedStep.PlayerChangeActionPoints,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
         playerId: ctx.player.ID,
         delta: 1,
       },

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { GuideOfAfterlifeEffect } from "../../effects/GuideOfAfterlifeEffect";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
@@ -36,7 +36,8 @@ export class GuideOfAfterlifePlus extends Card {
     } else {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: 1,
         },

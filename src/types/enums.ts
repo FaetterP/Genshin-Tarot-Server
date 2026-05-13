@@ -354,8 +354,7 @@ export enum ELeyline {
 }
 
 export enum EDetailedStep {
-  AddCard = "AddCard",
-  DiscardCard = "DiscardCard",
+  MoveCard = "MoveCard",
   DrawCards = "DrawCards",
   EnemyTakeDamage = "EnemyTakeDamage",
   EnemyBlockDamage = "EnemyBlockDamage",
@@ -363,10 +362,7 @@ export enum EDetailedStep {
   EnemyAppearance = "EnemyAppearance",
   PlayerTakeDamage = "PlayerTakeDamage",
   PlayerHeal = "PlayerHeal",
-  PlayerChangeEnergy = "PlayerChangeEnergy",
-  PlayerChangeShield = "PlayerChangeShield",
-  PlayerChangeMora = "PlayerChangeMora",
-  PlayerChangeActionPoints = "PlayerChangeActionPoints",
+  PlayerStatChange = "PlayerStatChange",
   PlayerGetEffect = "PlayerGetEffect",
   PlayerLoseEffect = "PlayerLoseEffect",
   EnemyGetElement = "EnemyGetElement",
@@ -375,9 +371,8 @@ export enum EDetailedStep {
   EnemyHeal = "EnemyHeal",
   UpgradeCard = "UpgradeCard",
   EnergyFreezed = "EnergyFreezed",
-  TrashCard = "TrashCard",
   UseLeyline = "UseLeyline",
-  EffectTrigger = "EffectTrigger",
+  PlayerEffectTrigger = "PlayerEffectTrigger",
   EnemyAttack = "EnemyAttack",
   EnemyGetEffect = "EnemyGetEffect",
   EnemyLoseEffect = "EnemyLoseEffect",

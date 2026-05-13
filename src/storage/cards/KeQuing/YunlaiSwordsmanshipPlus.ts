@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
@@ -28,7 +28,8 @@ export class YunlaiSwordsmanshipPlus extends Card {
         element: EElement.Electro,
       },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 2,
       },

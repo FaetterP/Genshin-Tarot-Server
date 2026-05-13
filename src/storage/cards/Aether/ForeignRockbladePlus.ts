@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
@@ -31,7 +31,8 @@ export class ForeignRockbladePlus extends Card {
         element: EElement.Geo,
       },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: energyDelta,
       },

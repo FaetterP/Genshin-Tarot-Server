@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import type { DetailedStep } from "../../../types/detailedStep";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
@@ -16,7 +16,8 @@ export class IcyPawsPlus extends Card {
   use(ctx: CardUseContext): void {
     ctx.addToSteps([
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 3,
       },

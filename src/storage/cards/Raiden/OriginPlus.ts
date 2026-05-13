@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
@@ -22,7 +22,8 @@ export class OriginPlus extends Card {
     const damage = target.isContainsElement(EElement.Electro) ? 5 : 2;
     ctx.addToSteps([
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 2,
       },

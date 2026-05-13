@@ -1,4 +1,4 @@
-import type { DetailedStep } from "../../../types/detailedStep";
+﻿import type { DetailedStep } from "../../../types/detailedStep";
 import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
@@ -34,7 +34,8 @@ export class AncientSwordArtPlus extends Card {
     if (!hasCryo) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: 2,
         },

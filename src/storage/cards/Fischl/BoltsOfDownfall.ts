@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
@@ -28,7 +28,12 @@ export class BoltsOfDownfall extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Electro;
       ctx.addToSteps([
-        { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -1 },
+        {
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
+          playerId: ctx.player.ID,
+          delta: -1,
+        },
       ]);
     }
     ctx.addToSteps([

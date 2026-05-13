@@ -3,12 +3,11 @@ import type { EDetailedStep, EElement, EEnemyEffect, ELeyline, EPlayerEffect } f
 
 export type DetailedStep =
   | {
-      type: EDetailedStep.AddCard;
+      type: EDetailedStep.MoveCard;
       playerId: string;
       card: CardPrimitive;
-      to: "hand" | "deck" | "discard";
+      to: "hand" | "deck" | "discard" | "trash";
     }
-  | { type: EDetailedStep.DiscardCard; playerId: string; card: CardPrimitive }
   | { type: EDetailedStep.DrawCards; playerId: string; cards: CardPrimitive[] }
   | {
       type: EDetailedStep.EnemyTakeDamage;
@@ -28,10 +27,12 @@ export type DetailedStep =
       enemyId?: string;
     }
   | { type: EDetailedStep.PlayerHeal; playerId: string; amount: number }
-  | { type: EDetailedStep.PlayerChangeEnergy; playerId: string; delta: number }
-  | { type: EDetailedStep.PlayerChangeShield; playerId: string; delta: number }
-  | { type: EDetailedStep.PlayerChangeMora; playerId: string; delta: number }
-  | { type: EDetailedStep.PlayerChangeActionPoints; playerId: string; delta: number }
+  | {
+      type: EDetailedStep.PlayerStatChange;
+      playerId: string;
+      stat: "energy" | "shield" | "mora" | "actionPoints";
+      delta: number;
+    }
   | { type: EDetailedStep.PlayerGetEffect; playerId: string; effect: EPlayerEffect }
   | { type: EDetailedStep.PlayerLoseEffect; playerId: string; effect: EPlayerEffect }
   | { type: EDetailedStep.EnemyGetElement; enemyId: string; element: EElement }
@@ -44,11 +45,10 @@ export type DetailedStep =
       oldCard: CardPrimitive;
       newCard: CardPrimitive;
     }
-  | { type: EDetailedStep.EnergyFreezed; playerId: string; delta: number }
-  | { type: EDetailedStep.TrashCard; playerId: string; card: CardPrimitive }
+  | { type: EDetailedStep.EnergyFreezed; playerId: string }
   | { type: EDetailedStep.UseLeyline; name: ELeyline }
   | {
-      type: EDetailedStep.EffectTrigger;
+      type: EDetailedStep.PlayerEffectTrigger;
       playerId: string;
       effect: EPlayerEffect;
       isRemove: boolean;

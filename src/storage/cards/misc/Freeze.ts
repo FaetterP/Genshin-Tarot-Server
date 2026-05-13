@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -18,7 +18,8 @@ export class Freeze extends Card {
     }
     ctx.addToSteps(
       freezeCards.map((card) => ({
-        type: EDetailedStep.TrashCard as const,
+        type: EDetailedStep.MoveCard as const,
+        to: "trash",
         playerId: ctx.player.ID,
         card: card.getPrimitive(),
       })),

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
@@ -33,7 +33,8 @@ export class Kaboom extends Card {
         element: EElement.Pyro,
       },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 1,
       },

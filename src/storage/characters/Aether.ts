@@ -1,4 +1,4 @@
-import { CharacterUseBurstContext } from "../../types/functionsContext";
+﻿import { CharacterUseBurstContext } from "../../types/functionsContext";
 import { ForeignRockblade } from "../cards/Aether/ForeignRockblade";
 import { StarfellSword } from "../cards/Aether/StarfellSword";
 import { ECharacter, EDetailedStep } from "../../types/enums";
@@ -25,7 +25,9 @@ export class Aether extends Character {
 
     for (const player of otherPlayers) {
       player.addShield(3);
-      ctx.addToSteps([{ type: EDetailedStep.PlayerChangeShield, playerId: player.ID, delta: 3 }]);
+      ctx.addToSteps([
+        { type: EDetailedStep.PlayerStatChange, stat: "shield", playerId: player.ID, delta: 3 },
+      ]);
     }
   }
 }

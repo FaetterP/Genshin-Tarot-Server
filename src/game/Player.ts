@@ -1,4 +1,4 @@
-import { v4 } from "uuid";
+﻿import { v4 } from "uuid";
 import type { DetailedStep } from "../types/detailedStep";
 import {
   CycleEndContext,
@@ -269,9 +269,7 @@ export class Player {
 
   public addEnergy(count: number) {
     if (this.hand.some((card) => card.Name === ECard.Freeze)) {
-      this._stepsCollector?.([
-        { type: EDetailedStep.EnergyFreezed, playerId: this.ID, delta: count },
-      ]);
+      this._stepsCollector?.([{ type: EDetailedStep.EnergyFreezed, playerId: this.ID }]);
       return;
     }
 
@@ -324,7 +322,8 @@ export class Player {
     if (burnCards.length > 0) {
       this._stepsCollector?.(
         burnCards.map((card) => ({
-          type: EDetailedStep.TrashCard,
+          type: EDetailedStep.MoveCard,
+          to: "trash",
           playerId: this.ID,
           card: card.getPrimitive(),
         })),
@@ -495,7 +494,7 @@ export class Player {
     this.deck = this.deck.filter((c) => c !== card);
 
     this._stepsCollector?.([
-      { type: EDetailedStep.TrashCard, playerId: this.ID, card: card.getPrimitive() },
+      { type: EDetailedStep.MoveCard, to: "trash", playerId: this.ID, card: card.getPrimitive() },
     ]);
   }
 
@@ -530,7 +529,7 @@ export class Player {
     this.hand = this.hand.filter((c) => c !== card);
     this.addCardToDeck(card);
     this._stepsCollector?.([
-      { type: EDetailedStep.AddCard, playerId: this.ID, card: card.getPrimitive(), to: "deck" },
+      { type: EDetailedStep.MoveCard, playerId: this.ID, card: card.getPrimitive(), to: "deck" },
     ]);
   }
 
@@ -565,7 +564,12 @@ export class Player {
       this.hand = this.hand.filter((c) => c !== card);
       this.discard.push(card);
       addToSteps([
-        { type: EDetailedStep.DiscardCard, playerId: this.ID, card: card.getPrimitive() },
+        {
+          type: EDetailedStep.MoveCard,
+          to: "discard",
+          playerId: this.ID,
+          card: card.getPrimitive(),
+        },
       ]);
     }
     this.isTurnEnds = true;
@@ -608,7 +612,8 @@ export class Player {
       if (shieldDelta < 0) {
         ctx.addToSteps([
           {
-            type: EDetailedStep.PlayerChangeShield,
+            type: EDetailedStep.PlayerStatChange,
+            stat: "shield",
             playerId: ctx.playerId,
             delta: shieldDelta,
           },
@@ -662,12 +667,18 @@ export class Player {
     this.burnsDrawnThisTurn = 0;
     if (oldShield > 0) {
       ctx.addToSteps([
-        { type: EDetailedStep.PlayerChangeShield, playerId: this.ID, delta: -oldShield },
+        {
+          type: EDetailedStep.PlayerStatChange,
+          stat: "shield",
+          playerId: this.ID,
+          delta: -oldShield,
+        },
       ]);
     }
     ctx.addToSteps([
       {
-        type: EDetailedStep.PlayerChangeActionPoints,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
         playerId: this.ID,
         delta: 3,
       },
@@ -688,7 +699,7 @@ export class Player {
 
       ctx.addToSteps([
         {
-          type: EDetailedStep.EffectTrigger,
+          type: EDetailedStep.PlayerEffectTrigger,
           playerId: this.ID,
           effect: effect.Name,
           isRemove,

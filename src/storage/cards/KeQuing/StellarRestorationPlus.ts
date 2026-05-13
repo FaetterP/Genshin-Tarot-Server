@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
@@ -23,7 +23,8 @@ export class StellarRestorationPlus extends Card {
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 2,
       },

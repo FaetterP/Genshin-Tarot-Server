@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
@@ -29,7 +29,8 @@ export class DoughFuPlus extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeActionPoints,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "actionPoints",
           playerId: ctx.player.ID,
           delta: 1,
         },

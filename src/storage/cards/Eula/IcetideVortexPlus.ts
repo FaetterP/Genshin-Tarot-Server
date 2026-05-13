@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
@@ -30,7 +30,7 @@ export class IcetideVortexPlus extends Card {
         ctx.player.addCardToHand(fromDeck, false);
         ctx.addToSteps([
           {
-            type: EDetailedStep.AddCard,
+            type: EDetailedStep.MoveCard,
             playerId: ctx.player.ID,
             card: fromDeck.getPrimitive(),
             to: "hand",
@@ -43,7 +43,7 @@ export class IcetideVortexPlus extends Card {
           ctx.player.addCardToHand(c, true);
           ctx.addToSteps([
             {
-              type: EDetailedStep.AddCard,
+              type: EDetailedStep.MoveCard,
               playerId: ctx.player.ID,
               card: c.getPrimitive(),
               to: "hand",

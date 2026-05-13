@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
@@ -36,7 +36,12 @@ export class LetTheShowBegin extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       healCount = 3;
       ctx.addToSteps([
-        { type: EDetailedStep.PlayerChangeEnergy, playerId: ctx.player.ID, delta: -2 },
+        {
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
+          playerId: ctx.player.ID,
+          delta: -2,
+        },
       ]);
     }
 

@@ -1,4 +1,4 @@
-import type { DetailedStep } from "../../types/detailedStep";
+﻿import type { DetailedStep } from "../../types/detailedStep";
 import type { PlayerEndTurnContext } from "../../types/eventsContext";
 import type { GameEndTurnRequest } from "../../types/request";
 import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsContext";
@@ -99,14 +99,16 @@ async function useCard(ws: ExtWebSocket, payload: any) {
 
   ws.player.trySpendActonPoints(card.Cost);
   steps.push({
-    type: EDetailedStep.PlayerChangeActionPoints,
+    type: EDetailedStep.PlayerStatChange,
+    stat: "actionPoints",
     playerId: ws.player.ID,
     delta: -card.Cost,
   });
 
   if (ws.player.Hand.some((c) => c.ID === card.ID)) {
     steps.push({
-      type: EDetailedStep.DiscardCard,
+      type: EDetailedStep.MoveCard,
+      to: "discard",
       playerId: ws.player.ID,
       card: card.getPrimitive(),
     });
@@ -148,9 +150,14 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
   ws.player.addCardToHand(newCard);
 
   const steps: DetailedStep[] = [
-    { type: EDetailedStep.PlayerChangeMora, playerId: ws.player.ID, delta: -UPGRADE_MORA_COST },
     {
-      type: EDetailedStep.AddCard,
+      type: EDetailedStep.PlayerStatChange,
+      stat: "mora",
+      playerId: ws.player.ID,
+      delta: -UPGRADE_MORA_COST,
+    },
+    {
+      type: EDetailedStep.MoveCard,
       playerId: ws.player.ID,
       card: newCard.getPrimitive(),
       to: "hand",
@@ -231,7 +238,8 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
   }
 
   steps.unshift({
-    type: EDetailedStep.PlayerChangeEnergy,
+    type: EDetailedStep.PlayerStatChange,
+    stat: "energy",
     playerId: ws.player.ID,
     delta: -character.BurstCost,
   });

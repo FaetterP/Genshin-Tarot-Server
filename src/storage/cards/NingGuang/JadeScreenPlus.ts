@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -15,12 +15,14 @@ export class JadeScreenPlus extends Card {
     if (ctx.selectedPlayer) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeShield,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "shield",
           playerId: ctx.selectedPlayer.ID,
           delta: 3,
         },
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.selectedPlayer.ID,
           delta: 1,
         },
@@ -30,12 +32,14 @@ export class JadeScreenPlus extends Card {
     }
     ctx.addToSteps([
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 3,
       },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 1,
       },

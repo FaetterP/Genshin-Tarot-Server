@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Anemo } from "../../elements/Anemo";
@@ -27,7 +27,8 @@ export class FavoniusBladeworkPlus extends Card {
         isPiercing: false,
       },
       {
-        type: EDetailedStep.PlayerChangeEnergy,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
         playerId: ctx.player.ID,
         delta: 2,
       },

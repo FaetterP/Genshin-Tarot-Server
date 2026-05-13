@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
@@ -34,7 +34,8 @@ export class AncientSwordArt extends Card {
     if (target.isContainsElement(EElement.Cryo)) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: 2,
         },

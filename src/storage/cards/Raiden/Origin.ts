@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
@@ -28,7 +28,8 @@ export class Origin extends Card {
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeActionPoints,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "actionPoints",
           playerId: ctx.player.ID,
           delta: 1,
         },

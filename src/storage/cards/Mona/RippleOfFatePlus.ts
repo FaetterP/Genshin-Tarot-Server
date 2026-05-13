@@ -1,4 +1,4 @@
-import type { DetailedStep } from "../../../types/detailedStep";
+﻿import type { DetailedStep } from "../../../types/detailedStep";
 import type { CardPrimitive } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { CardUseContext } from "../../../types/functionsContext";
@@ -29,7 +29,8 @@ export class RippleOfFatePlus extends Card {
       ) {
         ctx.addToSteps([
           {
-            type: EDetailedStep.PlayerChangeEnergy,
+            type: EDetailedStep.PlayerStatChange,
+            stat: "energy",
             playerId: ctx.player.ID,
             delta: 2,
           },

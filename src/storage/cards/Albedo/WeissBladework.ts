@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
@@ -37,7 +37,8 @@ export class WeissBladework extends Card {
     if (target.isContainsElement(EElement.Geo)) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: 2,
         },

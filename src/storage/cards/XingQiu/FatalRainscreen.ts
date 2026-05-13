@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Hydro } from "../../elements/Hydro";
 import { Card } from "../Card";
@@ -26,7 +26,8 @@ export class FatalRainscreen extends Card {
     ctx.addToSteps([
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Hydro },
       {
-        type: EDetailedStep.PlayerChangeShield,
+        type: EDetailedStep.PlayerStatChange,
+        stat: "shield",
         playerId: ctx.player.ID,
         delta: 4,
       },

@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
@@ -31,7 +31,8 @@ export class StrikeOfFortunePlus extends Card {
     if (ctx.player.Health <= 7) {
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: 3,
         },

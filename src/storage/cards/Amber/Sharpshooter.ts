@@ -1,4 +1,4 @@
-import { Pyro } from "../../elements/Pyro";
+﻿import { Pyro } from "../../elements/Pyro";
 import { Card } from "../Card";
 import { SharpshooterPlus } from "./SharpshooterPlus";
 import { CardUseContext } from "../../../types/functionsContext";
@@ -32,7 +32,8 @@ export class Sharpshooter extends Card {
       element = EElement.Pyro;
       ctx.addToSteps([
         {
-          type: EDetailedStep.PlayerChangeEnergy,
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
           playerId: ctx.player.ID,
           delta: -1,
         },

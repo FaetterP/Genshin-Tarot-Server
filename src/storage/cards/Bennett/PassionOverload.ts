@@ -1,4 +1,4 @@
-import { CardUseContext } from "../../../types/functionsContext";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Pyro } from "../../elements/Pyro";
@@ -55,13 +55,19 @@ export class PassionOverload extends Card {
 
       if (isBurn) {
         ctx.addToSteps([
-          { type: EDetailedStep.TrashCard, playerId: ctx.player.ID, card: topCard.getPrimitive() },
+          {
+            type: EDetailedStep.MoveCard,
+            to: "trash",
+            playerId: ctx.player.ID,
+            card: topCard.getPrimitive(),
+          },
         ]);
       } else {
         ctx.player.addCardToDiscard(topCard);
         ctx.addToSteps([
           {
-            type: EDetailedStep.DiscardCard,
+            type: EDetailedStep.MoveCard,
+            to: "discard",
             playerId: ctx.player.ID,
             card: topCard.getPrimitive(),
           },
