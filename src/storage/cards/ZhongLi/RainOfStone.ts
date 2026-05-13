@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 import { RainOfStone as RainOfStonePlus } from "./RainOfStonePlus";
@@ -34,21 +33,22 @@ export class RainOfStone extends Card {
     target.applyAttack({ damage: 1, isPiercing: true, player: ctx.player });
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      if (ctx.enemies.length <= 2) {
+      if (ctx.enemies.length < 2) {
         throw new Error("need 2 enemies");
       }
       if (ctx.enemies[0] === ctx.enemies[1]) {
         throw new Error("need 2 different enemies");
       }
+      const secondTarget = ctx.enemies[1];
       ctx.addToSteps([
         {
           type: EDetailedStep.EnemyTakeDamage,
-          enemyId: target.ID,
+          enemyId: secondTarget.ID,
           damage: 1,
           isPiercing: true,
         },
       ]);
-      target.applyAttack({
+      secondTarget.applyAttack({
         damage: 1,
         isPiercing: true,
         isRange: true,

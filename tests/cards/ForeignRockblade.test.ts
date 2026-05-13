@@ -71,19 +71,19 @@ describe("ForeignRockblade — Наносит 3 урона 1 врагу в ва�
     expect(action).toBe("game.useCard");
 
     const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && (s as any).enemyId === enemy.ID,
+      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
     );
     const apIdx = steps.findIndex(
       (s) =>
         s.type === EDetailedStep.PlayerStatChange &&
-        (s as any).stat === "actionPoints" &&
-        (s as any).playerId === player.ID,
+        s.stat === "actionPoints" &&
+        s.playerId === player.ID,
     );
     const discardIdx = steps.findIndex(
       (s) =>
         s.type === EDetailedStep.MoveCard &&
-        (s as any).to === "discard" &&
-        (s as any).playerId === player.ID,
+        s.to === "discard" &&
+        s.playerId === player.ID,
     );
 
     expect(damageIdx).toBeGreaterThanOrEqual(0);
@@ -105,6 +105,12 @@ describe("ForeignRockblade — Наносит 3 урона 1 врагу в ва�
       playerId: player.ID,
       delta: -1,
     });
+    expect(steps[discardIdx]).toEqual({
+      type: EDetailedStep.MoveCard,
+      to: "discard",
+      playerId: player.ID,
+      card: { cardId: card.ID, name: card.Name, type: card.Type },
+    });
     expect(enemy.Health).toBe(4);
   });
 
@@ -115,16 +121,37 @@ describe("ForeignRockblade — Наносит 3 урона 1 врагу в ва�
 
     const { steps } = getResponse();
     const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && (s as any).enemyId === enemy.ID,
+      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
     );
     const deathIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyDeath && (s as any).enemyId === enemy.ID,
+      (s) => s.type === EDetailedStep.EnemyDeath && s.enemyId === enemy.ID,
+    );
+    const apIdx = steps.findIndex(
+      (s) =>
+        s.type === EDetailedStep.PlayerStatChange &&
+        s.stat === "actionPoints" &&
+        s.playerId === player.ID,
+    );
+    const discardIdx = steps.findIndex(
+      (s) =>
+        s.type === EDetailedStep.MoveCard &&
+        s.to === "discard" &&
+        s.playerId === player.ID,
     );
 
     expect(damageIdx).toBeGreaterThanOrEqual(0);
     expect(deathIdx).toBeGreaterThanOrEqual(0);
+    expect(apIdx).toBeGreaterThanOrEqual(0);
+    expect(discardIdx).toBeGreaterThanOrEqual(0);
     // UI сначала показывает анимацию урона, потом гибель врага
     expect(damageIdx).toBeLessThan(deathIdx);
+
+    expect(steps[damageIdx]).toEqual({
+      type: EDetailedStep.EnemyTakeDamage,
+      enemyId: enemy.ID,
+      damage: 3,
+      isPiercing: false,
+    });
     expect(enemy.Health).toBe(0);
   });
 
@@ -135,17 +162,38 @@ describe("ForeignRockblade — Наносит 3 урона 1 врагу в ва�
 
     const { steps } = getResponse();
     const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && (s as any).enemyId === enemy.ID,
+      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
     );
     const blockIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyBlockDamage && (s as any).enemyId === enemy.ID,
+      (s) => s.type === EDetailedStep.EnemyBlockDamage && s.enemyId === enemy.ID,
+    );
+    const apIdx = steps.findIndex(
+      (s) =>
+        s.type === EDetailedStep.PlayerStatChange &&
+        s.stat === "actionPoints" &&
+        s.playerId === player.ID,
+    );
+    const discardIdx = steps.findIndex(
+      (s) =>
+        s.type === EDetailedStep.MoveCard &&
+        s.to === "discard" &&
+        s.playerId === player.ID,
     );
 
     // карта всегда добавляет EnemyTakeDamage до вызова applyAttack —
     // UI должен показать анимацию удара, затем отбивания щитом
     expect(damageIdx).toBeGreaterThanOrEqual(0);
     expect(blockIdx).toBeGreaterThanOrEqual(0);
+    expect(apIdx).toBeGreaterThanOrEqual(0);
+    expect(discardIdx).toBeGreaterThanOrEqual(0);
     expect(damageIdx).toBeLessThan(blockIdx);
+
+    expect(steps[damageIdx]).toEqual({
+      type: EDetailedStep.EnemyTakeDamage,
+      enemyId: enemy.ID,
+      damage: 3,
+      isPiercing: false,
+    });
     expect(enemy.Health).toBe(7);
   });
 
