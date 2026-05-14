@@ -16,6 +16,7 @@ import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
+import { createPlayerEffectFromEnum } from "../storage/effects/playerEffectFactory";
 import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
@@ -368,6 +369,9 @@ export class Player {
     shield?: number;
     mora?: number;
     actionPoints?: { normal?: number; extra?: number };
+    wave?: number;
+    eulaSnowflakes?: number;
+    effects?: EPlayerEffect[];
   }) {
     if (stats.hp !== undefined) this.hp = clamp(stats.hp, 0, 12);
     if (stats.energy !== undefined) this.energy = clamp(stats.energy, 0, 12);
@@ -377,6 +381,13 @@ export class Player {
       const { normal, extra } = stats.actionPoints;
       this.actionPoints = clamp(normal ?? 0, 0, 3);
       this.extraActionPoints = clamp(extra ?? 0, 0, 3);
+    }
+    if (stats.wave !== undefined) this.wave = Math.max(0, stats.wave);
+    if (stats.eulaSnowflakes !== undefined) this.snowflakes = Math.max(0, stats.eulaSnowflakes);
+    if (stats.effects !== undefined) {
+      this.effects = stats.effects
+        .map(createPlayerEffectFromEnum)
+        .filter((e): e is PlayerEffect => e !== null);
     }
   }
 

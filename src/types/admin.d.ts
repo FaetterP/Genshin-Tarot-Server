@@ -1,4 +1,5 @@
 import type { PlayerPrimitive } from "./general";
+import type { EElement, EEnemyEffect, EPlayerEffect } from "./enums";
 
 export type AdminStateSnapshot = {
   isGameStart: boolean;
@@ -33,4 +34,32 @@ export type AdminMoveCardPayload = {
   cardId: string;
   from: CardPile;
   to: CardPile;
+};
+
+export type AdminSetStateEnemyPayload = {
+  id: string;
+  hp?: number;
+  shield?: number;
+  isStunned?: boolean;
+  elements?: EElement[];
+  effects?: EEnemyEffect[];
+};
+
+export type AdminSetStatePlayerPayload = {
+  playerId: string;
+  hp?: number;
+  shields?: number;
+  energy?: number;
+  mora?: number;
+  wave?: number;
+  eulaSnowflakes?: number;
+  actionPoints?: { normal?: number; extra?: number };
+  effects?: EPlayerEffect[];
+  enemies?: AdminSetStateEnemyPayload[];
+};
+
+export type AdminSetStatePayload = {
+  isGameStart?: boolean;
+  cycle?: number;
+  players?: AdminSetStatePlayerPayload[];
 };

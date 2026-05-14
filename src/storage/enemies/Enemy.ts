@@ -12,6 +12,8 @@ import { EDetailedStep, EElement, EEnemy, EEnemyEffect } from "../../types/enums
 import { Cryo } from "../elements/Cryo";
 import { Hydro } from "../elements/Hydro";
 import { EnemyEffect } from "../effects/EnemyEffect";
+import { createElementFromEnum } from "../elements/elementFactory";
+import { createEnemyEffectFromEnum } from "../effects/enemyEffectFactory";
 
 type EnemyConstructorType = {
   hp: number;
@@ -101,10 +103,26 @@ export abstract class Enemy {
     };
   }
 
-  public adminSetStats(stats: { hp?: number; shield?: number; isStunned?: boolean }) {
+  public adminSetStats(stats: {
+    hp?: number;
+    shield?: number;
+    isStunned?: boolean;
+    elements?: EElement[];
+    effects?: EEnemyEffect[];
+  }) {
     if (stats.hp !== undefined) this.hp = Math.max(0, stats.hp);
     if (stats.shield !== undefined) this.shield = Math.max(0, stats.shield);
     if (stats.isStunned !== undefined) this.isStunned = stats.isStunned;
+    if (stats.elements !== undefined) {
+      this.elements = stats.elements
+        .map(createElementFromEnum)
+        .filter((e): e is BaseElement => e !== null);
+    }
+    if (stats.effects !== undefined) {
+      this.effects = stats.effects
+        .map((e) => createEnemyEffectFromEnum(e, this))
+        .filter((e): e is EnemyEffect => e !== null);
+    }
   }
 
   public kill() {

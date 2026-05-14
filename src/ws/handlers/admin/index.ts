@@ -8,7 +8,9 @@ import type {
   AdminMoveCardPayload,
   AdminUpdateEnemyPayload,
   AdminUpdatePlayerPayload,
+  AdminSetStatePayload,
 } from "../../../types/admin";
+import type { EElement, EEnemyEffect, EPlayerEffect } from "../../../types/enums";
 
 export type AdminContext = {
   cycleController: CycleController;
@@ -89,12 +91,50 @@ async function moveCard(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   await withPlayer(ctx, ws, playerId, (p) => p.adminMoveCard(cardId, from, to));
 }
 
+async function setState(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { isGameStart, cycle, players } = payload as AdminSetStatePayload;
+
+  if (isGameStart !== undefined) ctx.cycleController.adminSetGameStart(isGameStart);
+  if (cycle !== undefined) ctx.cycleController.adminSetCycle(cycle);
+
+  if (players) {
+    for (const playerData of players) {
+      const player = ctx.cycleController.getPlayerById(playerData.playerId);
+      if (!player) continue;
+
+      const { enemies: enemyUpdates, playerId: _id, ...playerStats } = playerData;
+      player.adminSetStats({
+        ...playerStats,
+        shield: playerStats.shields,
+        effects: playerStats.effects as EPlayerEffect[] | undefined,
+      });
+
+      if (enemyUpdates) {
+        for (const enemyData of enemyUpdates) {
+          const enemy = ctx.cycleController.getEnemyById(enemyData.id);
+          if (!enemy) continue;
+          const { id: _enemyId, ...enemyStats } = enemyData;
+          enemy.adminSetStats({
+            ...enemyStats,
+            elements: enemyStats.elements as EElement[] | undefined,
+            effects: enemyStats.effects as EEnemyEffect[] | undefined,
+          });
+        }
+      }
+    }
+  }
+
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
 export const handlers: Record<string, AdminHandler> = {
   "admin.getState": getState,
   "admin.updatePlayer": updatePlayer,
   "admin.updateEnemy": updateEnemy,
   "admin.killEnemy": killEnemy,
   "admin.moveCard": moveCard,
+  "admin.setState": setState,
 };
 
 export function createOnAdminConnect(ctx: AdminContext): (ws: WebSocket) => void {

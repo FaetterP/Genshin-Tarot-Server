@@ -186,4 +186,12 @@ export class CycleController {
   getPlayerCard(cardId: string, player: Player) {
     return player.Hand.find((card) => card.ID === cardId);
   }
+
+  adminSetCycle(cycle: number) {
+    this.cycle = Math.max(0, cycle);
+  }
+
+  adminSetGameStart(isGameStart: boolean) {
+    this.isGameStart = isGameStart;
+  }
 }
