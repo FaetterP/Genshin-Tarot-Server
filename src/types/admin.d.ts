@@ -1,5 +1,5 @@
 import type { PlayerPrimitive } from "./general";
-import type { EElement, EEnemyEffect, EPlayerEffect } from "./enums";
+import type { ECard, EElement, EEnemyEffect, EEnemy, EPlayerEffect } from "./enums";
 
 export type AdminStateSnapshot = {
   isGameStart: boolean;
@@ -62,4 +62,19 @@ export type AdminSetStatePayload = {
   isGameStart?: boolean;
   cycle?: number;
   players?: AdminSetStatePlayerPayload[];
+};
+
+export type AdminAddEnemyPayload = {
+  playerId: string;
+  enemyName: EEnemy;
+};
+
+export type AdminRemoveEnemyPayload = {
+  enemyId: string;
+};
+
+export type AdminAddCardPayload = {
+  playerId: string;
+  cardName: ECard;
+  to: CardPile;
 };

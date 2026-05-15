@@ -544,6 +544,17 @@ export class Player {
     ]);
   }
 
+  public adminAddNewEnemy(enemy: Enemy): void {
+    enemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
+    enemy.OnEndCycle.addListener(this.enemyEndCycleHandler.bind(this));
+    enemy.reveal();
+    this.enemies.push(enemy);
+  }
+
+  public adminRemoveEnemy(enemyId: string): void {
+    this.enemies = this.enemies.filter((e) => e.ID !== enemyId);
+  }
+
   public adminMoveCard(
     cardId: string,
     from: "hand" | "discard" | "deck",

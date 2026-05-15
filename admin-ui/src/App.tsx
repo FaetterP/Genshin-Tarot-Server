@@ -14,6 +14,64 @@ const PLAYER_EFFECTS = [
 const ENEMY_EFFECTS = ["Nightrider", "NightriderPlus"];
 const ELEMENTS = ["Pyro", "Hydro", "Cryo", "Electro", "Anemo", "Geo", "Dendro"];
 
+const ALL_ENEMIES = [
+  "AnemoBoxer", "AnemoShamachurl", "CryoAbyssMage", "CryoCicinSwarm", "CryoGunner",
+  "CryoHilichurlShooter", "CryoWhopperflower", "DendroShamachurl", "ElectroCicinSwarm",
+  "ElectroHammer", "ElectroHilichurlShooter", "GeoChanter", "GeoShamachurl",
+  "GiantAnemoSlime", "GiantCryoSlime", "GiantDendroSlime", "GiantElectroSlime",
+  "GiantGeoSlime", "GiantHydroSlime", "GiantPyroSlime", "HilichurlBerserk",
+  "HilichurlGang", "HilichurlGrenadier", "HilichurlGuard", "HydroAbyssMage",
+  "HydroGunner", "PyroAbyssMage", "PyroHilichurlShooter", "PyroSlinger",
+  "PyroWhopperflower", "SmallAnemoSlime", "SmallCryoSlime", "SmallDendroSlime",
+  "SmallElectroSlime", "SmallGeoSlime", "SmallHydroSlime", "SmallPyroSlime",
+  "TreasureHoarderGang", "UnusualHilichurl", "VishapHatchling",
+  "AnemoHypostasis", "BlazingAxeMitachurl", "CicinCryoMage", "CicinElectroMage",
+  "CryoRegisvine", "ElectroHypostasis", "EyeOfStorm", "FrostarmLawachurl",
+  "GeoHypostasis", "PyroAgent", "PyroRegisvine", "RuinGrader", "RuinGuard",
+  "RuinHunter", "ShieldBearerMitachurl", "StonehideLawachurl",
+];
+
+const ALL_CARDS = [
+  "StarfellSword", "StarfellSwordPlus", "ForeignRockblade", "ForeignRockbladePlus",
+  "WeissBladework", "WeissBladeworkPlus", "SolarIsotoma", "SolarIsotomaPlus",
+  "Sharpshooter", "SharpshooterPlus", "ExplosivePuppet", "ExplosivePuppetPlus",
+  "WhisperOfWater", "WhisperOfWaterPlus", "LetTheShowBegin", "LetTheShowBeginPlus",
+  "Oceanborn", "OceanbornPlus", "Tidecaller", "TidecallerPlus",
+  "StrikeOfFortune", "StrikeOfFortunePlus", "PassionOverload", "PassionOverloadPlus",
+  "LayeredFrost", "LayeredFrostPlus", "Demonbane", "DemonbanePlus",
+  "SearingOnslaught", "SearingOnslaughtPlus", "TemperedSword", "TemperedSwordPlus",
+  "KatzleinStyle", "KatzleinStylePlus", "IcyPaws", "IcyPawsPlus",
+  "IcetideVortex", "IcetideVortexPlus", "EdelBladework", "EdelBladeworkPlus",
+  "BoltsOfDownfall", "BoltsOfDownfallPlus", "Nightrider", "NightriderPlus",
+  "LiutianArchery", "LiutianArcheryPlus", "TrailOfTheQilin", "TrailOfTheQilinPlus",
+  "GuideOfAfterlife", "GuideOfAfterlifePlus", "SpearOfWangsheng", "SpearOfWangshengPlus",
+  "FavoniusBladework", "FavoniusBladeworkPlus", "GaleBlade", "GaleBladePlus",
+  "CeremonialBladework", "CeremonialBladeworkPlus", "Frostgnaw", "FrostgnawPlus",
+  "Chihayaburu", "ChihayaburuPlus", "GaryuuBladework", "GaryuuBladeworkPlus",
+  "StellarRestoration", "StellarRestorationPlus", "YunlaiSwordsmanship", "YunlaiSwordsmanshipPlus",
+  "Kaboom", "KaboomPlus", "JumpyDumpty", "JumpyDumptyPlus",
+  "LightningTouch", "LightningTouchPlus", "VioletArc", "VioletArcPlus",
+  "ForeignIronwind", "ForeignIronwindPlus", "PalmVortex", "PalmVortexPlus",
+  "MirrorReflections", "MirrorReflectionsPlus", "RippleOfFate", "RippleOfFatePlus",
+  "JadeScreen", "JadeScreenPlus", "SparklingScatter", "SparklingScatterPlus",
+  "Breastplate", "BreastplatePlus", "MaidsBladework", "MaidsBladeworkPlus",
+  "AncientSwordArt", "AncientSwordArtPlus", "HeraldOfFrost", "HeraldOfFrostPlus",
+  "BalefulOmen", "BalefulOmenPlus", "Origin", "OriginPlus",
+  "ClawAndThunder", "ClawAndThunderPlus", "SteelFang", "SteelFangPlus",
+  "RavagingConfession", "RavagingConfessionPlus", "SpearOfTheChurch", "SpearOfTheChurchPlus",
+  "AnemoHypostatis", "AnemoHypostatisPlus", "WindSpiritCreation", "WindSpiritCreationPlus",
+  "CuttingTorrent", "CuttingTorrentPlus", "RagingTide", "RagingTidePlus",
+  "DivineArchery", "DivineArcheryPlus", "SkywardSonnet", "SkywardSonnetPlus",
+  "DoughFu", "DoughFuPlus", "GuobaFire", "GuobaFirePlus",
+  "LemniscaticWind", "LemniscaticWindPlus", "WhirlwindThrust", "WhirlwindThrustPlus",
+  "GuhuaStyle", "GuhuaStylePlus", "FatalRainscreen", "FatalRainscreenPlus",
+  "DanceOfFire", "DanceOfFirePlus", "SweepingFervor", "SweepingFervorPlus",
+  "SealOfApproval", "SealOfApprovalPlus", "SignedEdict", "SignedEdictPlus",
+  "FireworkFlareUp", "FireworkFlareUpPlus", "NiwabiFireDance", "NiwabiFireDancePlus",
+  "DominusLapidis", "DominusLapidisPlus", "RainOfStone", "RainOfStonePlus",
+  "Burn", "Dash", "Freeze", "Overheat",
+];
+
 export type GameLogEntry =
   | { id: number; dir: "in"; time: number; playerId: string; request: unknown }
   | { id: number; dir: "out"; time: number; kind: string; payload: unknown; targetPlayerId: string | null };
@@ -265,7 +323,7 @@ function EnemyPanel({
         <ArrayBadges values={effects} all={ENEMY_EFFECTS} onChange={setEffects} />
       </div>
 
-      <div style={{ display: "flex", gap: "0.4rem" }}>
+      <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
         <button type="button" onClick={apply} style={{ fontSize: "0.8rem" }}>Применить</button>
         <button
           type="button"
@@ -274,7 +332,79 @@ function EnemyPanel({
         >
           Убить
         </button>
+        <button
+          type="button"
+          onClick={() => onSend("admin.removeEnemy", { enemyId: enemy.id })}
+          style={{ fontSize: "0.8rem", background: "#565f89", color: "#c0caf5" }}
+          title="Удалить без событий смерти"
+        >
+          Удалить
+        </button>
       </div>
+    </div>
+  );
+}
+
+function AddEnemyWidget({
+  playerId,
+  onSend,
+}: {
+  playerId: string;
+  onSend: (action: string, payload: Record<string, unknown>) => void;
+}) {
+  const [selectedEnemy, setSelectedEnemy] = useState(ALL_ENEMIES[0]);
+
+  return (
+    <div style={{ display: "flex", gap: "0.4rem", alignItems: "center", marginTop: "0.5rem", flexWrap: "wrap" }}>
+      <select
+        value={selectedEnemy}
+        onChange={(e) => setSelectedEnemy(e.target.value)}
+        style={{ fontSize: "0.8rem", padding: "0.2rem 0.4rem", flex: 1, minWidth: 0 }}
+      >
+        {ALL_ENEMIES.map((name) => (
+          <option key={name} value={name}>{name}</option>
+        ))}
+      </select>
+      <button
+        type="button"
+        onClick={() => onSend("admin.addEnemy", { playerId, enemyName: selectedEnemy })}
+        style={{ fontSize: "0.8rem", background: "#9ece6a", color: "#1a1b2e", whiteSpace: "nowrap" }}
+      >
+        + Враг
+      </button>
+    </div>
+  );
+}
+
+function AddCardWidget({
+  playerId,
+  pile,
+  onSend,
+}: {
+  playerId: string;
+  pile: CardPile;
+  onSend: (action: string, payload: Record<string, unknown>) => void;
+}) {
+  const [selectedCard, setSelectedCard] = useState(ALL_CARDS[0]);
+
+  return (
+    <div style={{ display: "flex", gap: "0.3rem", alignItems: "center", marginTop: "0.4rem", flexWrap: "wrap" }}>
+      <select
+        value={selectedCard}
+        onChange={(e) => setSelectedCard(e.target.value)}
+        style={{ fontSize: "0.75rem", padding: "0.15rem 0.3rem", flex: 1, minWidth: 0 }}
+      >
+        {ALL_CARDS.map((name) => (
+          <option key={name} value={name}>{name}</option>
+        ))}
+      </select>
+      <button
+        type="button"
+        onClick={() => onSend("admin.addCard", { playerId, cardName: selectedCard, to: pile })}
+        style={{ fontSize: "0.75rem", background: "#7aa2f7", color: "#1a1b2e", whiteSpace: "nowrap" }}
+      >
+        + Карта
+      </button>
     </div>
   );
 }
@@ -378,16 +508,19 @@ function PlayerCard({
       </button>
 
       {/* Enemies */}
-      {player.enemies.length > 0 && (
-        <div style={{ marginBottom: "0.75rem" }}>
-          <strong style={{ fontSize: "0.9rem" }}>Враги ({player.enemies.length}):</strong>
+      <div style={{ marginBottom: "0.75rem" }}>
+        <strong style={{ fontSize: "0.9rem" }}>
+          Враги ({player.enemies.length}):
+        </strong>
+        {player.enemies.length > 0 && (
           <div style={{ marginTop: "0.5rem" }}>
             {player.enemies.map((enemy) => (
               <EnemyPanel key={enemy.id} enemy={enemy} playerId={player.playerId} onSend={onSend} />
             ))}
           </div>
-        </div>
-      )}
+        )}
+        <AddEnemyWidget playerId={player.playerId} onSend={onSend} />
+      </div>
 
       {/* Card piles */}
       {CARD_PILES.map(({ key, label, cards }) => (
@@ -413,6 +546,7 @@ function PlayerCard({
             ))}
             {cards.length === 0 && <li style={{ color: "#565f89" }}>—</li>}
           </ul>
+          <AddCardWidget playerId={player.playerId} pile={key} onSend={onSend} />
         </details>
       ))}
     </div>

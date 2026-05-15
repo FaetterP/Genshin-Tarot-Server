@@ -9,8 +9,13 @@ import type {
   AdminUpdateEnemyPayload,
   AdminUpdatePlayerPayload,
   AdminSetStatePayload,
+  AdminAddEnemyPayload,
+  AdminRemoveEnemyPayload,
+  AdminAddCardPayload,
 } from "../../../types/admin";
-import type { EElement, EEnemyEffect, EPlayerEffect } from "../../../types/enums";
+import type { ECard, EElement, EEnemyEffect, EEnemy, EPlayerEffect } from "../../../types/enums";
+import { createEnemyFromEnum } from "../../../storage/enemies/enemyFactory";
+import { createCardFromEnum } from "../../../storage/cards/cardFactory";
 
 export type AdminContext = {
   cycleController: CycleController;
@@ -84,6 +89,55 @@ async function killEnemy(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   sendState(ctx, ws);
 }
 
+async function addEnemy(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { playerId, enemyName } = payload as AdminAddEnemyPayload;
+  if (!playerId) throw new Error("playerId is required");
+  if (!enemyName) throw new Error("enemyName is required");
+
+  const player = ctx.cycleController.getPlayerById(playerId);
+  if (!player) throw new Error("Player not found");
+
+  const enemy = createEnemyFromEnum(enemyName as EEnemy);
+  if (!enemy) throw new Error(`Unknown enemy: ${enemyName}`);
+
+  player.adminAddNewEnemy(enemy);
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
+async function removeEnemy(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { enemyId } = payload as AdminRemoveEnemyPayload;
+  if (!enemyId) throw new Error("enemyId is required");
+
+  const owner = ctx.cycleController.getPlayerByEnemyId(enemyId);
+  if (!owner) throw new Error("Owner player not found");
+
+  owner.adminRemoveEnemy(enemyId);
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
+async function addCard(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { playerId, cardName, to } = payload as AdminAddCardPayload;
+  if (!playerId) throw new Error("playerId is required");
+  if (!cardName) throw new Error("cardName is required");
+  if (!to) throw new Error("to is required");
+
+  const player = ctx.cycleController.getPlayerById(playerId);
+  if (!player) throw new Error("Player not found");
+
+  const card = createCardFromEnum(cardName as ECard);
+  if (!card) throw new Error(`Unknown or unimplemented card: ${cardName}`);
+
+  if (to === "hand") player.addCardToHand(card, false);
+  else if (to === "discard") player.addCardToDiscard(card);
+  else if (to === "deck") player.addCardToDeck(card);
+  else throw new Error(`Invalid pile: ${to}`);
+
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
 async function moveCard(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   const { playerId, cardId, from, to } = payload as AdminMoveCardPayload;
   if (!playerId || !cardId || !from || !to)
@@ -133,6 +187,9 @@ export const handlers: Record<string, AdminHandler> = {
   "admin.updatePlayer": updatePlayer,
   "admin.updateEnemy": updateEnemy,
   "admin.killEnemy": killEnemy,
+  "admin.addEnemy": addEnemy,
+  "admin.removeEnemy": removeEnemy,
+  "admin.addCard": addCard,
   "admin.moveCard": moveCard,
   "admin.setState": setState,
 };
