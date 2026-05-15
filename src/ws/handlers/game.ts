@@ -93,7 +93,9 @@ async function useCard(ws: ExtWebSocket, payload: any) {
       `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`,
     );
 
+  ws.player._currentCardType = card.Type;
   card.use(ctx);
+  ws.player._currentCardType = undefined;
 
   ws.player.triggerUseCardEffects({ player: ws.player, usedCard: card });
 

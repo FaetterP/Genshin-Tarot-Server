@@ -1,4 +1,4 @@
-import { EPlayerEffect } from "../../types/enums";
+import { ECardType, EPlayerEffect } from "../../types/enums";
 import { Player } from "../../game/Player";
 import { Cryo } from "../elements/Cryo";
 import { Enemy } from "../enemies/Enemy";
@@ -9,7 +9,9 @@ export class LayeredFrostEffect extends PlayerEffect {
     return EPlayerEffect.LayeredFrost;
   }
 
-  public override onAttack(player: Player, enemy: Enemy): boolean {
+  public override onAttack(player: Player, enemy: Enemy, cardType?: ECardType): boolean {
+    if (cardType !== ECardType.Attack) return false;
+
     enemy.applyElement(new Cryo(), player);
 
     return false;

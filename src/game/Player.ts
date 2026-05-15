@@ -20,7 +20,7 @@ import { createPlayerEffectFromEnum } from "../storage/effects/playerEffectFacto
 import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
-import { ECard, EDetailedStep, EElement, EPlayerEffect } from "../types/enums";
+import { ECard, ECardType, EDetailedStep, EElement, EPlayerEffect } from "../types/enums";
 
 export class Player {
   public readonly ID: string;
@@ -46,6 +46,7 @@ export class Player {
   private burnsDrawnThisTurn: number = 0;
   private isTookDamageThisTurn: boolean = false;
   private isTookDamageLastTurn: boolean = false;
+  public _currentCardType?: ECardType;
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
   private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
@@ -573,8 +574,9 @@ export class Player {
   }
 
   public useAttackEffects(enemy: Enemy) {
+    const cardType = this._currentCardType;
     for (const effect of this.effects) {
-      if (effect.onAttack(this, enemy)) {
+      if (effect.onAttack(this, enemy, cardType)) {
         this.effects = this.effects.filter((eff) => eff !== effect);
       }
     }

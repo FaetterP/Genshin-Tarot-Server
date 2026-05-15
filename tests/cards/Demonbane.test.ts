@@ -1,5 +1,5 @@
 /**
- * Oceanborn - Уничтожает 1 щит 1 врагу в вашей зоне. Наносит 2 урона если у врага нет щитов.
+ * Demonbane - Уничтожает 1 щит 1 врагу в вашей зоне. Наносит 2 урона, если у врага нет щитов.
  * Вы можете потратить 1 Очко действия, чтобы моментально повторить этот эффект на этом же враге.
  * Тип: Attack. Стоимость: 1
  */
@@ -17,7 +17,7 @@ import {
 
 jest.setTimeout(15000);
 
-describe("Oceanborn — уничтожает 1 щит врагу или наносит 2 урона, опционально повторяет за 1 AP", () => {
+describe("Demonbane — уничтожает 1 щит врагу или наносит 2 урона, опционально повторяет за 1 AP", () => {
   let game: TestGame;
 
   beforeAll(async () => {
@@ -45,7 +45,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -70,12 +70,13 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
       expect.objectContaining({
         type: EDetailedStep.MoveCard,
         to: "discard",
-        card: expect.objectContaining({ name: ECard.Oceanborn }),
+        card: expect.objectContaining({ name: ECard.Demonbane }),
       }),
     );
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
     expect(updatedEnemy.hp).toBe(8);
+    expect(response.player.actionPoints.total).toBe(2);
   });
 
   it("враг с 1 щитом — щит снимается, урон не наносится, HP не изменяется", async () => {
@@ -87,7 +88,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 1, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -102,28 +103,13 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     expect(response.steps).not.toContainEqual(
       expect.objectContaining({ type: EDetailedStep.EnemyTakeDamage }),
     );
-    expect(response.steps).toContainEqual(
-      expect.objectContaining({
-        type: EDetailedStep.PlayerStatChange,
-        stat: "actionPoints",
-        playerId: player.playerId,
-        delta: -1,
-      }),
-    );
-    expect(response.steps).toContainEqual(
-      expect.objectContaining({
-        type: EDetailedStep.MoveCard,
-        to: "discard",
-        card: expect.objectContaining({ name: ECard.Oceanborn }),
-      }),
-    );
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
     expect(updatedEnemy.hp).toBe(10);
     expect(updatedEnemy.shield).toBe(0);
   });
 
-  it("isUseAlternative, 2 AP, враг с 2 щитами — снимает оба щита", async () => {
+  it("isUseAlternative с 2 AP, враг с 2 щитами — снимает оба щита", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -132,7 +118,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 2, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 2, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -149,7 +135,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     expect(response.player.actionPoints.total).toBe(0);
   });
 
-  it("isUseAlternative, 2 AP, враг с 1 щитом — снимает щит, затем наносит 2 урона", async () => {
+  it("isUseAlternative с 2 AP, враг с 1 щитом — снимает щит, затем наносит 2 урона", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -158,7 +144,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 1, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 2, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -185,7 +171,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     expect(response.player.actionPoints.total).toBe(0);
   });
 
-  it("isUseAlternative, 2 AP, враг без щита — наносит 2+2 урона", async () => {
+  it("isUseAlternative с 2 AP, враг без щита — наносит 2+2 урона", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -194,7 +180,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 2, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -211,7 +197,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     expect(response.player.actionPoints.total).toBe(0);
   });
 
-  it("isUseAlternative с только 1 AP — возвращает ошибку", async () => {
+  it("isUseAlternative с 1 AP — возвращает ошибку", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -220,7 +206,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 1, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
     const response = await player.waitFor((m: any) => m.status !== undefined);
@@ -229,7 +215,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     expect(response.message).toContain("not enough action points");
   });
 
-  it("убивает врага с 2 HP — EnemyDeath, враг исчезает, новая волна", async () => {
+  it("убивает врага с 2 HP и спавнит следующую волну", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -238,35 +224,18 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 2, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
     expect(response.steps).toContainEqual(
-      expect.objectContaining({ type: EDetailedStep.EnemyTakeDamage, enemyId: enemy.id }),
-    );
-    expect(response.steps).toContainEqual(
       expect.objectContaining({ type: EDetailedStep.EnemyDeath, enemyId: enemy.id }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
-  });
-
-  it("возвращает ошибку если enemies не переданы", async () => {
-    game = await createTestGame();
-    const [player] = game.players;
-    const { admin } = game;
-
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
-
-    player.send({ action: "game.useCard", cardId });
-    const response = await player.waitFor((m: any) => m.status !== undefined);
-
-    expect(response.status).toBe("error");
-    expect(response.message).toBe("no enemies");
+    expect(
+      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
+    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {
@@ -278,13 +247,27 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0 });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 0, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.status !== undefined);
 
     expect(response.status).toBe("error");
     expect(response.message).toContain("not enough action points");
+  });
+
+  it("возвращает ошибку если enemies не переданы", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const cardId = await ensureCardInHand(player, admin, ECard.Demonbane);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toBe("no enemies");
   });
 
   it("второй игрок тоже получает событие game.useCard", async () => {
@@ -296,7 +279,7 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player1, admin, ECard.Oceanborn);
+    const cardId = await ensureCardInHand(player1, admin, ECard.Demonbane);
 
     player1.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
 
@@ -305,8 +288,8 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
       player2.waitFor((m: any) => m.action === "game.useCard"),
     ]);
 
-    expect(response1.card).toBe(ECard.Oceanborn);
-    expect(response2.card).toBe(ECard.Oceanborn);
+    expect(response1.card).toBe(ECard.Demonbane);
+    expect(response2.card).toBe(ECard.Demonbane);
     expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

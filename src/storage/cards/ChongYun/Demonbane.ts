@@ -22,6 +22,10 @@ export class Demonbane extends Card {
       throw new Error("no enemies");
     }
 
+    if (ctx.isUseAlternative && ctx.player.ActionPoints.total < 2) {
+      throw new Error(`not enough action points you:${ctx.player.ActionPoints.total} need:2`);
+    }
+
     const target = ctx.enemies[0];
 
     if (target.Shield > 0) {
@@ -46,15 +50,6 @@ export class Demonbane extends Card {
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
-      ctx.addToSteps([
-        {
-          type: EDetailedStep.PlayerStatChange,
-          stat: "actionPoints",
-          playerId: ctx.player.ID,
-          delta: -1,
-        },
-      ]);
-      ctx.player.addActionPoints(-1);
       if (target.Shield > 0) {
         ctx.addToSteps([
           {

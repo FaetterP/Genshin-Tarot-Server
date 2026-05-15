@@ -22,6 +22,10 @@ export class Oceanborn extends Card {
       throw new Error("no enemies");
     }
 
+    if (ctx.isUseAlternative && ctx.player.ActionPoints.total < 2) {
+      throw new Error(`not enough action points you:${ctx.player.ActionPoints.total} need:2`);
+    }
+
     const target = ctx.enemies[0];
 
     if (target.Shield > 0) {
@@ -45,7 +49,7 @@ export class Oceanborn extends Card {
       target.applyAttack({ damage: 2, player: ctx.player });
     }
 
-    if (ctx.isUseAlternative && ctx.player.ActionPoints.total >= 2 && ctx.player.trySpendActonPoints(1)) {
+    if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
         ctx.addToSteps([
           {
