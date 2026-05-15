@@ -747,9 +747,6 @@ export class Player {
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {
-    this.isTookDamageLastTurn = this.isTookDamageThisTurn;
-    this.isTookDamageThisTurn = false;
-
     for (const enemy of this.enemies) {
       enemy.endCycle({
         enemy,
@@ -757,5 +754,8 @@ export class Player {
         addToSteps: ctx.addToSteps,
       });
     }
+
+    this.isTookDamageLastTurn = this.isTookDamageThisTurn;
+    this.isTookDamageThisTurn = false;
   }
 }

@@ -45,7 +45,7 @@ export class Oceanborn extends Card {
       target.applyAttack({ damage: 2, player: ctx.player });
     }
 
-    if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
+    if (ctx.isUseAlternative && ctx.player.ActionPoints.total >= 2 && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
         ctx.addToSteps([
           {
