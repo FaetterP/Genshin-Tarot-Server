@@ -194,4 +194,12 @@ export class CycleController {
   adminSetGameStart(isGameStart: boolean) {
     this.isGameStart = isGameStart;
   }
+
+  reset(): void {
+    this.players = [];
+    this.cycle = 0;
+    this.isGameStart = false;
+    this.e_onCycleEnd = new Event<CycleEndContext>();
+    this.e_onCycleStart = new Event<CycleStartContext>();
+  }
 }

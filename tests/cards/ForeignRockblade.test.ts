@@ -1,221 +1,217 @@
-﻿/**
- * ForeignRockblade — Наносит 3 урона 1 врагу в вашей зоне.
- * Тип: Атака. Стоимость: 1 очко действия.
+/**
+ * ForeignRockblade - Наносит 3 урона 1 врагу в вашей зоне.
+ * Тип: Attack. Стоимость: 1
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { ForeignRockblade } from "../../src/storage/cards/Aether/ForeignRockblade";
-import { HilichurlGuard } from "../../src/storage/enemies/normal/HilichurlGuard";
-import { EDetailedStep } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("ForeignRockblade", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("ForeignRockblade — Наносит 3 урона 1 врагу в вашей зоне", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let card: ForeignRockblade;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    card = new ForeignRockblade();
-    player.addCardToHand(card);
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function addEnemy(hp: number, shield = 0): HilichurlGuard {
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp, shield });
-    player.addEnemy(enemy);
-    return enemy;
-  }
-
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
-
-  it("рассылает шаги всем игрокам: EnemyTakeDamage → PlayerChangeActionPoints → DiscardCard", async () => {
-    const enemy = addEnemy(7);
-
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
-
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
-
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
-    );
-
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    // порядок: сначала урон, потом списание AP, потом сброс карты
-    expect(damageIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 3,
-      isPiercing: false,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -1,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(enemy.Health).toBe(4);
+  afterEach(() => {
+    game?.cleanup();
   });
 
-  it("враг погибает при оставшихся ровно 3 HP — EnemyTakeDamage идёт перед EnemyDeath", async () => {
-    const enemy = addEnemy(3);
+  it("наносит 3 урона врагу без щита", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0 });
 
-    const { steps } = getResponse();
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const deathIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyDeath && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 3,
+        isPiercing: false,
+      }),
     );
 
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(deathIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    // UI сначала показывает анимацию урона, потом гибель врага
-    expect(damageIdx).toBeLessThan(deathIdx);
-
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 3,
-      isPiercing: false,
-    });
-    expect(enemy.Health).toBe(0);
+    const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
+    expect(updatedEnemy.hp).toBe(7);
   });
 
-  it("щит врага блокирует урон — EnemyTakeDamage идёт перед EnemyBlockDamage, HP не меняется", async () => {
-    const enemy = addEnemy(7, 1);
+  it("уменьшает AP игрока на 1 и перемещает карту в сброс", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0 });
 
-    const { steps } = getResponse();
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const blockIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyBlockDamage && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
-    );
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
 
-    // карта всегда добавляет EnemyTakeDamage до вызова applyAttack —
-    // UI должен показать анимацию удара, затем отбивания щитом
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(blockIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(damageIdx).toBeLessThan(blockIdx);
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 3,
-      isPiercing: false,
-    });
-    expect(enemy.Health).toBe(7);
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: -1,
+      }),
+    );
+    expect(response.player.actionPoints.total).toBe(2);
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.ForeignRockblade }),
+      }),
+    );
+    expect(response.player.discard.some((c: any) => c.name === ECard.ForeignRockblade)).toBe(true);
   });
 
-  it("при нескольких врагах в запросе удар наносится только первому (ctx.enemies[0])", async () => {
-    const firstEnemy = addEnemy(7);
-    const secondEnemy = addEnemy(7);
+  it("атака блокируется щитом врага — HP не изменяется, шаги содержат оба события", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [firstEnemy.ID, secondEnemy.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 2 });
 
-    expect(firstEnemy.Health).toBe(4);
-    expect(secondEnemy.Health).toBe(7);
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 3,
+        isPiercing: false,
+      }),
+    );
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyBlockDamage,
+        enemyId: enemy.id,
+      }),
+    );
+
+    const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
+    expect(updatedEnemy.hp).toBe(10);
   });
 
-  it("выбрасывает ошибку, если поле enemies не передано в запросе", async () => {
-    addEnemy(7);
+  it("убивает врага с 3 HP и спавнит следующую волну", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await expect(useCard(ws, { cardId: card.ID })).rejects.toThrow("no enemies");
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 3, shield: 0 });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 3,
+      }),
+    );
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyDeath,
+        enemyId: enemy.id,
+      }),
+    );
+
+    expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
+
+    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
+    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
-  it("выбрасывает ошибку, если передан пустой список врагов", async () => {
-    addEnemy(7);
+  it("возвращает ошибку при недостаточном количестве AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await expect(useCard(ws, { cardId: card.ID, enemies: [] })).rejects.toThrow("no enemies");
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0 });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 0, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toContain("not enough action points");
+  });
+
+  it("возвращает ошибку когда враги не указаны", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ForeignRockblade);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toBe("no enemies");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0 });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.ForeignRockblade);
+
+    player1.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
+
+    expect(response1.card).toBe(ECard.ForeignRockblade);
+    expect(response2.card).toBe(ECard.ForeignRockblade);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

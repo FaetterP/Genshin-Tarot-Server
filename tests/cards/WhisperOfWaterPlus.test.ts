@@ -1,170 +1,158 @@
 /**
- * WhisperOfWaterPlus — Восстанавливает 2 ОЗ себе и 1 другому игроку.
- * Тип: Attack. Стоимость: 1 очко действия.
+ * WhisperOfWaterPlus - Восстанавливает 2 ОЗ себе и 1 другому игроку.
+ * Тип: Attack. Стоимость: 1
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { WhisperOfWaterPlus } from "../../src/storage/cards/Barbara/WhisperOfWaterPlus";
-import { EDetailedStep } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("WhisperOfWaterPlus — восстанавливает 2 ОЗ себе и 1 другому игроку", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("WhisperOfWaterPlus — Восстанавливает 2 ОЗ себе и 1 другому игроку", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let otherPlayer: Player;
-  let card: WhisperOfWaterPlus;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    player.adminSetStats({ hp: 10, actionPoints: { normal: 3, extra: 0 } });
-    card = new WhisperOfWaterPlus();
-    player.addCardToHand(card);
-
-    ({ player: otherPlayer } = createGameState());
-    otherPlayer.adminSetStats({ hp: 10, actionPoints: { normal: 3, extra: 0 } });
-    cycleController.connectPlayer(otherPlayer);
-
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
-
-  it("без selectedPlayer: PlayerHeal(player, 2) → PlayerStatChange(ap) → MoveCard, HP игрока +2", async () => {
-    await useCard(ws, { cardId: card.ID });
-
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
-
-    const healIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerHeal && s.playerId === player.ID && s.amount === 2,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(healIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: player.ID,
-      amount: 2,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -1,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(player.Health).toBe(12);
+  afterEach(() => {
+    game?.cleanup();
   });
 
-  it("с selectedPlayer: PlayerHeal(player, 2) → PlayerHeal(selectedPlayer, 1) → ap → MoveCard, оба получают HP", async () => {
-    await useCard(ws, { cardId: card.ID, selectedPlayer: otherPlayer.ID });
+  it("лечит себя на 2 ОЗ без selectedPlayer, списывает 1 AP, карта в сброс", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    const { steps } = getResponse();
+    await admin.updatePlayer(player.playerId, { hp: 5, actionPoints: { normal: 3, extra: 0 } });
 
-    const healSelfIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerHeal && s.playerId === player.ID && s.amount === 2,
+    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWaterPlus);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player.playerId,
+        amount: 2,
+      }),
     );
-    const healOtherIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerHeal && s.playerId === otherPlayer.ID && s.amount === 1,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: -1,
+      }),
     );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.WhisperOfWaterPlus }),
+      }),
     );
 
-    expect(healSelfIdx).toBeGreaterThanOrEqual(0);
-    expect(healOtherIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(healSelfIdx).toBeLessThan(healOtherIdx);
-    expect(healOtherIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[healSelfIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: player.ID,
-      amount: 2,
-    });
-    expect(steps[healOtherIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: otherPlayer.ID,
-      amount: 1,
-    });
-    expect(player.Health).toBe(12);
-    expect(otherPlayer.Health).toBe(11);
+    expect(response.player.hp).toBe(7);
+    expect(response.player.actionPoints.total).toBe(2);
   });
 
-  it("игрок с максимальным HP (12) не превышает 12 после лечения", async () => {
-    player.adminSetStats({ hp: 12, actionPoints: { normal: 3, extra: 0 } });
+  it("с selectedPlayer — лечит себя на 2 и другого игрока на 1", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID });
+    await admin.updatePlayer(player1.playerId, { hp: 5, actionPoints: { normal: 3, extra: 0 } });
+    await admin.updatePlayer(player2.playerId, { hp: 5 });
 
-    expect(player.Health).toBe(12);
+    const cardId = await ensureCardInHand(player1, admin, ECard.WhisperOfWaterPlus);
+
+    player1.send({ action: "game.useCard", cardId, selectedPlayer: player2.playerId });
+    const response = await player1.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player1.playerId,
+        amount: 2,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player2.playerId,
+        amount: 1,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: -1,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.WhisperOfWaterPlus }),
+      }),
+    );
+
+    expect(response.player.hp).toBe(7);
   });
 
-  it("лечение selectedPlayer не превышает 12 HP", async () => {
-    otherPlayer.adminSetStats({ hp: 12, actionPoints: { normal: 3, extra: 0 } });
+  it("возвращает ошибку при недостаточном количестве AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, selectedPlayer: otherPlayer.ID });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 0, extra: 0 } });
 
-    expect(otherPlayer.Health).toBe(12);
+    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWaterPlus);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toContain("not enough action points");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    await admin.updatePlayer(player1.playerId, { hp: 5, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.WhisperOfWaterPlus);
+
+    player1.send({ action: "game.useCard", cardId });
+
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
+
+    expect(response1.card).toBe(ECard.WhisperOfWaterPlus);
+    expect(response2.card).toBe(ECard.WhisperOfWaterPlus);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

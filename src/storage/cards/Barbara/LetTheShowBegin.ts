@@ -33,7 +33,10 @@ export class LetTheShowBegin extends Card {
     target.applyElement(new Hydro(), ctx.player);
 
     let healCount = 1;
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+    if (ctx.isUseAlternative) {
+      if (!ctx.player.trySpendEnergy(2)) {
+        throw new Error("not enough energy");
+      }
       healCount = 3;
       ctx.addToSteps([
         {

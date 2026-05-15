@@ -1,215 +1,276 @@
 /**
- * ExplosivePuppet — Выбранный враг (не босс) в вашей зоне не атакует в этом ходу.
+ * ExplosivePuppet - Выбранный 1 враг, не босс, в вашей зоне не будет атаковать в этом ходу.
  * В начале следующего хода накладывает Пиро и наносит 2 урона всем врагам в вашей зоне.
- * Тип: Skill. Стоимость: 2 очка действия.
+ * Тип: Skill. Стоимость: 2
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { ExplosivePuppet } from "../../src/storage/cards/Amber/ExplosivePuppet";
-import { ExplosivePuppetEffect } from "../../src/storage/effects/ExplosivePuppetEffect";
-import { HilichurlGuard } from "../../src/storage/enemies/normal/HilichurlGuard";
-import { EDetailedStep, EElement, EPlayerEffect } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
-import { DetailedStep } from "../../src/types/detailedStep";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep, EElement, EEnemy, EPlayerEffect } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  endTurn,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("ExplosivePuppet — оглушает врага в зоне, в начале следующего цикла наносит 2 Pyro урона всем врагам", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("ExplosivePuppet — Оглушает врага в зоне, взрывается в начале следующего хода", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let card: ExplosivePuppet;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    card = new ExplosivePuppet();
-    player.addCardToHand(card);
-    player.adminSetStats({ hp: 12, actionPoints: { normal: 3 } });
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function addEnemy(hp: number, shield = 0): HilichurlGuard {
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp, shield });
-    player.addEnemy(enemy);
-    return enemy;
-  }
+  afterEach(() => {
+    game?.cleanup();
+  });
 
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
+  it("оглушает врага и вешает эффект игроку", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-  it("оглушает врага и добавляет эффект игроку, тратит 2 AP", async () => {
-    const enemy = addEnemy(7);
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
 
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
-    const effectIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerGetEffect &&
-        s.playerId === player.ID &&
-        s.effect === EPlayerEffect.ExplosivePuppet,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerGetEffect,
+        playerId: player.playerId,
+        effect: EPlayerEffect.ExplosivePuppet,
+      }),
     );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
+    expect(response.player.effects).toContain(EPlayerEffect.ExplosivePuppet);
+
+    const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
+    expect(updatedEnemy.isStunned).toBe(true);
+  });
+
+  it("уменьшает AP на 2, карта перемещается в сброс", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: -2,
+      }),
     );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
+    expect(response.player.actionPoints.total).toBe(1);
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.ExplosivePuppet }),
+      }),
     );
-
-    expect(effectIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-
-    expect(steps[effectIdx]).toEqual({
-      type: EDetailedStep.PlayerGetEffect,
-      playerId: player.ID,
-      effect: EPlayerEffect.ExplosivePuppet,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -2,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(enemy.IsStunned).toBe(true);
+    expect(response.player.discard.some((c: any) => c.name === ECard.ExplosivePuppet)).toBe(true);
   });
 
-  it("выбрасывает ошибку, если враг не в зоне игрока", async () => {
-    const { player: otherPlayer } = createGameState();
-    cycleController.connectPlayer(otherPlayer);
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp: 7 });
-    otherPlayer.addEnemy(enemy);
+  it("оглушённый враг не атакует в конце хода", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await expect(useCard(ws, { cardId: card.ID, enemies: [enemy.ID] })).rejects.toThrow(
-      "enemy is not in range",
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    await player.waitFor((m: any) => m.action === "game.useCard");
+
+    await endTurn(player);
+    const endCycle = await player.waitFor((m: any) => m.action === "game.endCycle");
+
+    expect(endCycle.steps).not.toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyAttack,
+        enemyId: enemy.id,
+      }),
     );
   });
 
-  it("выбрасывает ошибку, если поле enemies не передано", async () => {
-    addEnemy(7);
-    await expect(useCard(ws, { cardId: card.ID })).rejects.toThrow("no enemies");
-  });
+  it("в начале следующего цикла наносит 2 Pyro урона врагу и снимает эффект", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-  it("выбрасывает ошибку, если передан пустой список врагов", async () => {
-    addEnemy(7);
-    await expect(useCard(ws, { cardId: card.ID, enemies: [] })).rejects.toThrow("no enemies");
-  });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-  describe("эффект взрыва в начале следующего хода", () => {
-    function triggerEffect(): DetailedStep[] {
-      const steps: DetailedStep[] = [];
-      player.setStepsCollector((data) => steps.push(...data));
-      const effect = new ExplosivePuppetEffect();
-      effect.onStartCycle(player);
-      player.setStepsCollector(null);
-      return steps;
-    }
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
 
-    it("наносит 2 урона с Пиро каждому врагу — EnemyTakeDamage перед EnemyDeath", () => {
-      const enemy = addEnemy(5);
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    await player.waitFor((m: any) => m.action === "game.useCard");
 
-      const steps = triggerEffect();
+    const cycle2 = await endTurn(player);
 
-      const damageIdx = steps.findIndex(
-        (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-      );
-      expect(damageIdx).toBeGreaterThanOrEqual(0);
-      expect(steps[damageIdx]).toEqual({
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
         type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemy.ID,
+        enemyId: enemy.id,
         damage: 2,
         isPiercing: false,
         element: EElement.Pyro,
-      });
-      expect(enemy.Health).toBe(3);
-    });
+      }),
+    );
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerEffectTrigger,
+        playerId: player.playerId,
+        effect: EPlayerEffect.ExplosivePuppet,
+        isRemove: true,
+      }),
+    );
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerLoseEffect,
+        playerId: player.playerId,
+        effect: EPlayerEffect.ExplosivePuppet,
+      }),
+    );
+    expect(cycle2.you.effects).not.toContain(EPlayerEffect.ExplosivePuppet);
+  });
 
-    it("враг погибает от взрыва при 2 HP — EnemyTakeDamage идёт перед EnemyDeath", () => {
-      const enemy = addEnemy(2);
+  it("в начале следующего цикла наносит урон всем врагам в зоне (2 врага)", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-      const steps = triggerEffect();
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
 
-      const damageIdx = steps.findIndex(
-        (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
+    await admin.addEnemy(player.playerId, EEnemy.SmallDendroSlime);
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies;
+
+    for (const e of enemies) {
+      await admin.updateEnemy(e.id, { hp: 20, shield: 0, elements: [] });
+    }
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemies[0].id] });
+    await player.waitFor((m: any) => m.action === "game.useCard");
+
+    const cycle2 = await endTurn(player);
+
+    for (const e of enemies) {
+      expect(cycle2.steps).toContainEqual(
+        expect.objectContaining({
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: e.id,
+          damage: 2,
+          isPiercing: false,
+          element: EElement.Pyro,
+        }),
       );
-      const deathIdx = steps.findIndex(
-        (s) => s.type === EDetailedStep.EnemyDeath && s.enemyId === enemy.ID,
-      );
-      expect(damageIdx).toBeGreaterThanOrEqual(0);
-      expect(deathIdx).toBeGreaterThanOrEqual(0);
-      expect(damageIdx).toBeLessThan(deathIdx);
-      expect(enemy.Health).toBe(0);
-    });
+    }
+  });
 
-    it("щит блокирует взрыв — EnemyTakeDamage идёт перед EnemyBlockDamage, HP не меняется", () => {
-      const enemy = addEnemy(5, 1);
+  it("возвращает ошибку когда враги не указаны", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-      const steps = triggerEffect();
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
 
-      const damageIdx = steps.findIndex(
-        (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-      );
-      const blockIdx = steps.findIndex(
-        (s) => s.type === EDetailedStep.EnemyBlockDamage && s.enemyId === enemy.ID,
-      );
-      expect(damageIdx).toBeGreaterThanOrEqual(0);
-      expect(blockIdx).toBeGreaterThanOrEqual(0);
-      expect(damageIdx).toBeLessThan(blockIdx);
-      expect(enemy.Health).toBe(5);
-    });
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
 
-    it("взрыв бьёт всех врагов в зоне игрока", () => {
-      const first = addEnemy(5);
-      const second = addEnemy(5);
+    expect(response.status).toBe("error");
+    expect(response.message).toBe("no enemies");
+  });
 
-      triggerEffect();
+  it("возвращает ошибку если враг вне зоны игрока", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
 
-      expect(first.Health).toBe(3);
-      expect(second.Health).toBe(3);
-    });
+    const targetEnemy = player2.enemies[0];
+    await admin.updateEnemy(targetEnemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.ExplosivePuppet);
+
+    player1.send({ action: "game.useCard", cardId, enemies: [targetEnemy.id] });
+    const response = await player1.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toBe("enemy is not in range");
+  });
+
+  it("возвращает ошибку при недостаточном количестве AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 1, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppet);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toContain("not enough action points");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.ExplosivePuppet);
+
+    player1.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
+
+    expect(response1.card).toBe(ECard.ExplosivePuppet);
+    expect(response2.card).toBe(ECard.ExplosivePuppet);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

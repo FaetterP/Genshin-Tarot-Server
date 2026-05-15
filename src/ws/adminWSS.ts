@@ -11,9 +11,9 @@ const ADMIN_PORT = 8998;
 
 let adminWss: WebSocket.Server;
 
-export async function startAdminWSS(): Promise<void> {
-  await new Promise<void>((resolve) => {
-    adminWss = new WebSocket.Server({ port: ADMIN_PORT }, () => resolve());
+export async function startAdminWSS(port = ADMIN_PORT): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    adminWss = new WebSocket.Server({ port }, () => resolve());
     adminWss.on(
       "connection",
       createOnAdminConnect({
@@ -27,7 +27,7 @@ export async function startAdminWSS(): Promise<void> {
         },
       }),
     );
-    adminWss.on("error", () => process.exit());
+    adminWss.on("error", reject);
   });
 
   registerAdminWss(adminWss);

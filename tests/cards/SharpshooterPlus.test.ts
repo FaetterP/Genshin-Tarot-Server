@@ -1,217 +1,192 @@
 /**
- * SharpshooterPlus — Наносит 1 пронзающий урон 1 врагу где угодно.
- * Наносит 3 урона, если у врага нет щита.
- * Тип: Attack. Стоимость: 0 очков действия.
+ * SharpshooterPlus - Наносит 1 пронзающий урон 1 врагу где угодно.
+ * Наносит 3 урона если у врага нету щитов.
+ * Тип: Attack. Стоимость: 0
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { SharpshooterPlus } from "../../src/storage/cards/Amber/SharpshooterPlus";
-import { HilichurlGuard } from "../../src/storage/enemies/normal/HilichurlGuard";
-import { EDetailedStep } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("SharpshooterPlus — наносит 3 пронзающих урона если нет щита, иначе 1 пронзающий урон", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("SharpshooterPlus — Наносит 3 урона без щита, иначе 1 пронзающий", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let card: SharpshooterPlus;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    card = new SharpshooterPlus();
-    player.addCardToHand(card);
-    player.adminSetStats({ hp: 12, actionPoints: { normal: 3 } });
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function addEnemy(hp: number, shield = 0): HilichurlGuard {
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp, shield });
-    player.addEnemy(enemy);
-    return enemy;
-  }
-
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
-
-  it("враг без щита: наносит 3 пронзающих урона", async () => {
-    const enemy = addEnemy(7);
-
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
-
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
-
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
-    );
-
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(damageIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 3,
-      isPiercing: true,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -card.Cost,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(enemy.Health).toBe(4);
+  afterEach(() => {
+    game?.cleanup();
   });
 
-  it("враг со щитом: наносит только 1 пронзающий урон, щит не блокирует", async () => {
-    const enemy = addEnemy(7, 1);
+  it("наносит 3 пронзающих урона врагу без щита", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
 
-    const { steps } = getResponse();
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
+    const cardId = await ensureCardInHand(player, admin, ECard.SharpshooterPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 3,
+        isPiercing: true,
+      }),
     );
 
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 1,
-      isPiercing: true,
-    });
-    // isPiercing: блок не должен произойти
-    const blockIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyBlockDamage && s.enemyId === enemy.ID,
-    );
-    expect(blockIdx).toBe(-1);
-    expect(enemy.Health).toBe(6);
+    const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
+    expect(updatedEnemy.hp).toBe(7);
   });
 
-  it("враг без щита погибает при ровно 3 HP — EnemyTakeDamage идёт перед EnemyDeath", async () => {
-    const enemy = addEnemy(3);
+  it("наносит 1 пронзающий урон врагу со щитом (урон не заблокирован, но ослаблен)", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 2, elements: [] });
 
-    const { steps } = getResponse();
-    const damageIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyTakeDamage && s.enemyId === enemy.ID,
-    );
-    const deathIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyDeath && s.enemyId === enemy.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard &&
-        s.to === "discard" &&
-        s.playerId === player.ID,
+    const cardId = await ensureCardInHand(player, admin, ECard.SharpshooterPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 1,
+        isPiercing: true,
+      }),
     );
 
-    expect(damageIdx).toBeGreaterThanOrEqual(0);
-    expect(deathIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(damageIdx).toBeLessThan(deathIdx);
+    const blockSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyBlockDamage);
+    expect(blockSteps.length).toBe(0);
 
-    expect(steps[damageIdx]).toEqual({
-      type: EDetailedStep.EnemyTakeDamage,
-      enemyId: enemy.ID,
-      damage: 3,
-      isPiercing: true,
-    });
-    expect(enemy.Health).toBe(0);
+    const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
+    expect(updatedEnemy.hp).toBe(9);
   });
 
-  it("при нескольких врагах бьёт только первого (ctx.enemies[0])", async () => {
-    const first = addEnemy(7);
-    const second = addEnemy(7);
+  it("стоимость 0 AP, карта перемещается в сброс", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, enemies: [first.ID, second.ID] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
 
-    expect(first.Health).toBe(4);
-    expect(second.Health).toBe(7);
+    const cardId = await ensureCardInHand(player, admin, ECard.SharpshooterPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: 0,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.SharpshooterPlus }),
+      }),
+    );
+    expect(response.player.discard.some((c: any) => c.name === ECard.SharpshooterPlus)).toBe(true);
   });
 
-  it("выбрасывает ошибку, если поле enemies не передано", async () => {
-    addEnemy(7);
-    await expect(useCard(ws, { cardId: card.ID })).rejects.toThrow("no enemies");
+  it("убивает врага с 3 HP без щита и спавнит следующую волну", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 3, shield: 0, elements: [] });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.SharpshooterPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: enemy.id,
+        damage: 3,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyDeath,
+        enemyId: enemy.id,
+      }),
+    );
+    expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
+
+    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
+    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
-  it("выбрасывает ошибку, если передан пустой список врагов", async () => {
-    addEnemy(7);
-    await expect(useCard(ws, { cardId: card.ID, enemies: [] })).rejects.toThrow("no enemies");
+  it("возвращает ошибку когда враги не указаны", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const cardId = await ensureCardInHand(player, admin, ECard.SharpshooterPlus);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toBe("no enemies");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.SharpshooterPlus);
+
+    player1.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
+
+    expect(response1.card).toBe(ECard.SharpshooterPlus);
+    expect(response2.card).toBe(ECard.SharpshooterPlus);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

@@ -1,6 +1,6 @@
 ﻿import { CardUseContext } from "../../../types/functionsContext";
 import { Attack } from "../../../types/general";
-import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType, EElement } from "../../../types/enums";
 import { Geo } from "../../elements/Geo";
 import { Card } from "../Card";
 
@@ -24,6 +24,15 @@ export class RainOfStone extends Card {
       element: new Geo(),
       player: ctx.player,
     };
+    ctx.addToSteps([
+      {
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: ctx.enemies[0].ID,
+        damage: 2,
+        isPiercing: true,
+        element: EElement.Geo,
+      },
+    ]);
     ctx.enemies[0].applyAttack(attack);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {

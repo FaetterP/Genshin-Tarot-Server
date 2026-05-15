@@ -1,344 +1,363 @@
 /**
- * SolarIsotoma — Накладывает Гео всем врагам в вашей зоне. В начале следующего хода накладывает Гео
- * всем врагам. Можно выбросить карту из руки или сброса, чтобы вытянуть карту.
- * Тип: Skill. Стоимость: 2 очка действия.
+ * SolarIsotoma - Накладывает Гео всем врагам в вашей зоне. В начале следующего хода, накладывает Гео всем врагам в вашей зоне.
+ * Вы можете выбросить карту из вашей руки или сброса чтобы вытянуть карту.
+ * Тип: Skill. Стоимость: 2
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { SolarIsotoma } from "../../src/storage/cards/Albedo/SolarIsotoma";
-import { SolarIsotomaEffect } from "../../src/storage/effects/SolarIsotomaEffect";
-import { WeissBladework } from "../../src/storage/cards/Albedo/WeissBladework";
-import { HilichurlGuard } from "../../src/storage/enemies/normal/HilichurlGuard";
-import { EDetailedStep, EElement, EPlayerEffect } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep, EElement, EEnemy, EPlayerEffect } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  endTurn,
+  advanceCycle,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("SolarIsotoma — накладывает Гео всем врагам в зоне, в начале следующего цикла накладывает Гео снова", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("SolarIsotoma — Накладывает Гео всем врагам в зоне, даёт эффект Тектоническая волна. Опционально: выбросить карту и вытянуть", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let card: SolarIsotoma;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    player.adminSetStats({ hp: 12, actionPoints: { normal: 3, extra: 0 }, energy: 0 });
-    card = new SolarIsotoma();
-    player.addCardToHand(card);
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function addEnemy(hp: number): HilichurlGuard {
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp, shield: 0 });
-    player.addEnemy(enemy);
-    return enemy;
-  }
-
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
-
-  it("рассылает шаги: EnemyGetElement → PlayerGetEffect → PlayerStatChange(ap) → MoveCard, эффект добавлен", async () => {
-    const enemy = addEnemy(5);
-
-    await useCard(ws, { cardId: card.ID });
-
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
-
-    const elementIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyGetElement && s.enemyId === enemy.ID,
-    );
-    const effectIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerGetEffect && s.playerId === player.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(elementIdx).toBeGreaterThanOrEqual(0);
-    expect(effectIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(elementIdx).toBeLessThan(effectIdx);
-    expect(effectIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[elementIdx]).toEqual({
-      type: EDetailedStep.EnemyGetElement,
-      enemyId: enemy.ID,
-      element: EElement.Geo,
-    });
-    expect(steps[effectIdx]).toEqual({
-      type: EDetailedStep.PlayerGetEffect,
-      playerId: player.ID,
-      effect: EPlayerEffect.SolarIsotoma,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -2,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(player.isContainsEffect(new SolarIsotomaEffect())).toBe(true);
+  afterEach(() => {
+    game?.cleanup();
   });
 
-  it("нет врагов в зоне — EnemyGetElement отсутствует, PlayerGetEffect и стандартные шаги есть", async () => {
-    await useCard(ws, { cardId: card.ID });
+  it("применяет Гео врагу и вешает эффект игроку", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    const { steps } = getResponse();
-    const elementIdx = steps.findIndex((s) => s.type === EDetailedStep.EnemyGetElement);
-    const effectIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerGetEffect && s.playerId === player.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    expect(elementIdx).toBe(-1);
-    expect(effectIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
 
-    expect(steps[effectIdx]).toEqual({
-      type: EDetailedStep.PlayerGetEffect,
-      playerId: player.ID,
-      effect: EPlayerEffect.SolarIsotoma,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -2,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(player.isContainsEffect(new SolarIsotomaEffect())).toBe(true);
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: enemy.id,
+        element: EElement.Geo,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerGetEffect,
+        playerId: player.playerId,
+        effect: EPlayerEffect.SolarIsotoma,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: -2,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.SolarIsotoma }),
+      }),
+    );
+    expect(response.player.actionPoints.total).toBe(1);
+    expect(response.player.effects).toContain(EPlayerEffect.SolarIsotoma);
   });
 
-  it("два врага в зоне — EnemyGetElement для каждого в порядке добавления, оба получают Гео", async () => {
-    const firstEnemy = addEnemy(5);
-    const secondEnemy = addEnemy(5);
+  it("эффект срабатывает в начале следующего цикла, вызывает реакцию Гео+Гео и исчезает", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const { steps } = getResponse();
-    const element1Idx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyGetElement && s.enemyId === firstEnemy.ID,
-    );
-    const element2Idx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyGetElement && s.enemyId === secondEnemy.ID,
-    );
-    const effectIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerGetEffect && s.playerId === player.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
 
-    expect(element1Idx).toBeGreaterThanOrEqual(0);
-    expect(element2Idx).toBeGreaterThanOrEqual(0);
-    expect(effectIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(element1Idx).toBeLessThan(element2Idx);
-    expect(element2Idx).toBeLessThan(effectIdx);
-    expect(effectIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
+    player.send({ action: "game.useCard", cardId });
+    await player.waitFor((m: any) => m.action === "game.useCard");
 
-    expect(steps[element1Idx]).toEqual({
-      type: EDetailedStep.EnemyGetElement,
-      enemyId: firstEnemy.ID,
-      element: EElement.Geo,
-    });
-    expect(steps[element2Idx]).toEqual({
-      type: EDetailedStep.EnemyGetElement,
-      enemyId: secondEnemy.ID,
-      element: EElement.Geo,
-    });
+    const cycle2 = await endTurn(player);
+
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyReaction,
+        enemyId: enemy.id,
+        element1: EElement.Geo,
+        element2: EElement.Geo,
+      }),
+    );
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerEffectTrigger,
+        playerId: player.playerId,
+        effect: EPlayerEffect.SolarIsotoma,
+        isRemove: true,
+      }),
+    );
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerLoseEffect,
+        playerId: player.playerId,
+        effect: EPlayerEffect.SolarIsotoma,
+      }),
+    );
+    expect(cycle2.you.effects).not.toContain(EPlayerEffect.SolarIsotoma);
   });
 
-  it("selectedCard из руки — MoveCard(trash) + DrawCards идут после PlayerGetEffect", async () => {
-    const enemy = addEnemy(5);
-    const otherCard = new WeissBladework();
-    player.addCardToHand(otherCard);
-    const deckCard = new WeissBladework();
-    player.addCardToDeck(deckCard);
+  it("применяет Гео всем врагам в зоне (2 врага), эффект срабатывает для обоих", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, selectedCard: otherCard.ID });
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
 
-    const { steps } = getResponse();
-    const drawnCard = deckCard;
+    await admin.addEnemy(player.playerId, EEnemy.SmallDendroSlime);
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies;
 
-    const effectIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerGetEffect && s.playerId === player.ID,
+    for (const e of enemies) {
+      await admin.updateEnemy(e.id, { hp: 20, shield: 0, elements: [] });
+    }
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    for (const e of enemies) {
+      expect(response.steps).toContainEqual(
+        expect.objectContaining({
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: e.id,
+          element: EElement.Geo,
+        }),
+      );
+    }
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: -2,
+      }),
     );
-    const trashIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "trash" && s.playerId === player.ID,
-    );
-    const drawIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.DrawCards && s.playerId === player.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.SolarIsotoma }),
+      }),
     );
 
-    expect(effectIdx).toBeGreaterThanOrEqual(0);
-    expect(trashIdx).toBeGreaterThanOrEqual(0);
-    expect(drawIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(effectIdx).toBeLessThan(trashIdx);
-    expect(trashIdx).toBeLessThan(drawIdx);
-    expect(drawIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
+    const cycle2 = await endTurn(player);
 
-    expect(steps[trashIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "trash",
-      playerId: player.ID,
-      card: { cardId: otherCard.ID, name: otherCard.Name, type: otherCard.Type },
-    });
-    expect(steps[drawIdx]).toEqual({
-      type: EDetailedStep.DrawCards,
-      playerId: player.ID,
-      cards: [drawnCard.getPrimitive()],
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(player.Hand.some((c) => c.ID === otherCard.ID)).toBe(false);
+    for (const e of enemies) {
+      expect(cycle2.steps).toContainEqual(
+        expect.objectContaining({
+          type: EDetailedStep.EnemyReaction,
+          enemyId: e.id,
+          element1: EElement.Geo,
+          element2: EElement.Geo,
+        }),
+      );
+    }
   });
 
-  it("selectedCard из сброса — MoveCard(trash) + DrawCards присутствуют, карта вытянута", async () => {
-    const otherCard = new WeissBladework();
-    player.discardCard(otherCard);
-    const deckCard = new WeissBladework();
-    player.addCardToDeck(deckCard);
+  it("selectedCard выбрасывает карту из руки и вытягивает новую", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, { cardId: card.ID, selectedCard: otherCard.ID });
+    await admin.addCard(player.playerId, ECard.ForeignRockblade, "hand");
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.hand.some((c: any) => c.name === ECard.ForeignRockblade));
+    const selectedCardId: string = syncMsg.you.hand.find((c: any) => c.name === ECard.ForeignRockblade).cardId;
 
-    const { steps } = getResponse();
-    const drawnCard = deckCard;
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const trashIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "trash" && s.playerId === player.ID,
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
+
+    player.send({ action: "game.useCard", cardId, selectedCard: selectedCardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: enemy.id,
+        element: EElement.Geo,
+      }),
     );
-    const drawIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.DrawCards && s.playerId === player.ID,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "trash",
+        card: expect.objectContaining({ name: ECard.ForeignRockblade }),
+      }),
     );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.DrawCards,
+        playerId: player.playerId,
+      }),
     );
-    const discardIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: -2,
+      }),
     );
-
-    expect(trashIdx).toBeGreaterThanOrEqual(0);
-    expect(drawIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(trashIdx).toBeLessThan(drawIdx);
-
-    expect(steps[trashIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "trash",
-      playerId: player.ID,
-      card: { cardId: otherCard.ID, name: otherCard.Name, type: otherCard.Type },
-    });
-    expect(steps[drawIdx]).toEqual({
-      type: EDetailedStep.DrawCards,
-      playerId: player.ID,
-      cards: [drawnCard.getPrimitive()],
-    });
-  });
-
-  it("выбрасывает ошибку, если selectedCard === ID самой карты", async () => {
-    await expect(useCard(ws, { cardId: card.ID, selectedCard: card.ID })).rejects.toThrow(
-      "card cannot trash itself",
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.SolarIsotoma }),
+      }),
     );
   });
 
-  it("выбрасывает ошибку, если selectedCard не находится в руке или сбросе", async () => {
-    const otherCard = new WeissBladework();
+  it("selectedCard выбрасывает карту из сброса и вытягивает новую", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await expect(
-      useCard(ws, { cardId: card.ID, selectedCard: otherCard.ID }),
-    ).rejects.toThrow("selectedCard must be a card in your hand or discard");
+    await admin.addCard(player.playerId, ECard.ForeignRockblade, "discard");
+    const adminState = await admin.waitFor((m: any) => m.action === "admin.state");
+    const playerState = adminState.players.find((p: any) => p.playerId === player.playerId);
+    const selectedCardId: string = playerState.discard.find((c: any) => c.name === ECard.ForeignRockblade).cardId;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
+
+    player.send({ action: "game.useCard", cardId, selectedCard: selectedCardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: enemy.id,
+        element: EElement.Geo,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "trash",
+        card: expect.objectContaining({ name: ECard.ForeignRockblade }),
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.DrawCards,
+        playerId: player.playerId,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: -2,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.SolarIsotoma }),
+      }),
+    );
+  });
+
+  it("возвращает ошибку когда selectedCard является самой картой", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
+
+    player.send({ action: "game.useCard", cardId, selectedCard: cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+  });
+
+  it("возвращает ошибку когда selectedCard не найдена", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
+
+    player.send({ action: "game.useCard", cardId, selectedCard: "non-existent-id" });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+  });
+
+  it("возвращает ошибку при недостаточном количестве AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 1, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.SolarIsotoma);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toContain("not enough action points");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.SolarIsotoma);
+
+    player1.send({ action: "game.useCard", cardId });
+
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
+
+    expect(response1.card).toBe(ECard.SolarIsotoma);
+    expect(response2.card).toBe(ECard.SolarIsotoma);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

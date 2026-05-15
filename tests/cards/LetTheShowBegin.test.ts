@@ -1,331 +1,262 @@
 /**
- * LetTheShowBegin — Накладывает Гидро 1 врагу в вашей зоне. Восстанавливает 1 ОЗ 1 любому игроку.
+ * LetTheShowBegin - Накладывает Гидро 1 врагу в вашей зоне. Восстанавливает 1 ОЗ 1 любому игроку.
  * Вы можете потратить 2 энергии, чтобы восстановить 3 ОЗ.
- * Тип: Skill. Стоимость: 1 очко действия.
+ * Тип: Skill. Стоимость: 1
  */
 
-import gameHandlers from "../../src/ws/handlers/game";
-import { sendToAll } from "../../src/utils/wsUtils";
-import { LetTheShowBegin } from "../../src/storage/cards/Barbara/LetTheShowBegin";
-import { HilichurlGuard } from "../../src/storage/enemies/normal/HilichurlGuard";
-import { EDetailedStep, EElement } from "../../src/types/enums";
-import { GameUseCardResponse } from "../../src/types/response";
-import { createGameState, makeWs } from "../helpers/setup";
-import { CycleController } from "../../src/game/CycleController";
-import { Player } from "../../src/game/Player";
-import { ExtWebSocket } from "../../src/types/wsTypes";
+import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
+import { ECard, EDetailedStep, EElement } from "../../src/types/enums";
+import {
+  startTestServers,
+  stopTestServers,
+  resetGame,
+  createTestGame,
+  ensureCardInHand,
+  TestGame,
+} from "../helpers/setup";
 
-jest.mock("../../src/utils/wsUtils", () => ({
-  sendToAll: jest.fn(),
-  sendToAllAndWait: jest.fn().mockResolvedValue(undefined),
-}));
+jest.setTimeout(15000);
 
-jest.mock("../../src/ws", () => ({
-  getAllClients: jest.fn(() => []),
-  getAllPlayers: jest.fn(() => []),
-  sendResponseToAdmin: jest.fn(),
-  sendStateToClients: jest.fn(),
-  getGameStateSnapshot: jest.fn(() => ({})),
-  cycleController: null,
-  startGameWSS: jest.fn(),
-  stopGameWSS: jest.fn(),
-  startAdminWSS: jest.fn(),
-  stopAdminWSS: jest.fn(),
-}));
+describe("LetTheShowBegin — накладывает Гидро врагу, лечит выбранного игрока", () => {
+  let game: TestGame;
 
-const mockedSendToAll = sendToAll as jest.MockedFunction<typeof sendToAll>;
-const useCard = gameHandlers.handlers.useCard;
+  beforeAll(async () => {
+    await startTestServers();
+  });
 
-describe("LetTheShowBegin — Накладывает Гидро 1 врагу в зоне, восстанавливает ОЗ (1 или 3 с энергией)", () => {
-  let cycleController: CycleController;
-  let player: Player;
-  let otherPlayer: Player;
-  let card: LetTheShowBegin;
-  let ws: ExtWebSocket;
+  afterAll(async () => {
+    await stopTestServers();
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    ({ cycleController, player } = createGameState());
-    player.adminSetStats({ hp: 8, actionPoints: { normal: 3, extra: 0 }, energy: 5 });
-    card = new LetTheShowBegin();
-    player.addCardToHand(card);
-
-    ({ player: otherPlayer } = createGameState());
-    otherPlayer.adminSetStats({ hp: 8, actionPoints: { normal: 3, extra: 0 } });
-    cycleController.connectPlayer(otherPlayer);
-
-    ws = makeWs(player, cycleController);
+    resetGame();
   });
 
-  function addEnemy(hp: number): HilichurlGuard {
-    const enemy = new HilichurlGuard();
-    enemy.adminSetStats({ hp });
-    player.addEnemy(enemy);
-    return enemy;
-  }
-
-  function getResponse(): GameUseCardResponse {
-    return mockedSendToAll.mock.calls[0][0] as GameUseCardResponse;
-  }
-
-  it("стандартное лечение: EnemyGetElement(Hydro) → PlayerHeal(1) → PlayerStatChange(ap) → MoveCard", async () => {
-    const enemy = addEnemy(5);
-
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID], selectedPlayer: otherPlayer.ID });
-
-    expect(mockedSendToAll).toHaveBeenCalledTimes(1);
-    const { action, steps } = getResponse();
-    expect(action).toBe("game.useCard");
-
-    const elementIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyGetElement && s.enemyId === enemy.ID,
-    );
-    const healIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerHeal && s.playerId === otherPlayer.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(elementIdx).toBeGreaterThanOrEqual(0);
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(elementIdx).toBeLessThan(healIdx);
-    expect(healIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[elementIdx]).toEqual({
-      type: EDetailedStep.EnemyGetElement,
-      enemyId: enemy.ID,
-      element: EElement.Hydro,
-    });
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: otherPlayer.ID,
-      amount: 1,
-    });
-    expect(steps[apIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "actionPoints",
-      playerId: player.ID,
-      delta: -1,
-    });
-    expect(steps[discardIdx]).toEqual({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: player.ID,
-      card: { cardId: card.ID, name: card.Name, type: card.Type },
-    });
-    expect(otherPlayer.Health).toBe(9);
+  afterEach(() => {
+    game?.cleanup();
   });
 
-  it("альтернативный режим с энергией: EnemyGetElement → PlayerStatChange(energy, -2) → PlayerHeal(3) → ap → MoveCard", async () => {
-    const enemy = addEnemy(5);
-    player.adminSetStats({ hp: 8, actionPoints: { normal: 3, extra: 0 }, energy: 2 });
+  it("накладывает Гидро, лечит selectedPlayer на 1 ОЗ, списывает 1 AP, карта в сброс", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, {
-      cardId: card.ID,
-      enemies: [enemy.ID],
-      selectedPlayer: otherPlayer.ID,
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { hp: 5, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id], selectedPlayer: player.playerId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: enemy.id,
+        element: EElement.Hydro,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player.playerId,
+        amount: 1,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: -1,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        card: expect.objectContaining({ name: ECard.LetTheShowBegin }),
+      }),
+    );
+
+    expect(response.player.hp).toBe(6);
+    expect(response.player.actionPoints.total).toBe(2);
+  });
+
+  it("isUseAlternative с 2 энергиями — лечит 3 ОЗ и тратит 2 энергии", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { hp: 5, energy: 2, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({
+      action: "game.useCard",
+      cardId,
+      enemies: [enemy.id],
+      selectedPlayer: player.playerId,
       isUseAlternative: true,
     });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
-    const { steps } = getResponse();
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player.playerId,
+        amount: 3,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
+        playerId: player.playerId,
+        delta: -2,
+      }),
+    );
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: enemy.id,
+        element: EElement.Hydro,
+      }),
+    );
 
-    const elementIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.EnemyGetElement && s.enemyId === enemy.ID,
-    );
-    const energyIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "energy" &&
-        s.playerId === player.ID,
-    );
-    const healIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerHeal && s.playerId === otherPlayer.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(elementIdx).toBeGreaterThanOrEqual(0);
-    expect(energyIdx).toBeGreaterThanOrEqual(0);
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-    expect(elementIdx).toBeLessThan(energyIdx);
-    expect(energyIdx).toBeLessThan(healIdx);
-    expect(healIdx).toBeLessThan(apIdx);
-    expect(apIdx).toBeLessThan(discardIdx);
-
-    expect(steps[energyIdx]).toEqual({
-      type: EDetailedStep.PlayerStatChange,
-      stat: "energy",
-      playerId: player.ID,
-      delta: -2,
-    });
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: otherPlayer.ID,
-      amount: 3,
-    });
-    expect(otherPlayer.Health).toBe(11);
-    expect(player.Energy).toBe(0);
+    expect(response.player.hp).toBe(8);
   });
 
-  it("альтернативный режим без энергии — лечит на 1, PlayerStatChange(energy) отсутствует", async () => {
-    const enemy = addEnemy(5);
-    player.adminSetStats({ hp: 8, actionPoints: { normal: 3, extra: 0 }, energy: 0 });
+  it("isUseAlternative без энергии — возвращает ошибку", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, {
-      cardId: card.ID,
-      enemies: [enemy.ID],
-      selectedPlayer: otherPlayer.ID,
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { energy: 0, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({
+      action: "game.useCard",
+      cardId,
+      enemies: [enemy.id],
+      selectedPlayer: player.playerId,
       isUseAlternative: true,
     });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
 
-    const { steps } = getResponse();
+    expect(response.status).toBe("error");
+  });
 
-    const energyIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "energy" &&
-        s.playerId === player.ID,
-    );
-    const healIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerHeal && s.playerId === otherPlayer.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
+  it("лечит другого игрока при selectedPlayer = player2", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
 
-    expect(energyIdx).toBe(-1);
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
+    await admin.updatePlayer(player2.playerId, { hp: 5 });
 
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: otherPlayer.ID,
-      amount: 1,
+    const cardId = await ensureCardInHand(player1, admin, ECard.LetTheShowBegin);
+
+    player1.send({
+      action: "game.useCard",
+      cardId,
+      enemies: [enemy.id],
+      selectedPlayer: player2.playerId,
     });
-    expect(otherPlayer.Health).toBe(9);
+    const response = await player1.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerHeal,
+        playerId: player2.playerId,
+        amount: 1,
+      }),
+    );
   });
 
-  it("isUseAlternative: false с энергией — лечит на 1, энергия не тратится", async () => {
-    const enemy = addEnemy(5);
+  it("возвращает ошибку если enemies не переданы", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
 
-    await useCard(ws, {
-      cardId: card.ID,
-      enemies: [enemy.ID],
-      selectedPlayer: otherPlayer.ID,
-      isUseAlternative: false,
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({ action: "game.useCard", cardId, selectedPlayer: player.playerId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+  });
+
+  it("возвращает ошибку если selectedPlayer не передан", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+  });
+
+  it("возвращает ошибку при недостаточном количестве AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 0, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBegin);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id], selectedPlayer: player.playerId });
+    const response = await player.waitFor((m: any) => m.status !== undefined);
+
+    expect(response.status).toBe("error");
+    expect(response.message).toContain("not enough action points");
+  });
+
+  it("второй игрок тоже получает событие game.useCard", async () => {
+    game = await createTestGame(2);
+    const [player1, player2] = game.players;
+    const { admin } = game;
+
+    const enemy = player1.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player1.playerId, { hp: 5, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player1, admin, ECard.LetTheShowBegin);
+
+    player1.send({
+      action: "game.useCard",
+      cardId,
+      enemies: [enemy.id],
+      selectedPlayer: player1.playerId,
     });
 
-    const { steps } = getResponse();
+    const [response1, response2] = await Promise.all([
+      player1.waitFor((m: any) => m.action === "game.useCard"),
+      player2.waitFor((m: any) => m.action === "game.useCard"),
+    ]);
 
-    const energyIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "energy" &&
-        s.playerId === player.ID,
-    );
-    const healIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerHeal && s.playerId === otherPlayer.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(energyIdx).toBe(-1);
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: otherPlayer.ID,
-      amount: 1,
-    });
-    expect(otherPlayer.Health).toBe(9);
-    expect(player.Energy).toBe(5);
-  });
-
-  it("selectedPlayer — сам игрок: лечится сам, PlayerHeal с player.ID", async () => {
-    const enemy = addEnemy(5);
-
-    await useCard(ws, { cardId: card.ID, enemies: [enemy.ID], selectedPlayer: player.ID });
-
-    const { steps } = getResponse();
-
-    const healIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.PlayerHeal && s.playerId === player.ID,
-    );
-    const apIdx = steps.findIndex(
-      (s) =>
-        s.type === EDetailedStep.PlayerStatChange &&
-        s.stat === "actionPoints" &&
-        s.playerId === player.ID,
-    );
-    const discardIdx = steps.findIndex(
-      (s) => s.type === EDetailedStep.MoveCard && s.to === "discard" && s.playerId === player.ID,
-    );
-
-    expect(healIdx).toBeGreaterThanOrEqual(0);
-    expect(apIdx).toBeGreaterThanOrEqual(0);
-    expect(discardIdx).toBeGreaterThanOrEqual(0);
-
-    expect(steps[healIdx]).toEqual({
-      type: EDetailedStep.PlayerHeal,
-      playerId: player.ID,
-      amount: 1,
-    });
-    expect(player.Health).toBe(9);
-  });
-
-  it("выбрасывает ошибку, если поле enemies не передано в запросе", async () => {
-    await expect(
-      useCard(ws, { cardId: card.ID, selectedPlayer: otherPlayer.ID }),
-    ).rejects.toThrow("no enemies");
-  });
-
-  it("выбрасывает ошибку, если передан пустой список врагов", async () => {
-    await expect(
-      useCard(ws, { cardId: card.ID, enemies: [], selectedPlayer: otherPlayer.ID }),
-    ).rejects.toThrow("no enemies");
-  });
-
-  it("выбрасывает ошибку, если selectedPlayer не передан", async () => {
-    const enemy = addEnemy(5);
-
-    await expect(useCard(ws, { cardId: card.ID, enemies: [enemy.ID] })).rejects.toThrow(
-      "no selected player",
-    );
+    expect(response1.card).toBe(ECard.LetTheShowBegin);
+    expect(response2.card).toBe(ECard.LetTheShowBegin);
+    expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

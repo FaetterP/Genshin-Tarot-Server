@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import { startGameWSS, stopGameWSS, getAllClients, cycleController } from "../../src/ws/gameWSS";
 import { startAdminWSS, stopAdminWSS } from "../../src/ws/adminWSS";
 import { TaskAwaiter } from "../../src/utils/TaskAwaiter";
-import { ECard, ECharacter, EEnemy } from "../../src/types/enums";
+import { ECard, ECharacter, EEnemy, EElement } from "../../src/types/enums";
 import type { CardPrimitive, EnemyPrimitive } from "../../src/types/general";
 
 export const TEST_GAME_PORT = 19999;
@@ -76,7 +76,7 @@ export class GameTestClient {
     this.ws.send(JSON.stringify(payload));
   }
 
-  waitFor(predicate: (msg: unknown) => boolean, timeout = 5000): Promise<unknown> {
+  waitFor(predicate: (msg: any) => boolean, timeout = 5000): Promise<any> {
     const idx = this.buffer.findIndex(predicate);
     if (idx !== -1) {
       return Promise.resolve(this.buffer.splice(idx, 1)[0]);
@@ -157,7 +157,7 @@ export class AdminTestClient {
 
   async updateEnemy(
     enemyId: string,
-    stats: { hp?: number; shield?: number; isStunned?: boolean },
+    stats: { hp?: number; shield?: number; isStunned?: boolean; elements?: EElement[] },
   ): Promise<void> {
     await this.request({ action: "admin.updateEnemy", enemyId, ...stats });
   }
@@ -200,7 +200,7 @@ export class AdminTestClient {
     await this.request({ action: "admin.removeEnemy", enemyId });
   }
 
-  waitFor(predicate: (msg: unknown) => boolean, timeout = 5000): Promise<unknown> {
+  waitFor(predicate: (msg: any) => boolean, timeout = 5000): Promise<any> {
     const idx = this.buffer.findIndex(predicate);
     if (idx !== -1) {
       return Promise.resolve(this.buffer.splice(idx, 1)[0]);
@@ -312,6 +312,36 @@ export async function createTestGame(numPlayers = 1): Promise<TestGame> {
 }
 
 /**
+ * Ends the current player's turn and waits for the next cycle to start.
+ * Assumes single-player: one player ending turn always triggers endCycle → startCycle.
+ * Updates player.startCycleData so .hand/.enemies/.deck reflect the new cycle.
+ * Returns the game.startCycle message.
+ */
+export async function endTurn(player: GameTestClient): Promise<any> {
+  player.send({ action: "game.endTurn" });
+  const cycle = (await player.waitFor((m: any) => m.action === "game.startCycle")) as any;
+  player.startCycleData = cycle;
+  return cycle;
+}
+
+/**
+ * Ends turns for all players and waits for the next cycle to start for each.
+ * Returns game.startCycle messages in the same order as players.
+ */
+export async function advanceCycle(players: GameTestClient[]): Promise<any[]> {
+  for (const p of players) {
+    p.send({ action: "game.endTurn" });
+  }
+  return Promise.all(
+    players.map(async (p) => {
+      const cycle = (await p.waitFor((m: any) => m.action === "game.startCycle")) as any;
+      p.startCycleData = cycle;
+      return cycle;
+    }),
+  );
+}
+
+/**
  * Ensures the card is in the player's hand.
  * Moves from deck if possible, otherwise creates a new copy via admin.addCard.
  * Returns the cardId.
@@ -331,7 +361,11 @@ export async function ensureCardInHand(
   }
 
   await admin.addCard(player.playerId, cardName, "hand");
-  const stateMsg = (await admin.waitFor((m: any) => m.action === "admin.state")) as any;
+  const stateMsg = (await admin.waitFor((m: any) => {
+    if (m.action !== "admin.state") return false;
+    const ps = m.players?.find((p: any) => p.playerId === player.playerId);
+    return ps?.hand?.some((c: any) => c.name === cardName);
+  })) as any;
   const playerState = stateMsg.players?.find((p: any) => p.playerId === player.playerId);
   const added = playerState?.hand?.find((c: any) => c.name === cardName);
   if (!added) throw new Error(`Card ${cardName} was not found in hand after addCard`);

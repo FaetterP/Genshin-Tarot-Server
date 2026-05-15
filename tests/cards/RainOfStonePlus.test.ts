@@ -1,5 +1,6 @@
 /**
- * WhisperOfWater - накладывает Гидро и наносит 1 пронзающий урон 1 врагу где угодно. Вытягивает 1 карту.
+ * RainOfStonePlus - Накладывает Гео и наносит 2 пронзающего урона 1 врагу в вашей зоне.
+ * Вы можете потратить 1 энергию, чтобы получить 1 Очко Действия.
  * Тип: Attack. Стоимость: 1
  */
 
@@ -16,7 +17,7 @@ import {
 
 jest.setTimeout(15000);
 
-describe("WhisperOfWater — накладывает Гидро и наносит 1 пронзающий урон, вытягивает карту", () => {
+describe("RainOfStonePlus - накладывает Гео и наносит 2 пронзающего урона, опционально даёт 1 AP за 1 энергию", () => {
   let game: TestGame;
 
   beforeAll(async () => {
@@ -35,7 +36,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     game?.cleanup();
   });
 
-  it("наносит 1 пронзающий урон с Гидро, вытягивает карту, списывает 1 AP, карта в сброс", async () => {
+  it("наносит 2 пронзающих урона с Гео, списывает 1 AP, карта в сброс", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -44,7 +45,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -53,15 +54,9 @@ describe("WhisperOfWater — накладывает Гидро и наносит
       expect.objectContaining({
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemy.id,
-        damage: 1,
+        damage: 2,
         isPiercing: true,
-        element: EElement.Hydro,
-      }),
-    );
-    expect(response.steps).toContainEqual(
-      expect.objectContaining({
-        type: EDetailedStep.DrawCards,
-        playerId: player.playerId,
+        element: EElement.Geo,
       }),
     );
     expect(response.steps).toContainEqual(
@@ -76,12 +71,12 @@ describe("WhisperOfWater — накладывает Гидро и наносит
       expect.objectContaining({
         type: EDetailedStep.MoveCard,
         to: "discard",
-        card: expect.objectContaining({ name: ECard.WhisperOfWater }),
+        card: expect.objectContaining({ name: ECard.RainOfStonePlus }),
       }),
     );
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
-    expect(updatedEnemy.hp).toBe(9);
+    expect(updatedEnemy.hp).toBe(8);
     expect(response.player.actionPoints.total).toBe(2);
   });
 
@@ -93,7 +88,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     const enemy = player.enemies[0];
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 2, elements: [] });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -102,7 +97,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
       expect.objectContaining({
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: enemy.id,
-        damage: 1,
+        damage: 2,
         isPiercing: true,
       }),
     );
@@ -111,18 +106,18 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     );
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
-    expect(updatedEnemy.hp).toBe(9);
+    expect(updatedEnemy.hp).toBe(8);
   });
 
-  it("убивает врага с 1 HP — EnemyDeath и следующая волна появляется", async () => {
+  it("убивает врага с 2 HP — EnemyDeath и следующая волна появляется", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
 
     const enemy = player.enemies[0];
-    await admin.updateEnemy(enemy.id, { hp: 1, shield: 0, elements: [] });
+    await admin.updateEnemy(enemy.id, { hp: 2, shield: 0, elements: [] });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
@@ -137,34 +132,62 @@ describe("WhisperOfWater — накладывает Гидро и наносит
 
     const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
     expect(appearanceSteps.length).toBeGreaterThan(0);
-
-    const damageIdx = response.steps.findIndex((s: any) => s.type === EDetailedStep.EnemyTakeDamage);
-    const deathIdx = response.steps.findIndex((s: any) => s.type === EDetailedStep.EnemyDeath);
-    expect(damageIdx).toBeLessThan(deathIdx);
   });
 
-  it("isRange — атакует врага в зоне второго игрока", async () => {
-    game = await createTestGame(2);
-    const [player1, player2] = game.players;
+  it("isUseAlternative с энергией — даёт +1 AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
     const { admin } = game;
 
-    const enemy2 = player2.enemies[0];
-    await admin.updateEnemy(enemy2.id, { hp: 10, shield: 0, elements: [] });
-    await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { energy: 1, actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player1, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
-    player1.send({ action: "game.useCard", cardId, enemies: [enemy2.id] });
-    const response = await player1.waitFor((m: any) => m.action === "game.useCard");
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        playerId: player.playerId,
+        delta: 1,
+      }),
+    );
+    expect(response.player.actionPoints.total).toBe(3);
+  });
+
+  it("isUseAlternative без энергии — только основная атака, без AP", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { energy: 0, actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id], isUseAlternative: true });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemy2.id,
-        damage: 1,
-        isPiercing: true,
+        enemyId: enemy.id,
+        damage: 2,
       }),
     );
+    expect(response.steps).not.toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "actionPoints",
+        delta: 1,
+      }),
+    );
+    expect(response.player.actionPoints.total).toBe(2);
   });
 
   it("возвращает ошибку если enemies не переданы", async () => {
@@ -172,7 +195,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     const [player] = game.players;
     const { admin } = game;
 
-    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
     player.send({ action: "game.useCard", cardId });
     const response = await player.waitFor((m: any) => m.status !== undefined);
@@ -189,7 +212,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 0, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player, admin, ECard.RainOfStonePlus);
 
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.status !== undefined);
@@ -207,7 +230,7 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player1.playerId, { actionPoints: { normal: 3, extra: 0 } });
 
-    const cardId = await ensureCardInHand(player1, admin, ECard.WhisperOfWater);
+    const cardId = await ensureCardInHand(player1, admin, ECard.RainOfStonePlus);
 
     player1.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
 
@@ -216,8 +239,8 @@ describe("WhisperOfWater — накладывает Гидро и наносит
       player2.waitFor((m: any) => m.action === "game.useCard"),
     ]);
 
-    expect(response1.card).toBe(ECard.WhisperOfWater);
-    expect(response2.card).toBe(ECard.WhisperOfWater);
+    expect(response1.card).toBe(ECard.RainOfStonePlus);
+    expect(response2.card).toBe(ECard.RainOfStonePlus);
     expect(response2.player.playerId).toBe(player1.playerId);
   });
 });

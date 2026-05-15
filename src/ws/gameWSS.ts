@@ -11,6 +11,7 @@ const GAME_PORT = 8999;
 const handlers = buildHandlers();
 let gameWss: WebSocket.Server;
 let adminWss: WebSocket.Server | null = null;
+let heartbeatInterval: ReturnType<typeof setInterval> | null = null;
 const cycleController = new CycleController();
 
 export function registerAdminWss(wss: WebSocket.Server) {
@@ -134,14 +135,14 @@ async function onGameConnect(ws: ExtWebSocket, _req: unknown) {
   }
 }
 
-export async function startGameWSS(): Promise<void> {
-  await new Promise<void>((resolve) => {
-    gameWss = new WebSocket.Server({ port: GAME_PORT }, () => resolve());
+export async function startGameWSS(port = GAME_PORT): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    gameWss = new WebSocket.Server({ port }, () => resolve());
     gameWss.on("connection", (ws, req) => onGameConnect(ws as ExtWebSocket, req));
-    gameWss.on("error", () => process.exit());
+    gameWss.on("error", reject);
   });
 
-  setInterval(() => {
+  heartbeatInterval = setInterval(() => {
     gameWss.clients.forEach((ws: WebSocket) => {
       const ext = ws as ExtWebSocket;
       if (ext.isAlive === false) return ws.terminate();
@@ -150,10 +151,14 @@ export async function startGameWSS(): Promise<void> {
     });
   }, HEARTBEAT_TIMEOUT);
 
-  console.log(`Game WebSocket: ws://localhost:${GAME_PORT}`);
+  console.log(`Game WebSocket: ws://localhost:${port}`);
 }
 
 export function stopGameWSS() {
+  if (heartbeatInterval) {
+    clearInterval(heartbeatInterval);
+    heartbeatInterval = null;
+  }
   gameWss.close();
 }
 
