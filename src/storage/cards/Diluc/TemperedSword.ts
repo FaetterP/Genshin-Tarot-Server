@@ -22,6 +22,10 @@ export class TemperedSword extends Card {
       throw new Error("no enemies");
     }
 
+    if (ctx.isUseAlternative && ctx.player.ActionPoints.total < 2) {
+      throw new Error(`not enough action points you:${ctx.player.ActionPoints.total} need:2`);
+    }
+
     const target = ctx.enemies[0];
 
     if (target.Shield > 0) {
