@@ -30,7 +30,7 @@ export type DetailedStep =
   | {
       type: EDetailedStep.PlayerStatChange;
       playerId: string;
-      stat: "energy" | "shield" | "mora" | "actionPoints";
+      stat: "energy" | "shield" | "mora" | "actionPoints" | "eulaSnowflakes";
       delta: number;
     }
   | { type: EDetailedStep.PlayerGetEffect; playerId: string; effect: EPlayerEffect }

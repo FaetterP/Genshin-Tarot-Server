@@ -23,6 +23,10 @@ export class EdelBladework extends Card {
       throw new Error("no enemies");
     }
 
+    if (ctx.isUseAlternative && ctx.player.Energy < 2) {
+      throw new Error("not enough energy");
+    }
+
     const target = ctx.enemies[0];
     if (target.Shield > 0) {
       ctx.addToSteps([{ type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 }]);

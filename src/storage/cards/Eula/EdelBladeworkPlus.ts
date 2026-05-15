@@ -32,5 +32,15 @@ export class EdelBladeworkPlus extends Card {
       element: new Cryo(),
       player: ctx.player,
     });
+
+    ctx.player.snowflakes += 1;
+    ctx.addToSteps([
+      {
+        type: EDetailedStep.PlayerStatChange,
+        stat: "eulaSnowflakes",
+        playerId: ctx.player.ID,
+        delta: 1,
+      },
+    ]);
   }
 }
