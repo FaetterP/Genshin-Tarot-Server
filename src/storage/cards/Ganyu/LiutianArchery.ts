@@ -25,7 +25,10 @@ export class LiutianArchery extends Card {
 
     const target = ctx.enemies[0];
     let element: EElement | undefined;
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
+    if (ctx.isUseAlternative) {
+      if (!ctx.player.trySpendEnergy(1)) {
+        throw new Error("not enough energy");
+      }
       element = EElement.Cryo;
       ctx.addToSteps([
         {

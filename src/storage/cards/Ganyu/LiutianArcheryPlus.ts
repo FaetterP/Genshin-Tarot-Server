@@ -21,7 +21,10 @@ export class LiutianArcheryPlus extends Card {
     const target = ctx.enemies[0];
     let damage = 2;
     let element: EElement | undefined;
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+    if (ctx.isUseAlternative) {
+      if (!ctx.player.trySpendEnergy(2)) {
+        throw new Error("not enough energy");
+      }
       element = EElement.Cryo;
       damage *= 3;
       ctx.addToSteps([
@@ -31,8 +34,6 @@ export class LiutianArcheryPlus extends Card {
           playerId: ctx.player.ID,
           delta: -2,
         },
-      ]);
-      ctx.addToSteps([
         { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo },
       ]);
     }

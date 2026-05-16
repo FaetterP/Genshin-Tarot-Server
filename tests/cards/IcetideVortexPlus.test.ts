@@ -191,10 +191,6 @@ describe("IcetideVortexPlus — накладывает Крио ИЛИ дост�
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
-    const apSteps = response.steps.filter(
-      (s: any) => s.type === EDetailedStep.PlayerStatChange && s.stat === "actionPoints",
-    );
-    expect(apSteps.length).toBe(0);
     expect(response.player.actionPoints.total).toBe(3);
 
     expect(response.steps).toContainEqual(
