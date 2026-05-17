@@ -5,7 +5,7 @@
  */
 
 import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
-import { ECard, EDetailedStep, EElement } from "../../src/types/enums";
+import { ECard, EDetailedStep, EElement, EEnemy } from "../../src/types/enums";
 import {
   startTestServers,
   stopTestServers,
@@ -160,7 +160,13 @@ describe("Sharpshooter — наносит 1 пронзающий урон 1 вр
     const [player] = game.players;
     const { admin } = game;
 
-    const enemy = player.enemies[0];
+    // HilichurlGuard — нет стартового элемента, нет способностей (напр. GiantDendroSlime наносит 2 доп. урона при попадании Pyro)
+    await admin.removeEnemy(player.enemies[0].id);
+    await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
+    const syncMsg = await player.waitFor(
+      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 1,
+    );
+    const enemy = syncMsg.you.enemies[0];
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { energy: 1 });
 

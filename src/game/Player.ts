@@ -536,10 +536,32 @@ export class Player {
     this.deck.push(card);
   }
 
-  public moveCardFromHandToDeck(card: Card) {
+  public moveCardFromHandToDeck(card: Card, isShuffle: boolean = false) {
     if (!this.hand.includes(card)) return;
     this.hand = this.hand.filter((c) => c !== card);
-    this.addCardToDeck(card);
+
+    card.revealDeckPositionToClient = false;
+
+    if (isShuffle) {
+      const sortedExisting = [...this.deck].sort((a, b) => a.deckPosition - b.deckPosition);
+      const insertSlot = Math.floor(Math.random() * (sortedExisting.length + 1));
+      const newOrder = [
+        ...sortedExisting.slice(0, insertSlot),
+        card,
+        ...sortedExisting.slice(insertSlot),
+      ];
+      newOrder.forEach((c, i) => {
+        c.deckPosition = i + 1;
+      });
+      this.deck.push(card);
+    } else {
+      for (const c of this.deck) {
+        c.deckPosition += 1;
+      }
+      card.deckPosition = 1;
+      this.deck.push(card);
+    }
+
     this._stepsCollector?.([
       { type: EDetailedStep.MoveCard, playerId: this.ID, card: card.getPrimitive(), to: "deck" },
     ]);

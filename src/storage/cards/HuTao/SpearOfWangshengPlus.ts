@@ -43,7 +43,7 @@ export class SpearOfWangsheng extends Card {
     });
 
     if (ctx.player.Health <= 7) {
-      ctx.player.moveCardFromHandToDeck(this);
+      ctx.player.moveCardFromHandToDeck(this, true);
     }
   }
 }
