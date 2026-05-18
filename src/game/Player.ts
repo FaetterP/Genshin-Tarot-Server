@@ -9,6 +9,7 @@ import {
   PlayerEndTurnContext,
   PlayerUseCardContext,
 } from "../types/eventsContext";
+import { CardUseContext } from "../types/functionsContext";
 import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
@@ -46,7 +47,7 @@ export class Player {
   private burnsDrawnThisTurn: number = 0;
   private isTookDamageThisTurn: boolean = false;
   private isTookDamageLastTurn: boolean = false;
-  public _currentCardType?: ECardType;
+  private currentCardType?: ECardType;
 
   private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
   private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
@@ -136,6 +137,36 @@ export class Player {
   }
   public get LastCard(): Card | undefined {
     return this.lastCard;
+  }
+
+  public executeUseCard(card: Card, ctx: CardUseContext): void {
+    this.setStepsCollector(ctx.addToSteps);
+
+    this.currentCardType = card.Type;
+    card.use(ctx);
+    this.currentCardType = undefined;
+    this.lastCard = card;
+
+    this.triggerUseCardEffects({ player: this, usedCard: card });
+
+    this.trySpendActonPoints(card.Cost);
+    this.addSteps([{
+      type: EDetailedStep.PlayerStatChange,
+      stat: "actionPoints",
+      playerId: this.ID,
+      delta: -card.Cost,
+    }]);
+
+    if (this.hand.some((c) => c.ID === card.ID)) {
+      this.addSteps([{
+        type: EDetailedStep.MoveCard,
+        to: "discard",
+        playerId: this.ID,
+        card: card.getPrimitive(),
+      }]);
+      this.discardCard(card);
+    }
+    this.setStepsCollector(null);
   }
   public get IsTurnEnds() {
     return this.isTurnEnds;
@@ -596,7 +627,7 @@ export class Player {
   }
 
   public useAttackEffects(enemy: Enemy) {
-    const cardType = this._currentCardType;
+    const cardType = this.currentCardType;
     for (const effect of this.effects) {
       if (effect.onAttack(this, enemy, cardType)) {
         this.effects = this.effects.filter((eff) => eff !== effect);

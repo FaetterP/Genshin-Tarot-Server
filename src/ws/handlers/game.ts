@@ -86,37 +86,12 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     addToSteps: (data) => steps.push(...data),
     players: ws.cycleController.getPlayers(),
   };
-  ws.player.setStepsCollector((data) => steps.push(...data));
-
   if (ws.player.ActionPoints.total < card.Cost)
     throw new Error(
       `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`,
     );
 
-  ws.player._currentCardType = card.Type;
-  card.use(ctx);
-  ws.player._currentCardType = undefined;
-
-  ws.player.triggerUseCardEffects({ player: ws.player, usedCard: card });
-
-  ws.player.trySpendActonPoints(card.Cost);
-  steps.push({
-    type: EDetailedStep.PlayerStatChange,
-    stat: "actionPoints",
-    playerId: ws.player.ID,
-    delta: -card.Cost,
-  });
-
-  if (ws.player.Hand.some((c) => c.ID === card.ID)) {
-    steps.push({
-      type: EDetailedStep.MoveCard,
-      to: "discard",
-      playerId: ws.player.ID,
-      card: card.getPrimitive(),
-    });
-    ws.player.discardCard(card);
-  }
-  ws.player.setStepsCollector(null);
+  ws.player.executeUseCard(card, ctx);
 
   sendToAll<GameUseCardResponse>({
     action: "game.useCard",

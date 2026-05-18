@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
 
@@ -18,15 +17,17 @@ export class GaryuuBladeworkPlus extends Card {
     }
 
     const target = ctx.enemies[0];
+    const lastCardName = ctx.player.LastCard?.Name;
+    const damage = lastCardName === ECard.Chihayaburu || lastCardName === ECard.Dash ? 6 : 3;
+
     ctx.addToSteps([
       {
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
-        damage: 3,
+        damage,
         isPiercing: false,
       },
     ]);
-    target.applyAttack({ damage: 3, player: ctx.player });
-    // TODO
+    target.applyAttack({ damage, player: ctx.player });
   }
 }
