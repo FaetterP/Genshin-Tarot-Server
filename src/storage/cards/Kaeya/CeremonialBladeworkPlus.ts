@@ -19,7 +19,7 @@ export class CeremonialBladeworkPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = 2 + getRandomInteger(1, 7);
+    const damage = 2 + getRandomInteger(1, 6);
     ctx.addToSteps([
       {
         type: EDetailedStep.EnemyTakeDamage,

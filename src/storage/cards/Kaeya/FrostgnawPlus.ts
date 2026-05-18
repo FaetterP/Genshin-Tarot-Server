@@ -28,6 +28,7 @@ export class FrostgnawPlus extends Card {
         playerId: ctx.player.ID,
         delta: 2,
       },
+      { type: EDetailedStep.PlayerHeal, playerId: ctx.player.ID, amount: 2 },
     ]);
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Cryo(), ctx.player);

@@ -4,7 +4,7 @@
  */
 
 import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
-import { ECard, EDetailedStep, EElement, EPlayerEffect } from "../../src/types/enums";
+import { ECard, EDetailedStep, EElement, EEnemy, EPlayerEffect } from "../../src/types/enums";
 import {
   startTestServers,
   stopTestServers,
@@ -133,7 +133,11 @@ describe("GuideOfAfterlifePlus — получить 1 урон, +энергия 
     const [player] = game.players;
     const { admin } = game;
 
-    const enemy = player.enemies[0];
+    const existingEnemy = player.enemies[0];
+    await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2);
+    const allEnemies: { id: string }[] = syncMsg.you.enemies;
+    const enemy = allEnemies.find((e: any) => e.id !== existingEnemy.id)!;
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { hp: 10, energy: 0, actionPoints: { normal: 3, extra: 0 } });
 
