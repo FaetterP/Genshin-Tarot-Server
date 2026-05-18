@@ -23,6 +23,16 @@ export class GaleBlade extends Card {
     if (ctx.enemies.length > 2) throw new Error("need 1-2 enemies");
 
     const target = ctx.enemies[0];
+
+    if (ctx.enemies.length === 2) {
+      const other = ctx.enemies[1];
+      if (other === target) throw new Error("same enemies");
+      if (!ctx.player.Enemies.includes(target)) throw new Error("first enemy must be in your zone");
+      const ownerA = ctx.players.find((p) => p.Enemies.includes(target));
+      const ownerB = ctx.players.find((p) => p.Enemies.includes(other));
+      if (!ownerA || !ownerB) throw new Error("unknown enemy");
+    }
+
     ctx.addToSteps([
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Anemo },
       {
@@ -39,15 +49,11 @@ export class GaleBlade extends Card {
       element: new Anemo(),
       player: ctx.player,
     });
+
     if (ctx.enemies.length === 2) {
       const other = ctx.enemies[1];
-      if (other === target) throw new Error("same enemies");
-      if (!ctx.player.Enemies.includes(target)) throw new Error("first enemy must be in your zone");
-
-      const ownerA = ctx.players.find((p) => p.Enemies.includes(target));
-      const ownerB = ctx.players.find((p) => p.Enemies.includes(other));
-
-      if (!ownerA || !ownerB) throw new Error("unknown enemy");
+      const ownerA = ctx.players.find((p) => p.Enemies.includes(target))!;
+      const ownerB = ctx.players.find((p) => p.Enemies.includes(other))!;
       ownerA.moveEnemyTo(ownerB, target);
       ownerB.moveEnemyTo(ownerA, other);
       ctx.addToSteps([

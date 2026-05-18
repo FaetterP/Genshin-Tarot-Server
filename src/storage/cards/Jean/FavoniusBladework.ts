@@ -1,6 +1,5 @@
 ﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
-import { Anemo } from "../../elements/Anemo";
 import { Card } from "../Card";
 import { FavoniusBladeworkPlus } from "./FavoniusBladeworkPlus";
 
