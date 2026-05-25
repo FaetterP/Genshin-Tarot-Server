@@ -12,8 +12,10 @@ import type {
   AdminAddEnemyPayload,
   AdminRemoveEnemyPayload,
   AdminAddCardPayload,
+  AdminUpdateBossPayload,
+  AdminSpawnBossPayload,
 } from "../../../types/admin";
-import type { ECard, EElement, EEnemyEffect, EEnemy, EPlayerEffect } from "../../../types/enums";
+import type { ECard, EElement, EEnemyEffect, EEnemy, ELeyline, EPlayerEffect } from "../../../types/enums";
 import { createEnemyFromEnum } from "../../../storage/enemies/enemyFactory";
 import { createCardFromEnum } from "../../../storage/cards/cardFactory";
 
@@ -145,6 +147,34 @@ async function moveCard(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   await withPlayer(ctx, ws, playerId, (p) => p.adminMoveCard(cardId, from, to));
 }
 
+async function setBossRoll(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { roll } = payload as { roll: number };
+  ctx.cycleController.adminSetNextBossRoll(roll);
+  sendState(ctx, ws);
+}
+
+async function setLeylines(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { leylines } = payload as { leylines: ELeyline[] };
+  ctx.cycleController.adminSetNextLeylines(leylines);
+  sendState(ctx, ws);
+}
+
+async function spawnBoss(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const { bossName } = payload as AdminSpawnBossPayload;
+  ctx.cycleController.adminSpawnBoss(bossName);
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
+async function updateBoss(ctx: AdminContext, ws: WebSocket, payload: unknown) {
+  const stats = payload as AdminUpdateBossPayload;
+  const boss = ctx.cycleController.Boss;
+  if (!boss) throw new Error("No boss spawned");
+  boss.adminSetStats(stats);
+  ctx.sendStateToClients();
+  sendState(ctx, ws);
+}
+
 async function setState(ctx: AdminContext, ws: WebSocket, payload: unknown) {
   const { isGameStart, cycle, players } = payload as AdminSetStatePayload;
 
@@ -192,6 +222,10 @@ export const handlers: Record<string, AdminHandler> = {
   "admin.addCard": addCard,
   "admin.moveCard": moveCard,
   "admin.setState": setState,
+  "admin.spawnBoss": spawnBoss,
+  "admin.updateBoss": updateBoss,
+  "admin.setBossRoll": setBossRoll,
+  "admin.setLeylines": setLeylines,
 };
 
 export function createOnAdminConnect(ctx: AdminContext): (ws: WebSocket) => void {

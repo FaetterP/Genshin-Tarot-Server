@@ -13,6 +13,7 @@ import {
   createTestGame,
   ensureCardInHand,
   endTurn,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -247,5 +248,29 @@ describe("OceanbornPlus — наносит 2 урона всем врагам в
     expect(response1.card).toBe(ECard.OceanbornPlus);
     expect(response2.card).toBe(ECard.OceanbornPlus);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("наносит урон боссу", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    await admin.updateEnemy(player.enemies[0].id, { elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.OceanbornPlus);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: bossId,
+        damage: 2,
+      }),
+    );
   });
 });

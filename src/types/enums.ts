@@ -332,6 +332,8 @@ export enum EEnemy {
   RuinHunter = "RuinHunter",
   ShieldBearerMitachurl = "ShieldBearerMitachurl",
   StonehideLawachurl = "StonehideLawachurl",
+  // boss
+  Dvalin = "Dvalin",
 }
 
 export enum ELeyline {
@@ -376,6 +378,18 @@ export enum EDetailedStep {
   EnemyAttack = "EnemyAttack",
   EnemyGetEffect = "EnemyGetEffect",
   EnemyLoseEffect = "EnemyLoseEffect",
+  EnemyLoseElement = "EnemyLoseElement",
   EnemyEffectTrigger = "EnemyEffectTrigger",
   EnemiesSwap = "EnemiesSwap",
+  BossAppearance = "BossAppearance",
+  GameWin = "GameWin",
+  BossReset = "BossReset",
+  BossAnemoImmunity = "BossAnemoImmunity",
+  BossAttack = "BossAttack",
+}
+
+export enum EDvalinAttack {
+  SwoopingStrike = "SwoopingStrike",
+  PulsingWind = "PulsingWind",
+  DragonBreath = "DragonBreath",
 }

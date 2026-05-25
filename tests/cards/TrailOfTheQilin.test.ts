@@ -58,6 +58,7 @@ describe("TrailOfTheQilin — оглушает врага в зоне, в нач
         effect: EPlayerEffect.TrailOfTheQilin,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.TrailOfTheQilin)).toHaveLength(1);
     expect(response.player.effects).toContain(EPlayerEffect.TrailOfTheQilin);
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
@@ -185,6 +186,7 @@ describe("TrailOfTheQilin — оглушает врага в зоне, в нач
     player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
     await player.waitFor((m: any) => m.action === "game.useCard");
 
+    await admin.setLeylines([]);
     const cycle2 = await endTurn(player);
 
     expect(cycle2.steps).toContainEqual(

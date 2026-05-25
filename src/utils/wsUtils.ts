@@ -31,6 +31,18 @@ export async function sendToAllAndWait<T extends AnyResponse>(payload: T) {
   await taskAwaiter.done();
 }
 
+export async function sendToEachAndWait(payloadFn: (ws: ExtWebSocket) => any): Promise<void> {
+  const taskAwaiter = new TaskAwaiter();
+  for (const ws of getAllClients()) {
+    const taskId = `task-${v4()}`;
+    const payload = payloadFn(ws as ExtWebSocket);
+    taskAwaiter.addTask(taskId);
+    sendResponseToAdmin({ ...payload, taskId }, "send", (ws as ExtWebSocket).player?.ID);
+    ws.send(JSON.stringify({ ...payload, taskId }));
+  }
+  await taskAwaiter.done();
+}
+
 export function sendToAll<T extends AnyResponse>(payload: T) {
   sendResponseToAdmin(payload, "sendToAll");
 

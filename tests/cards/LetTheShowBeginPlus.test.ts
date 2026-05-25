@@ -13,6 +13,7 @@ import {
   createTestGame,
   ensureCardInHand,
   endTurn,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -65,6 +66,7 @@ describe("LetTheShowBeginPlus — Гидро всем врагам, атаки �
         effect: EPlayerEffect.LetTheShowBeginPlus,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.LetTheShowBeginPlus)).toHaveLength(1);
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.PlayerStatChange,
@@ -121,6 +123,7 @@ describe("LetTheShowBeginPlus — Гидро всем врагам, атаки �
         effect: EPlayerEffect.LetTheShowBeginPlus,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.LetTheShowBeginPlus)).toHaveLength(1);
   });
 
   it("атака при активном эффекте — PlayerHeal появляется в ответе на атакующую карту", async () => {
@@ -221,5 +224,29 @@ describe("LetTheShowBeginPlus — Гидро всем врагам, атаки �
     expect(response1.card).toBe(ECard.LetTheShowBeginPlus);
     expect(response2.card).toBe(ECard.LetTheShowBeginPlus);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("накладывает Гидро на босса", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    await admin.updateEnemy(player.enemies[0].id, { elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.LetTheShowBeginPlus);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: bossId,
+        element: EElement.Hydro,
+      }),
+    );
   });
 });

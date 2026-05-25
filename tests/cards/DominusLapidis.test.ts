@@ -13,6 +13,7 @@ import {
   createTestGame,
   ensureCardInHand,
   endTurn,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -73,6 +74,7 @@ describe("DominusLapidis - даёт 3 брони, накладывает Гео 
         effect: EPlayerEffect.DominusLapidis,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.DominusLapidis)).toHaveLength(1);
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.PlayerStatChange,
@@ -175,6 +177,7 @@ describe("DominusLapidis - даёт 3 брони, накладывает Гео 
     player.send({ action: "game.useCard", cardId });
     await player.waitFor((m: any) => m.action === "game.useCard");
 
+    await admin.setLeylines([]);
     const cycle2 = await endTurn(player);
 
     expect(cycle2.steps).toContainEqual(
@@ -240,5 +243,59 @@ describe("DominusLapidis - даёт 3 брони, накладывает Гео 
     expect(response1.card).toBe(ECard.DominusLapidis);
     expect(response2.card).toBe(ECard.DominusLapidis);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("накладывает Гео на босса", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    await admin.updateEnemy(player.enemies[0].id, { elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.DominusLapidis);
+
+    player.send({ action: "game.useCard", cardId });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: bossId,
+        element: EElement.Geo,
+      }),
+    );
+  });
+
+  it("два эффекта DominusLapidis вызывают реакцию Гео+Гео в начале следующего цикла", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+
+    await admin.request({
+      action: "admin.setState",
+      players: [{ playerId: player.playerId, effects: [EPlayerEffect.DominusLapidis, EPlayerEffect.DominusLapidis] }],
+    });
+    await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.effects?.length >= 2);
+
+    await admin.setLeylines([]);
+    const cycle2 = await endTurn(player);
+
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyReaction,
+        enemyId: enemy.id,
+        element1: EElement.Geo,
+        element2: EElement.Geo,
+      }),
+    );
+    expect(
+      cycle2.steps.filter((s: any) => s.type === EDetailedStep.PlayerEffectTrigger && s.effect === EPlayerEffect.DominusLapidis),
+    ).toHaveLength(2);
   });
 });

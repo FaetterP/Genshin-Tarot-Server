@@ -13,6 +13,7 @@ import {
   resetGame,
   createTestGame,
   ensureCardInHand,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -351,5 +352,33 @@ describe("PassionOverload - Накладывает Пиро и наносит 2 
     expect(response1.card).toBe(ECard.PassionOverload);
     expect(response2.card).toBe(ECard.PassionOverload);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("АоЕ при карте Беннета также наносит урон боссу", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    await admin.addCard(player.playerId, ECard.StrikeOfFortune, "deck");
+
+    const cardId = await ensureCardInHand(player, admin, ECard.PassionOverload);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: bossId,
+        damage: 1,
+        element: EElement.Pyro,
+      }),
+    );
   });
 });

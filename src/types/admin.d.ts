@@ -1,10 +1,11 @@
-import type { PlayerPrimitive } from "./general";
+import type { BossPrimitive, EnemyPrimitive, PlayerPrimitive } from "./general";
 import type { ECard, EElement, EEnemyEffect, EEnemy, EPlayerEffect } from "./enums";
 
 export type AdminStateSnapshot = {
   isGameStart: boolean;
   cycle: number;
   players: PlayerPrimitive[];
+  boss: BossPrimitive | null;
 };
 
 export type AdminUpdatePlayerPayload = {
@@ -33,7 +34,7 @@ export type AdminMoveCardPayload = {
   playerId: string;
   cardId: string;
   from: CardPile;
-  to: CardPile;
+  to: CardPile | "trash";
 };
 
 export type AdminSetStateEnemyPayload = {
@@ -77,4 +78,15 @@ export type AdminAddCardPayload = {
   playerId: string;
   cardName: ECard;
   to: CardPile;
+};
+
+export type AdminUpdateBossPayload = {
+  hp?: number;
+  shield?: number;
+  elements?: EElement[];
+  lives?: number;
+};
+
+export type AdminSpawnBossPayload = {
+  bossName: EEnemy;
 };

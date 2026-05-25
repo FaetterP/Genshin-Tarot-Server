@@ -1,4 +1,4 @@
-import type { ECharacter, ECard, EEnemy } from "./enums";
+import type { ECharacter, ECard } from "./enums";
 
 export type GameStartRequest = { action: "game.startGame" };
 
@@ -48,6 +48,15 @@ export type TaskCompleteTaskRequest = {
   taskId: string;
 };
 
+export type GameDragonBreathResponseRequest =
+  | { action: "game.dragonBreathResponse"; taskId: string; type: "none" }
+  | { action: "game.dragonBreathResponse"; taskId: string; type: "dash"; cardId: string }
+  | { action: "game.dragonBreathResponse"; taskId: string; type: "discard"; cardIds: string[] };
+
+export type GameBossPassiveResponseRequest =
+  | { action: "game.bossPassiveResponse"; taskId: string; type: "loseAP" }
+  | { action: "game.bossPassiveResponse"; taskId: string; type: "discard"; cardIds: [string, string] };
+
 export type AnyRequest =
   | GameStartRequest
   | GameEndTurnRequest
@@ -56,4 +65,6 @@ export type AnyRequest =
   | GameUseBurstRequest
   | CharactersAddCharacterRequest
   | CharactersRemoveCharacterRequest
-  | TaskCompleteTaskRequest;
+  | TaskCompleteTaskRequest
+  | GameDragonBreathResponseRequest
+  | GameBossPassiveResponseRequest;

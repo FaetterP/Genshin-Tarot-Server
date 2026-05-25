@@ -2,6 +2,7 @@ import { CardUseContext } from "../../../types/functionsContext";
 import { ExplosivePuppetEffect } from "../../effects/ExplosivePuppetEffect";
 import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
 import { Card } from "../Card";
+import { BossEnemy } from "../../enemies/BossEnemy";
 
 export class ExplosivePuppetPlus extends Card {
   public get Name(): ECard {
@@ -29,7 +30,8 @@ export class ExplosivePuppetPlus extends Card {
     ]);
     ctx.player.addEffect(effect);
 
-    // TODO: not apply to boss
-    ctx.enemies[0].addStun();
+    if (!(ctx.enemies[0] instanceof BossEnemy)) {
+      ctx.enemies[0].addStun();
+    }
   }
 }

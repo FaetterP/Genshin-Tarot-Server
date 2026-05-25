@@ -12,6 +12,9 @@ export class ExplosivePuppetEffect extends PlayerEffect {
   public override onStartCycle(player: Player): boolean {
     for (const enemy of player.Enemies) {
       player.addSteps([
+        { type: EDetailedStep.EnemyGetElement, enemyId: enemy.ID, element: EElement.Pyro },
+      ]);
+      player.addSteps([
         {
           type: EDetailedStep.EnemyTakeDamage,
           enemyId: enemy.ID,

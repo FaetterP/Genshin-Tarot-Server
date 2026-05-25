@@ -33,12 +33,14 @@ export function getGameStateSnapshot(): AdminStateSnapshot {
     isGameStart: cycleController.IsGameStart,
     cycle: cycleController.CycleNumber,
     players: getAllPlayers().map((p) => p.getPrimitiveStats(true)),
+    boss: cycleController.Boss?.getPrimitiveStats() ?? null,
   };
 }
 
 export function sendStateToClients() {
   const players = getAllPlayers();
   const allPrimitive = players.map((p) => p.getPrimitiveStats());
+  const boss = cycleController.Boss?.getPrimitiveStats() ?? null;
   for (const ws of gameWss.clients) {
     const ext = ws as ExtWebSocket;
     const you = ext.player.getPrimitiveStats();
@@ -49,6 +51,7 @@ export function sendStateToClients() {
         you,
         otherPlayers,
         cycle: cycleController.CycleNumber,
+        boss,
       }),
     );
   }

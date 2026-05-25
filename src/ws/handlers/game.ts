@@ -1,16 +1,19 @@
 ﻿import type { DetailedStep } from "../../types/detailedStep";
 import type { PlayerEndTurnContext } from "../../types/eventsContext";
-import type { GameEndTurnRequest } from "../../types/request";
+import type {
+  GameEndTurnRequest,
+  GameUpgradeCardRequest,
+  GameUseBurstRequest,
+  GameUseCardRequest,
+  GameDragonBreathResponseRequest,
+  GameBossPassiveResponseRequest,
+} from "../../types/request";
 import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsContext";
 import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
 import { Enemy } from "../../storage/enemies/Enemy";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
-import {
-  GameUpgradeCardRequest,
-  GameUseBurstRequest,
-  GameUseCardRequest,
-} from "../../types/request";
+import { TaskAwaiter } from "../../utils/TaskAwaiter";
 import { ECard, EDetailedStep } from "../../types/enums";
 import {
   GameStartGameResponse,
@@ -22,8 +25,7 @@ import {
 async function startGame(ws: ExtWebSocket, payload: any) {
   ws.cycleController.startGame();
   await sendToAllAndWait<GameStartGameResponse>({ action: "game.startGame" });
-
-  ws.cycleController.startCycle();
+  await ws.cycleController.startCycle();
 }
 
 async function endTurn(ws: ExtWebSocket, payload: any) {
@@ -99,6 +101,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     card: card.Name,
     player: ws.player.getPrimitiveStats(),
     steps,
+    boss: ws.cycleController.Boss?.getPrimitiveStats() || null,
   });
 }
 
@@ -153,6 +156,7 @@ async function upgradeCard(ws: ExtWebSocket, payload: any) {
     card: newCard.Name,
     player: ws.player.getPrimitiveStats(),
     steps,
+    boss: ws.cycleController.Boss?.getPrimitiveStats() || null,
   });
 }
 
@@ -228,7 +232,20 @@ async function useBurst(ws: ExtWebSocket, payload: any) {
     character: characterName,
     player: ws.player.getPrimitiveStats(),
     steps,
+    boss: ws.cycleController.Boss?.getPrimitiveStats() || null,
   });
 }
 
-export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst } };
+async function dragonBreathResponse(ws: ExtWebSocket, payload: any) {
+  const { taskId, ...rest } = payload as GameDragonBreathResponseRequest & { taskId: string };
+  ws.cycleController.Boss?.receivePlayerAction("dragonBreath", ws.player.ID, rest);
+  TaskAwaiter.completeTask(taskId);
+}
+
+async function bossPassiveResponse(ws: ExtWebSocket, payload: any) {
+  const { taskId, ...rest } = payload as GameBossPassiveResponseRequest & { taskId: string };
+  ws.cycleController.Boss?.receivePlayerAction("bossPassive", ws.player.ID, rest);
+  TaskAwaiter.completeTask(taskId);
+}
+
+export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst, dragonBreathResponse, bossPassiveResponse } };

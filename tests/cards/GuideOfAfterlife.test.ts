@@ -69,6 +69,7 @@ describe("GuideOfAfterlife — получить 1 урон, +энергия ил
         effect: EPlayerEffect.GuideOfAfterlife,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.GuideOfAfterlife)).toHaveLength(1);
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.PlayerStatChange,
@@ -121,6 +122,7 @@ describe("GuideOfAfterlife — получить 1 урон, +энергия ил
         effect: EPlayerEffect.GuideOfAfterlife,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.GuideOfAfterlife)).toHaveLength(1);
     expect(response.steps).not.toContainEqual(
       expect.objectContaining({ type: EDetailedStep.PlayerStatChange, stat: "energy" }),
     );

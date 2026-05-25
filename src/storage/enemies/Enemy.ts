@@ -25,8 +25,9 @@ type EnemyConstructorType = {
 export abstract class Enemy {
   abstract get Name(): EEnemy;
   public readonly ID: string;
-  private hp: number;
-  private shield: number;
+  protected hp: number;
+  protected readonly maxHp: number;
+  protected shield: number;
   private damage: number;
   private mora: number;
   protected elements: BaseElement[] = [];
@@ -78,9 +79,16 @@ export abstract class Enemy {
   constructor({ hp, damage, mora, shield }: EnemyConstructorType) {
     this.ID = `enemy-${v4()}`;
     this.hp = hp;
+    this.maxHp = hp;
     this.shield = shield;
     this.damage = damage;
     this.mora = mora;
+  }
+
+  public healToMax(): number {
+    const amount = this.maxHp - this.hp;
+    if (amount > 0) this.hp = this.maxHp;
+    return amount;
   }
 
   getPrimitiveStats(): EnemyPrimitive {
@@ -150,9 +158,7 @@ export abstract class Enemy {
       return;
     }
 
-    if (!attack.isRange && !attack.player.Enemies.includes(this)) {
-      throw new Error("attack not range");
-    }
+    this.checkAttackTarget(attack);
 
     const bonus = attack.player.getAndConsumeNextAttackBonus();
     const totalDamage = attack.damage + bonus.bonusDamage;
@@ -182,6 +188,7 @@ export abstract class Enemy {
     attack.player.useAttackEffects(this);
 
     if (this.hp <= 0) {
+      if (!this.onBeforeDeath(attack.player)) return;
       if (bonus.energyOnKill > 0) {
         attack.player.addEnergy(bonus.energyOnKill);
       }
@@ -189,6 +196,16 @@ export abstract class Enemy {
       this.death();
       this.e_onDeath.Invoke({ enemy: this });
     }
+  }
+
+  protected checkAttackTarget(attack: Attack): void {
+    if (!attack.isRange && !attack.player.Enemies.includes(this)) {
+      throw new Error("attack not range");
+    }
+  }
+
+  protected onBeforeDeath(player: Player): boolean {
+    return true;
   }
 
   death() {}

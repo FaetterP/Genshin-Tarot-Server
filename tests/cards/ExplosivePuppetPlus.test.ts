@@ -13,6 +13,7 @@ import {
   createTestGame,
   ensureCardInHand,
   endTurn,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -58,6 +59,7 @@ describe("ExplosivePuppetPlus — оглушает врага в зоне, в н
         effect: EPlayerEffect.ExplosivePuppet,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.ExplosivePuppet)).toHaveLength(1);
     expect(response.player.effects).toContain(EPlayerEffect.ExplosivePuppet);
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
@@ -247,5 +249,87 @@ describe("ExplosivePuppetPlus — оглушает врага в зоне, в н
     expect(response1.card).toBe(ECard.ExplosivePuppetPlus);
     expect(response2.card).toBe(ECard.ExplosivePuppetPlus);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("при выборе босса карта применяется без ошибки, оглушение не накладывается", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    await admin.updateEnemy(player.enemies[0].id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppetPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [bossId] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.action).toBe("game.useCard");
+  });
+
+  it("эффект следующего цикла наносит Пиро и урон боссу", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+    await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.ExplosivePuppetPlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [enemy.id] });
+    await player.waitFor((m: any) => m.action === "game.useCard");
+
+    const cycle2 = await endTurn(player);
+
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: bossId,
+        element: EElement.Pyro,
+      }),
+    );
+    expect(cycle2.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: bossId,
+        damage: 2,
+      }),
+    );
+  });
+
+  it("два эффекта ExplosivePuppet срабатывают дважды в начале следующего цикла", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const enemy = player.enemies[0];
+    await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
+
+    await admin.request({
+      action: "admin.setState",
+      players: [{ playerId: player.playerId, effects: [EPlayerEffect.ExplosivePuppet, EPlayerEffect.ExplosivePuppet] }],
+    });
+    await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.effects?.length >= 2);
+
+    await admin.setLeylines([]);
+    const cycle2 = await endTurn(player);
+
+    expect(
+      cycle2.steps.filter((s: any) =>
+        s.type === EDetailedStep.EnemyTakeDamage &&
+        s.enemyId === enemy.id &&
+        s.damage === 2 &&
+        s.element === EElement.Pyro,
+      ),
+    ).toHaveLength(2);
+    expect(
+      cycle2.steps.filter((s: any) => s.type === EDetailedStep.PlayerEffectTrigger && s.effect === EPlayerEffect.ExplosivePuppet),
+    ).toHaveLength(2);
   });
 });

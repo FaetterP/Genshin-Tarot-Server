@@ -88,7 +88,27 @@ afterEach(() => { game?.cleanup(); });          // закрывает все WS-
 
 **Никогда не полагаться на дефолтные значения** — HP врага, AP игрока, наличие карты в руке. Всё устанавливать явно.
 
-Тесты держать в **первых двух циклах** (cycle 1–2): leylines появляются с третьего цикла и могут непредсказуемо менять состояние.
+Тесты держать в **первых двух циклах** (cycle 1–2): с третьего цикла количество leylines растёт и тесты становятся непредсказуемы.
+
+#### Leylines и управление случайностью
+
+`createTestGame` **автоматически** вызывает `admin.setLeylines([])` перед стартом игры, поэтому цикл 1 всегда чистый.
+
+**Для каждого теста, который вызывает `endTurn`** (переход в цикл 2), нужно вызвать `await admin.setLeylines([])` ПОСЛЕ использования карты и ДО `endTurn`:
+
+```ts
+player.send({ action: "game.useCard", cardId });
+await player.waitFor((m: any) => m.action === "game.useCard");
+
+await admin.setLeylines([]);   // ← обязательно перед endTurn
+const cycle2 = await endTurn(player);
+```
+
+Без этого случайные leylines цикла 2 сломают тест.
+
+`admin.setLeylines([])` работает как одноразовый override для следующего цикла: применяется единожды, после чего сбрасывается.
+
+**Исключение**: тесты с боссом (`spawnTestBoss`) — при наличии босса leylines не применяются, `setLeylines` не нужен.
 
 #### Элементы врагов
 
@@ -183,6 +203,9 @@ expect(response.status).toBe("error");
 player.send({ action: "game.useCard", cardId });
 await player.waitFor((m: any) => m.action === "game.useCard");
 
+// Отключаем leylines цикла 2, чтобы они не сломали тест
+await admin.setLeylines([]);
+
 // Завершаем ход — получаем данные цикла 2
 const cycle2 = await endTurn(player);
 
@@ -236,6 +259,7 @@ const [cycle2p1, cycle2p2] = await advanceCycle([player1, player2]);
 await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
 player.send({ action: "game.useCard", cardId });
 await player.waitFor((m: any) => m.action === "game.useCard");
+await admin.setLeylines([]);
 
 // cycle 2
 const cycle2 = await endTurn(player);

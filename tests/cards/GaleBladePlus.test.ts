@@ -4,13 +4,14 @@
  */
 
 import { expect, describe, beforeAll, afterAll, jest, beforeEach, afterEach, it } from '@jest/globals';
-import { ECard, EDetailedStep, EElement } from "../../src/types/enums";
+import { ECard, EDetailedStep, EElement, EEnemy } from "../../src/types/enums";
 import {
   startTestServers,
   stopTestServers,
   resetGame,
   createTestGame,
   ensureCardInHand,
+  spawnTestBoss,
   TestGame,
 } from "../helpers/setup";
 
@@ -258,5 +259,26 @@ describe("GaleBladePlus — накладывает Анемо и наносит 
     expect(response1.card).toBe(ECard.GaleBladePlus);
     expect(response2.card).toBe(ECard.GaleBladePlus);
     expect(response2.player.playerId).toBe(player1.playerId);
+  });
+
+  it("Dvalin получает BossAnemoImmunity вместо элемента Анемо", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+    const { admin } = game;
+
+    const bossId = await spawnTestBoss(player, admin, EEnemy.Dvalin);
+    await admin.updateBoss({ hp: 20, shield: 0, elements: [] });
+
+    const cardId = await ensureCardInHand(player, admin, ECard.GaleBladePlus);
+
+    player.send({ action: "game.useCard", cardId, enemies: [bossId] });
+    const response = await player.waitFor((m: any) => m.action === "game.useCard");
+
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.BossAnemoImmunity,
+        bossId,
+      }),
+    );
   });
 });

@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import { startGameWSS, stopGameWSS, getAllClients, cycleController } from "../../src/ws/gameWSS";
 import { startAdminWSS, stopAdminWSS } from "../../src/ws/adminWSS";
 import { TaskAwaiter } from "../../src/utils/TaskAwaiter";
-import { ECard, ECharacter, EEnemy, EElement } from "../../src/types/enums";
+import { ECard, ECharacter, EEnemy, EElement, ELeyline } from "../../src/types/enums";
 import type { CardPrimitive, EnemyPrimitive } from "../../src/types/general";
 
 export const TEST_GAME_PORT = 19999;
@@ -29,6 +29,7 @@ export class GameTestClient {
 
   private buffer: unknown[] = [];
   private waiters: Waiter[] = [];
+  private taskHandlers = new Map<string, (taskId: string, msg: any) => void>();
 
   get hand(): CardPrimitive[] {
     return this.startCycleData?.you?.hand ?? [];
@@ -54,7 +55,13 @@ export class GameTestClient {
       this.ws.on("message", (data: Buffer) => {
         const msg = JSON.parse(data.toString());
         if ("taskId" in msg) {
-          this.ws.send(JSON.stringify({ action: "task.completeTask", taskId: msg.taskId }));
+          const customHandler = this.taskHandlers.get(msg.action);
+          if (customHandler) {
+            this.taskHandlers.delete(msg.action);
+            customHandler(msg.taskId, msg);
+          } else {
+            this.ws.send(JSON.stringify({ action: "task.completeTask", taskId: msg.taskId }));
+          }
         }
         this._dispatch(msg);
       });
@@ -74,6 +81,10 @@ export class GameTestClient {
 
   send(payload: object): void {
     this.ws.send(JSON.stringify(payload));
+  }
+
+  setTaskHandler(action: string, handler: (taskId: string, msg: any) => void): void {
+    this.taskHandlers.set(action, handler);
   }
 
   waitFor(predicate: (msg: any) => boolean, timeout = 5000): Promise<any> {
@@ -179,7 +190,7 @@ export class AdminTestClient {
     playerId: string,
     cardId: string,
     from: "hand" | "discard" | "deck",
-    to: "hand" | "discard" | "deck",
+    to: "hand" | "discard" | "deck" | "trash",
   ): Promise<void> {
     await this.request({ action: "admin.moveCard", playerId, cardId, from, to });
   }
@@ -200,6 +211,28 @@ export class AdminTestClient {
     await this.request({ action: "admin.removeEnemy", enemyId });
   }
 
+  async spawnBoss(bossName: EEnemy): Promise<void> {
+    await this.request({ action: "admin.spawnBoss", bossName });
+  }
+
+  async updateBoss(stats: {
+    hp?: number;
+    shield?: number;
+    isStunned?: boolean;
+    elements?: EElement[];
+    lives?: number;
+  }): Promise<void> {
+    await this.request({ action: "admin.updateBoss", ...stats });
+  }
+
+  async setBossRoll(roll: number): Promise<void> {
+    await this.request({ action: "admin.setBossRoll", roll });
+  }
+
+  async setLeylines(leylines: ELeyline[]): Promise<void> {
+    await this.request({ action: "admin.setLeylines", leylines });
+  }
+
   waitFor(predicate: (msg: any) => boolean, timeout = 5000): Promise<any> {
     const idx = this.buffer.findIndex(predicate);
     if (idx !== -1) {
@@ -215,6 +248,10 @@ export class AdminTestClient {
 
       this.waiters.push({ predicate, resolve, reject, timeoutId });
     });
+  }
+
+  clearBuffer(): void {
+    this.buffer = [];
   }
 
   close(): void {
@@ -285,6 +322,10 @@ export async function createTestGame(numPlayers = 1): Promise<TestGame> {
     await addCharacters(player, DEFAULT_CHARACTERS);
   }
 
+  const admin = new AdminTestClient();
+  await admin.connect();
+  await admin.setLeylines([]);
+
   players[0].send({ action: "game.startGame" });
 
   await Promise.all(
@@ -297,9 +338,7 @@ export async function createTestGame(numPlayers = 1): Promise<TestGame> {
   for (const player of players) {
     player.clearBuffer();
   }
-
-  const admin = new AdminTestClient();
-  await admin.connect();
+  admin.clearBuffer();
 
   return {
     players,
@@ -339,6 +378,22 @@ export async function advanceCycle(players: GameTestClient[]): Promise<any[]> {
       return cycle;
     }),
   );
+}
+
+/**
+ * Spawns Dvalin boss via admin and returns its ID.
+ * Waits for admin.stateSync to confirm boss is present.
+ */
+export async function spawnTestBoss(
+  player: GameTestClient,
+  admin: AdminTestClient,
+  bossName: EEnemy,
+): Promise<string> {
+  await admin.spawnBoss(bossName);
+  const syncMsg = await player.waitFor(
+    (m: any) => m.action === "admin.stateSync" && m.boss !== null,
+  );
+  return syncMsg.boss.id;
 }
 
 /**

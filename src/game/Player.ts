@@ -5,7 +5,6 @@ import {
   CycleStartContext,
   EnemyDeathContext,
   EnemyEndCycleContext,
-  PlayerEndsWavesContext,
   PlayerEndTurnContext,
   PlayerUseCardContext,
 } from "../types/eventsContext";
@@ -13,7 +12,6 @@ import { CardUseContext } from "../types/functionsContext";
 import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
-import { Event } from "../utils/Event";
 import { clamp } from "../utils/math";
 import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
@@ -48,8 +46,9 @@ export class Player {
   private isTookDamageThisTurn: boolean = false;
   private isTookDamageLastTurn: boolean = false;
   private currentCardType?: ECardType;
+  private _isProcessingAttackEffects = false;
 
-  private e_onWavesDefeated = new Event<PlayerEndsWavesContext>();
+  private cycleController: CycleController;
   private _stepsCollector: ((data: DetailedStep[]) => void) | null = null;
 
   public setStepsCollector(fn: ((data: DetailedStep[]) => void) | null) {
@@ -90,7 +89,8 @@ export class Player {
     return this.mora;
   }
   public get Enemies(): ReadonlyArray<Enemy> {
-    return this.enemies;
+    const boss = this.cycleController.Boss;
+    return boss ? [...this.enemies, boss] : this.enemies;
   }
 
   public removeEnemy(enemy: Enemy): void {
@@ -177,6 +177,7 @@ export class Player {
 
   constructor(cycleController: CycleController) {
     this.ID = `player-${v4()}`;
+    this.cycleController = cycleController;
 
     cycleController.OnCycleEnd.addListener(this.cycleEndHandler.bind(this));
     cycleController.OnCycleStart.addListener(this.cycleStartHandler.bind(this));
@@ -432,7 +433,7 @@ export class Player {
 
   public createWave() {
     if (this.wave >= 5) {
-      this.e_onWavesDefeated.Invoke({ player: this });
+      this.cycleController.spawnBoss(this._stepsCollector ?? (() => {}));
       return;
     }
 
@@ -541,12 +542,13 @@ export class Player {
     ]);
   }
 
-  public discardRandomCard() {
-    if (this.hand.length === 0) return;
+  public discardRandomCard(): Card | undefined {
+    if (this.hand.length === 0) return undefined;
 
     const card = getRandomElement(this.hand);
     this.hand = this.hand.filter((c) => c != card);
     this.discard.push(card);
+    return card;
   }
 
   public addCardToDiscard(card: Card) {
@@ -612,7 +614,7 @@ export class Player {
   public adminMoveCard(
     cardId: string,
     from: "hand" | "discard" | "deck",
-    to: "hand" | "discard" | "deck",
+    to: "hand" | "discard" | "deck" | "trash",
   ): void {
     if (from === to) return;
     const fromArr = from === "hand" ? this.hand : from === "discard" ? this.discard : this.deck;
@@ -623,15 +625,22 @@ export class Player {
     else this.deck = this.deck.filter((c) => c !== card);
     if (to === "hand") this.addCardToHand(card, false);
     else if (to === "discard") this.addCardToDiscard(card);
-    else this.addCardToDeck(card);
+    else if (to === "deck") this.addCardToDeck(card);
+    // "trash": card is permanently removed, not added to any pile
   }
 
   public useAttackEffects(enemy: Enemy) {
-    const cardType = this.currentCardType;
-    for (const effect of this.effects) {
-      if (effect.onAttack(this, enemy, cardType)) {
-        this.effects = this.effects.filter((eff) => eff !== effect);
+    if (this._isProcessingAttackEffects) return;
+    this._isProcessingAttackEffects = true;
+    try {
+      const cardType = this.currentCardType;
+      for (const effect of this.effects) {
+        if (effect.onAttack(this, enemy, cardType)) {
+          this.effects = this.effects.filter((eff) => eff !== effect);
+        }
       }
+    } finally {
+      this._isProcessingAttackEffects = false;
     }
   }
 
@@ -649,6 +658,19 @@ export class Player {
         },
       ]);
     }
+
+    this.burnsDrawnThisTurn = 0;
+    this.setStepsCollector(addToSteps);
+    const drawnCards: CardPrimitive[] = [];
+    for (let i = 0; i < 5; i++) {
+      if (this.deck.length === 0) this.restoreDeck();
+      if (this.deck.length === 0) break;
+      const card = this.drawCard();
+      drawnCards.push(card.getPrimitive());
+    }
+    this.setStepsCollector(null);
+    addToSteps([{ type: EDetailedStep.DrawCards, playerId: this.ID, cards: drawnCards }]);
+
     this.isTurnEnds = true;
   }
 
@@ -726,13 +748,6 @@ export class Player {
 
     if (this.enemies.length === 0) {
       this.createWave();
-      ctx.addToSteps(
-        this.enemies.map((enemy) => ({
-          type: EDetailedStep.EnemyAppearance,
-          playerId: this.ID,
-          enemy: enemy.getPrimitiveStats(),
-        })),
-      );
     }
 
     this.isTurnEnds = false;
@@ -741,7 +756,6 @@ export class Player {
     this.shield = 0;
     this.actionPoints = 3;
     this.extraActionPoints = 0;
-    this.burnsDrawnThisTurn = 0;
     if (oldShield > 0) {
       ctx.addToSteps([
         {
@@ -761,12 +775,15 @@ export class Player {
       },
     ]);
 
-    const drawnCards: CardPrimitive[] = [];
-    for (let i = 0; i < 5; i++) {
-      const card = this.drawCard();
-      drawnCards.push(card.getPrimitive());
+    if (ctx.cycle === 1) {
+      this.burnsDrawnThisTurn = 0;
+      const drawnCards: CardPrimitive[] = [];
+      for (let i = 0; i < 5; i++) {
+        const card = this.drawCard();
+        drawnCards.push(card.getPrimitive());
+      }
+      ctx.addToSteps([{ type: EDetailedStep.DrawCards, playerId: this.ID, cards: drawnCards }]);
     }
-    ctx.addToSteps([{ type: EDetailedStep.DrawCards, playerId: this.ID, cards: drawnCards }]);
 
     for (const effect of this.effects) {
       const isRemove = effect.onStartCycle(this);

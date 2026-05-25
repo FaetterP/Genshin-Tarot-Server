@@ -62,6 +62,7 @@ describe("LayeredFrost — вытягивает 1 карту и даёт эфф�
         effect: EPlayerEffect.LayeredFrost,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.LayeredFrost)).toHaveLength(1);
     expect(response.player.effects).toContain(EPlayerEffect.LayeredFrost);
   });
 

@@ -104,6 +104,7 @@ describe("Nightrider — накладывает Электро и наносит
     await player.waitFor((m: any) => m.action === "game.useCard");
 
     // Цикл 2: эффект срабатывает — повторный Электро вызывает реакцию Электро+Электро
+    await admin.setLeylines([]);
     const cycle2 = await endTurn(player);
 
     expect(cycle2.steps).toContainEqual(

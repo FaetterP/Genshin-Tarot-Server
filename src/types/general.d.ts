@@ -20,6 +20,10 @@ export type EnemyPrimitive = {
   effects: EEnemyEffect[];
 };
 
+export type BossPrimitive = EnemyPrimitive & {
+  lives: number;
+};
+
 export type PlayerPrimitive = {
   playerId: string;
   characters: ECharacter[];

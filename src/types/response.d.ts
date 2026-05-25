@@ -1,6 +1,6 @@
 import type { ECharacter, ECard, EEnemy, ELeyline } from "./enums";
 import type { DetailedStep } from "./detailedStep";
-import type { PlayerPrimitive } from "./general";
+import type { BossPrimitive, CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "./general";
 
 export type OkResponse = {
   status: "ok";
@@ -37,6 +37,7 @@ export interface GameStartCycleResponse {
   cycle: number;
   leylines: ELeyline[];
   steps: DetailedStep[];
+  boss: BossPrimitive | null;
 }
 
 export interface GameEndCycleResponse {
@@ -50,6 +51,7 @@ export interface GameUseCardResponse {
   card: ECard;
   player: PlayerPrimitive;
   steps: DetailedStep[];
+  boss: BossPrimitive | null;
 }
 
 export interface GameUpgradeCardResponse {
@@ -58,6 +60,7 @@ export interface GameUpgradeCardResponse {
   card: ECard;
   player: PlayerPrimitive;
   steps: DetailedStep[];
+  boss: BossPrimitive | null;
 }
 
 export interface GameUseBurstResponse {
@@ -65,6 +68,21 @@ export interface GameUseBurstResponse {
   character: ECharacter;
   player: PlayerPrimitive;
   steps: DetailedStep[];
+  boss: BossPrimitive | null;
+}
+
+export interface GameWinResponse {
+  action: "game.win";
+}
+
+export interface GameDragonBreathResponse {
+  action: "game.dragonBreath";
+  bossId: string;
+}
+
+export interface GameBossPassiveResponse {
+  action: "game.bossPassive";
+  hand: CardPrimitive[];
 }
 
 export interface CharactersAddCharacterResponse {
@@ -95,6 +113,9 @@ export type AnyResponse =
   | GameEndCycleResponse
   | GameUpgradeCardResponse
   | GameUseBurstResponse
+  | GameWinResponse
   | CharactersAddCharacterResponse
   | CharactersRemoveCharacterResponse
-  | AdminChangeStatsResponse;
+  | AdminChangeStatsResponse
+  | GameDragonBreathResponse
+  | GameBossPassiveResponse;

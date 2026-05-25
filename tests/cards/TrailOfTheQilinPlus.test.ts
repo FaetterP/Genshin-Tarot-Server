@@ -58,6 +58,7 @@ describe("TrailOfTheQilinPlus — оглушает врага в зоне, в н
         effect: EPlayerEffect.TrailOfTheQilin,
       }),
     );
+    expect(response.steps.filter((s: any) => s.type === EDetailedStep.PlayerGetEffect && s.effect === EPlayerEffect.TrailOfTheQilin)).toHaveLength(1);
     expect(response.player.effects).toContain(EPlayerEffect.TrailOfTheQilin);
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
