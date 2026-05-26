@@ -45,9 +45,9 @@ export class WhisperOfWater extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      element: new Hydro(),
       player: ctx.player,
     };
     target.applyAttack(attack);
+    target.applyElement(new Hydro(), ctx.player);
   }
 }

@@ -29,9 +29,9 @@ export class NightriderEffect extends EnemyEffect {
     this.enemy.applyAttack({
       damage: 1,
       isPiercing: true,
-      element: new Electro(),
       player: ctx.player,
     });
+    this.enemy.applyElement(new Electro(), ctx.player);
     this.enemy.markHitByNightriderEffect();
     return true;
   }

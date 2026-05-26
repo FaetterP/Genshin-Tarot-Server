@@ -30,9 +30,9 @@ export class Diluc extends Character {
     const attack: Attack = {
       damage: 6,
       isRange: true,
-      element: new Pyro(),
       player: ctx.player,
     };
     ctx.selectedEnemy.applyAttack(attack);
+    ctx.selectedEnemy.applyElement(new Pyro(), ctx.player);
   }
 }

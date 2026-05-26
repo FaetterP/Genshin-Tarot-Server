@@ -24,7 +24,7 @@ export class SearingOnslaught extends Card {
     }
 
     const target = ctx.enemies[0];
-    const attack: Attack = { damage: 2, element: new Pyro(), player: ctx.player };
+    const attack: Attack = { damage: 2, player: ctx.player };
 
     for (let i = 0; i < 3; i++) {
       ctx.addToSteps([
@@ -37,6 +37,7 @@ export class SearingOnslaught extends Card {
         },
       ]);
       target.applyAttack(attack);
+      target.applyElement(new Pyro(), ctx.player);
     }
   }
 }

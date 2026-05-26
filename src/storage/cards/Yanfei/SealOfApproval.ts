@@ -37,8 +37,8 @@ export class SealOfApproval extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      element: new Pyro(),
       player: ctx.player,
     });
+    target.applyElement(new Pyro(), ctx.player);
   }
 }

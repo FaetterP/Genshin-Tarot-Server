@@ -32,9 +32,9 @@ export class DemonbanePlus extends Card {
       ]);
       target.applyAttack({
         damage: 4,
-        element: new Cryo(),
         player: ctx.player,
       });
+      target.applyElement(new Cryo(), ctx.player);
     } else {
       ctx.addToSteps(
         ctx.player.Enemies.map((enemy) => ({

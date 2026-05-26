@@ -42,7 +42,8 @@ export class AncientSwordArtPlus extends Card {
       ]);
     }
     if (hasCryo) {
-      target.applyAttack({ damage: 5, element: new Cryo(), player: ctx.player });
+      target.applyAttack({ damage: 5, player: ctx.player });
+      target.applyElement(new Cryo(), ctx.player);
     } else {
       target.applyAttack({ damage: 2, player: ctx.player });
       ctx.player.addEnergy(2);

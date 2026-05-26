@@ -23,8 +23,9 @@ export class TrailOfTheQilinEffect extends PlayerEffect {
           element: EElement.Cryo,
         },
       ]);
-      const attack: Attack = { damage: 2, element: new Cryo(), player };
+      const attack: Attack = { damage: 2, player };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Cryo(), player);
     }
 
     return true;

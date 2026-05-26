@@ -26,11 +26,11 @@ export class ExplosivePuppetEffect extends PlayerEffect {
 
       const attack: Attack = {
         damage: 2,
-        element: new Pyro(),
         player: player,
       };
 
       enemy.applyAttack(attack);
+      enemy.applyElement(new Pyro(), player);
     }
 
     return true;

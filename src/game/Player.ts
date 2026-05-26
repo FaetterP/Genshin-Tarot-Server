@@ -63,10 +63,8 @@ export class Player {
     this._stepsCollector?.([{ type: EDetailedStep.EnemyReaction, enemyId, element1, element2 }]);
   }
 
-  public recordEnemyBlockDamage(enemyId: string, element?: EElement) {
-    this._stepsCollector?.([
-      { type: EDetailedStep.EnemyBlockDamage, enemyId, ...(element && { element }) },
-    ]);
+  public recordEnemyBlockDamage(enemyId: string) {
+    this._stepsCollector?.([{ type: EDetailedStep.EnemyBlockDamage, enemyId }]);
   }
 
   public addSteps(steps: DetailedStep[]) {

@@ -32,10 +32,10 @@ export class Fischl extends Character {
         damage: 2,
         isPiercing: true,
         isRange: true,
-        element: new Electro(),
         player: ctx.player,
       };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Electro(), ctx.player);
     }
   }
 }

@@ -11,8 +11,9 @@ export class GuobaFireEffect extends PlayerEffect {
 
   public override onStartCycle(player: Player): boolean {
     for (const enemy of player.Enemies) {
-      const attack: Attack = { damage: 2, element: new Pyro(), player };
+      const attack: Attack = { damage: 2, player };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Pyro(), player);
     }
 
     return true;

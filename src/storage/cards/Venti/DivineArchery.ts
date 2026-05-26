@@ -43,7 +43,7 @@ export class DivineArchery extends Card {
       isRange: true,
       player: ctx.player,
     };
-    if (element) attack.element = new Anemo();
     target.applyAttack(attack);
+    if (element) target.applyElement(new Anemo(), ctx.player);
   }
 }

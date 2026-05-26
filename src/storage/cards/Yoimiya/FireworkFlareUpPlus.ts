@@ -34,9 +34,9 @@ export class FireworkFlareUpPlus extends Card {
       enemies[i].applyAttack({
         damage: 2,
         isRange: true,
-        element: new Pyro(),
         player: ctx.player,
       });
+      enemies[i].applyElement(new Pyro(), ctx.player);
     }
   }
 }

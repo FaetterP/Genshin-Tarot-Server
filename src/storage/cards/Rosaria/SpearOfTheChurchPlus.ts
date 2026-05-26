@@ -20,10 +20,10 @@ export class SpearOfTheChurchPlus extends Card {
 
     const attack: Attack = {
       damage: 3,
-      element: new Cryo(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+    ctx.enemies[0].applyElement(new Cryo(), ctx.player);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([

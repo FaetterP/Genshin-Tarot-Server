@@ -40,9 +40,9 @@ export class GaleBladePlus extends Card {
     target.applyAttack({
       damage: 1,
       isPiercing: true,
-      element: new Anemo(),
       player: ctx.player,
     });
+    target.applyElement(new Anemo(), ctx.player);
 
     if (ctx.enemies.length === 2) {
       const other = ctx.enemies[1];

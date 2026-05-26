@@ -51,7 +51,7 @@ export class LiutianArcheryPlus extends Card {
       isRange: true,
       player: ctx.player,
     };
-    if (element) attack.element = new Cryo();
     target.applyAttack(attack);
+    if (element) target.applyElement(new Cryo(), ctx.player);
   }
 }

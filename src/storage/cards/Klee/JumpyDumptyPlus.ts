@@ -36,9 +36,9 @@ export class JumpyDumptyPlus extends Card {
     for (let i = 0; i < 2; i++) {
       enemies[i].applyAttack({
         damage: 2,
-        element: new Pyro(),
         player: ctx.player,
       });
+      enemies[i].applyElement(new Pyro(), ctx.player);
     }
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
@@ -54,9 +54,9 @@ export class JumpyDumptyPlus extends Card {
       for (let i = 0; i < 2; i++) {
         enemies[i].applyAttack({
           damage: 2,
-          element: new Pyro(),
           player: ctx.player,
         });
+        enemies[i].applyElement(new Pyro(), ctx.player);
       }
     }
   }

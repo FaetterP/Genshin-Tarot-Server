@@ -43,8 +43,8 @@ export class LightningTouch extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      element: new Electro(),
       player: ctx.player,
     });
+    target.applyElement(new Electro(), ctx.player);
   }
 }

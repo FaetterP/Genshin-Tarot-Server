@@ -21,10 +21,10 @@ export class WhirlwindThrustPlus extends Card {
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
-      element: new Anemo(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+    ctx.enemies[0].applyElement(new Anemo(), ctx.player);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([

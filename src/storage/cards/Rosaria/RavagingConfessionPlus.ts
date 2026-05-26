@@ -21,10 +21,10 @@ export class RavagingConfessionPlus extends Card {
     const attack: Attack = {
       damage: 3,
       isRange: true,
-      element: new Cryo(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+    ctx.enemies[0].applyElement(new Cryo(), ctx.player);
 
     // TODO
   }

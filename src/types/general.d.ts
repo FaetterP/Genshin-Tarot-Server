@@ -1,5 +1,4 @@
 import { Player } from "../game/Player";
-import { BaseElement } from "../storage/elements/BaseElement";
 import type {
   ECard,
   ECardType,
@@ -50,7 +49,6 @@ export type Attack = {
   damage: number;
   isPiercing?: boolean;
   isRange?: boolean;
-  element?: BaseElement;
   player: Player;
 };
 

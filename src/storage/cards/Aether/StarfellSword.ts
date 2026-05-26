@@ -42,11 +42,11 @@ export class StarfellSword extends Card {
       const attack: Attack = {
         damage,
         isPiercing: true,
-        element: new Geo(),
         player: ctx.player,
       };
 
       enemy.applyAttack(attack);
+      enemy.applyElement(new Geo(), ctx.player);
     }
   }
 }

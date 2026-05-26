@@ -32,9 +32,9 @@ export class SealOfApprovalPlus extends Card {
       damage: 2,
       isPiercing: true,
       isRange: true,
-      element: new Pyro(),
       player: ctx.player,
     });
+    target.applyElement(new Pyro(), ctx.player);
     // TODO
   }
 }

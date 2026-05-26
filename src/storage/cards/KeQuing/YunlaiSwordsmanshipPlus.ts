@@ -36,9 +36,9 @@ export class YunlaiSwordsmanshipPlus extends Card {
     ]);
     target.applyAttack({
       damage: 3,
-      element: new Electro(),
       player: ctx.player,
     });
+    target.applyElement(new Electro(), ctx.player);
     ctx.player.addEnergy(2);
   }
 }

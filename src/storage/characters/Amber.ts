@@ -32,10 +32,10 @@ export class Amber extends Character {
         damage: 2,
         isPiercing: true,
         isRange: true,
-        element: new Pyro(),
         player: ctx.player,
       };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Pyro(), ctx.player);
     }
   }
 }

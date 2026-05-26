@@ -51,7 +51,7 @@ export class BoltsOfDownfall extends Card {
       isRange: true,
       player: ctx.player,
     };
-    if (element) attack.element = new Electro();
     target.applyAttack(attack);
+    if (element) target.applyElement(new Electro(), ctx.player);
   }
 }

@@ -21,7 +21,6 @@ export class RainOfStone extends Card {
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
-      element: new Geo(),
       player: ctx.player,
     };
     ctx.addToSteps([
@@ -34,6 +33,7 @@ export class RainOfStone extends Card {
       },
     ]);
     ctx.enemies[0].applyAttack(attack);
+    ctx.enemies[0].applyElement(new Geo(), ctx.player);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([

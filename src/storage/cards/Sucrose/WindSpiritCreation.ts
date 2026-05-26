@@ -43,9 +43,9 @@ export class WindSpiritCreation extends Card {
       damage: 1,
       isPiercing: true,
       isRange: true,
-      element: new Anemo(),
       player: ctx.player,
     });
+    target.applyElement(new Anemo(), ctx.player);
     ctx.player.addEnergy(1);
   }
 }

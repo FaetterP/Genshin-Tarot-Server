@@ -41,10 +41,10 @@ export class JumpyDumpty extends Card {
     for (let i = 0; i < 2; i++) {
       const attack: Attack = {
         damage: 1,
-        element: new Pyro(),
         player: ctx.player,
       };
       enemies[i].applyAttack(attack);
+      enemies[i].applyElement(new Pyro(), ctx.player);
     }
 
     if (ctx.isUseAlternative) {

@@ -30,9 +30,9 @@ export class NightriderPlusEffect extends EnemyEffect {
       damage: 2,
       isPiercing: true,
       isRange: true,
-      element: new Electro(),
       player: ctx.player,
     });
+    this.enemy.applyElement(new Electro(), ctx.player);
     this.enemy.markHitByNightriderEffect();
     return true;
   }

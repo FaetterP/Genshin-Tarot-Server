@@ -170,7 +170,6 @@ export abstract class Enemy {
           enemyId: this.ID,
           damage: bonus.bonusDamage,
           isPiercing: attack.isPiercing ?? false,
-          element: attack.element?.Name,
         },
       ]);
     }
@@ -178,11 +177,7 @@ export abstract class Enemy {
     if (this.shield <= 0 || attack.isPiercing) {
       this.hp -= totalDamage;
     } else {
-      attack.player.recordEnemyBlockDamage(this.ID, attack.element?.Name);
-    }
-
-    if (attack.element) {
-      this.applyElement(attack.element, attack.player);
+      attack.player.recordEnemyBlockDamage(this.ID);
     }
 
     attack.player.useAttackEffects(this);

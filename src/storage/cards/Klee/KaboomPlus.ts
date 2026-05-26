@@ -33,8 +33,8 @@ export class KaboomPlus extends Card {
       damage,
       isPiercing: true,
       isRange: true,
-      element: new Pyro(),
       player: ctx.player,
     });
+    target.applyElement(new Pyro(), ctx.player);
   }
 }

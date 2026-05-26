@@ -38,9 +38,9 @@ export class SparklingScatterPlus extends Card {
         damage: 2,
         isPiercing: true,
         isRange: true,
-        element: new Geo(),
         player: ctx.player,
       });
+      enemies[i].applyElement(new Geo(), ctx.player);
     }
   }
 }

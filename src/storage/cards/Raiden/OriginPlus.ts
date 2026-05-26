@@ -38,8 +38,8 @@ export class OriginPlus extends Card {
     ctx.player.addEnergy(2);
     target.applyAttack({
       damage,
-      element: new Electro(),
       player: ctx.player,
     });
+    target.applyElement(new Electro(), ctx.player);
   }
 }

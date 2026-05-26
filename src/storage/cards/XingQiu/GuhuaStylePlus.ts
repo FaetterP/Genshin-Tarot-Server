@@ -30,9 +30,9 @@ export class GuhuaStylePlus extends Card {
       },
     ]);
     const attack: Attack = { damage, player: ctx.player };
-    if (target.isContainsElement(EElement.Hydro)) {
-      attack.element = new Hydro();
-    }
     target.applyAttack(attack);
+    if (target.isContainsElement(EElement.Hydro)) {
+      target.applyElement(new Hydro(), ctx.player);
+    }
   }
 }

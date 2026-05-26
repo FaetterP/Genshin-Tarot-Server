@@ -42,9 +42,9 @@ export class Nightrider extends Card {
     target.applyAttack({
       damage: 1,
       isPiercing: true,
-      element: new Electro(),
       player: ctx.player,
     });
+    target.applyElement(new Electro(), ctx.player);
     target.addEffect(effect);
   }
 }

@@ -29,12 +29,9 @@ export class Rosaria extends Character {
     }
 
     for (const enemy of ctx.player.Enemies) {
-      const attack: Attack = {
-        damage: 3,
-        element: new Cryo(),
-        player: ctx.player,
-      };
+      const attack: Attack = { damage: 3, player: ctx.player };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Cryo(), ctx.player);
     }
   }
 }

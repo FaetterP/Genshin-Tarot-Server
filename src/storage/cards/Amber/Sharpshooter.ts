@@ -57,7 +57,7 @@ export class Sharpshooter extends Card {
       isPiercing: true,
       player: ctx.player,
     };
-    if (element) attack.element = new Pyro();
     target.applyAttack(attack);
+    if (element) target.applyElement(new Pyro(), ctx.player);
   }
 }

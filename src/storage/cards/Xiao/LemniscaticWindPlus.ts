@@ -33,8 +33,8 @@ export class LemniscaticWindPlus extends Card {
     target.applyAttack({
       damage,
       isPiercing: true,
-      element: new Anemo(),
       player: ctx.player,
     });
+    target.applyElement(new Anemo(), ctx.player);
   }
 }

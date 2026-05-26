@@ -33,9 +33,9 @@ export class VioletArc extends Card {
         enemy.applyAttack({
           damage: 5,
           isPiercing: true,
-          element: new Electro(),
           player: ctx.player,
         });
+        enemy.applyElement(new Electro(), ctx.player);
       }
     }
   }

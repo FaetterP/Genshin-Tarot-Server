@@ -41,9 +41,9 @@ export class GuobaFire extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyAttack({
         damage: 2,
-        element: new Pyro(),
         player: ctx.player,
       });
+      enemy.applyElement(new Pyro(), ctx.player);
     }
     ctx.player.addEffect(effect);
   }

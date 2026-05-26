@@ -36,7 +36,7 @@ export class CuttingTorrentPlus extends Card {
       isPiercing: true,
       player: ctx.player,
     };
-    if (hasHydro) attack.element = new Hydro();
     target.applyAttack(attack);
+    if (hasHydro) target.applyElement(new Hydro(), ctx.player);
   }
 }

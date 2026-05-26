@@ -28,7 +28,6 @@ export class PassionOverloadPlus extends Card {
     const target = ctx.enemies[0];
     const attack: Attack = {
       damage: 4,
-      element: new Pyro(),
       player: ctx.player,
     };
 
@@ -42,6 +41,7 @@ export class PassionOverloadPlus extends Card {
       },
     ]);
     target.applyAttack(attack);
+    target.applyElement(new Pyro(), ctx.player);
 
     const topCard = ctx.player.findTopCardFromDeck();
     if (topCard) {
@@ -81,7 +81,6 @@ export class PassionOverloadPlus extends Card {
         ]);
         const aoeAttack: Attack = {
           damage: 1,
-          element: new Pyro(),
           player: ctx.player,
         };
         for (const enemy of ctx.player.Enemies) {
@@ -95,6 +94,7 @@ export class PassionOverloadPlus extends Card {
             },
           ]);
           enemy.applyAttack(aoeAttack);
+          enemy.applyElement(new Pyro(), ctx.player);
         }
       }
     }

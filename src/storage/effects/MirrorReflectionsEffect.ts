@@ -13,10 +13,10 @@ export class MirrorReflectionsEffect extends PlayerEffect {
     for (const enemy of player.Enemies) {
       const attack: Attack = {
         damage: 2,
-        element: new Hydro(),
         player,
       };
       enemy.applyAttack(attack);
+      enemy.applyElement(new Hydro(), player);
     }
 
     return true;

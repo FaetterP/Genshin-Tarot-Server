@@ -21,10 +21,10 @@ export class DoughFuPlus extends Card {
     const attack: Attack = {
       damage: 2,
       isPiercing: true,
-      element: new Pyro(),
       player: ctx.player,
     };
     ctx.enemies[0].applyAttack(attack);
+    ctx.enemies[0].applyElement(new Pyro(), ctx.player);
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       ctx.addToSteps([

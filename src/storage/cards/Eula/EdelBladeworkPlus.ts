@@ -29,9 +29,9 @@ export class EdelBladeworkPlus extends Card {
     ]);
     target.applyAttack({
       damage: 2,
-      element: new Cryo(),
       player: ctx.player,
     });
+    target.applyElement(new Cryo(), ctx.player);
 
     ctx.player.snowflakes += 1;
     ctx.addToSteps([

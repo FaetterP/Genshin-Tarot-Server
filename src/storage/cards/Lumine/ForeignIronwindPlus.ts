@@ -34,10 +34,10 @@ export class ForeignIronwindPlus extends Card {
 
     const attack: Attack = {
       damage,
-      element: new Anemo(),
       player: ctx.player,
     };
     target.applyAttack(attack);
+    target.applyElement(new Anemo(), ctx.player);
     ctx.player.addEnergy(2);
   }
 }
