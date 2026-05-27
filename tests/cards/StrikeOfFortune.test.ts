@@ -178,9 +178,6 @@ describe("StrikeOfFortune - Наносит 2 урона 1 врагу в ваше
     );
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(
-      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
-    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

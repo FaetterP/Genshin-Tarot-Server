@@ -295,9 +295,6 @@ describe("PassionOverloadPlus - Накладывает Пиро и наноси�
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(
-      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
-    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

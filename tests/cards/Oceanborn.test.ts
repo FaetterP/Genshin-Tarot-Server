@@ -250,9 +250,6 @@ describe("Oceanborn — уничтожает 1 щит врагу или нано
       expect.objectContaining({ type: EDetailedStep.EnemyDeath, enemyId: enemy.id }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку если enemies не переданы", async () => {

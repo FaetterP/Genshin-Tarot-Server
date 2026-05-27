@@ -13,13 +13,26 @@ import { Card } from "../storage/cards/Card";
 import { Character } from "../storage/characters/Character";
 import { Enemy } from "../storage/enemies/Enemy";
 import { clamp } from "../utils/math";
-import { CardPrimitive, EnemyPrimitive, PlayerPrimitive } from "../types/general";
+import { CardPrimitive, EnemyPrimitive, PlayerPrimitive, PyramidSlot } from "../types/general";
 import { PlayerEffect } from "../storage/effects/PlayerEffect";
 import { createPlayerEffectFromEnum } from "../storage/effects/playerEffectFactory";
 import { getRandomElement, randomPermutation } from "../utils/arrays";
 import { eliteEnemies, normalEnemies } from "../storage/enemies";
 import { CycleController } from "./CycleController";
 import { ECard, ECardType, EDetailedStep, EElement, EPlayerEffect } from "../types/enums";
+
+type FaceDownNode = {
+  enemy: Enemy;
+  blockedBy: Set<string>;
+  covers: string[];
+  row: number;
+};
+
+type PendingRevealItem = {
+  enemy: Enemy;
+  covers: string[];
+  row: number;
+};
 
 export class Player {
   public readonly ID: string;
@@ -29,7 +42,9 @@ export class Player {
   private mora: number = 0;
 
   private enemies: Enemy[] = [];
-  private wave: number = 0;
+  private faceDownNodes: FaceDownNode[] = [];
+  private pendingReveal: PendingRevealItem[] = [];
+  private enemyMeta = new Map<string, { covers: string[]; row: number }>();
   private actionPoints: number = 0;
   private extraActionPoints: number = 0;
   private isTurnEnds: boolean = true;
@@ -79,9 +94,6 @@ export class Player {
   }
   public get Shields() {
     return this.shield;
-  }
-  public get Wave() {
-    return this.wave;
   }
   public get Mora() {
     return this.mora;
@@ -192,18 +204,40 @@ export class Player {
       effects.push(effect.Name);
     }
 
+    const slotsByRow = new Map<number, PyramidSlot[]>();
+    const addSlot = (rowIdx: number, slot: PyramidSlot) => {
+      if (!slotsByRow.has(rowIdx)) slotsByRow.set(rowIdx, []);
+      slotsByRow.get(rowIdx)!.push(slot);
+    };
+
+    for (const node of this.faceDownNodes) {
+      addSlot(node.row, { id: node.enemy.ID, faceDown: true, covers: node.covers });
+    }
+    for (const item of this.pendingReveal) {
+      addSlot(item.row, { id: item.enemy.ID, faceDown: true, covers: item.covers });
+    }
+    for (const enemy of this.enemies) {
+      const meta = this.enemyMeta.get(enemy.ID);
+      if (meta) {
+        addSlot(meta.row, { ...enemy.getPrimitiveStats(), faceDown: false, covers: meta.covers });
+      }
+    }
+    const pyramid: PyramidSlot[][] = [...slotsByRow.keys()]
+      .sort((a, b) => a - b)
+      .map((row) => slotsByRow.get(row)!);
+
     return {
       playerId: this.ID,
       hp: this.hp,
       shields: this.shield,
       energy: this.energy,
-      wave: this.wave,
       mora: this.mora,
       actionPoints: {
         normal: this.actionPoints,
         extra: this.extraActionPoints,
         total: this.actionPoints + this.extraActionPoints,
       },
+      pyramid,
       enemies,
       effects,
       eulaSnowflakes: this.snowflakes,
@@ -248,6 +282,7 @@ export class Player {
     this.energy = 0;
     this.isTookDamageThisTurn = false;
     this.isTookDamageLastTurn = false;
+    this.initializePyramid();
   }
 
   public applyDamage(damage: number, isPiercing: boolean = false) {
@@ -400,7 +435,6 @@ export class Player {
     shield?: number;
     mora?: number;
     actionPoints?: { normal?: number; extra?: number };
-    wave?: number;
     eulaSnowflakes?: number;
     effects?: EPlayerEffect[];
   }) {
@@ -413,7 +447,6 @@ export class Player {
       this.actionPoints = clamp(normal ?? 0, 0, 3);
       this.extraActionPoints = clamp(extra ?? 0, 0, 3);
     }
-    if (stats.wave !== undefined) this.wave = Math.max(0, stats.wave);
     if (stats.eulaSnowflakes !== undefined) this.snowflakes = Math.max(0, stats.eulaSnowflakes);
     if (stats.effects !== undefined) {
       this.effects = stats.effects
@@ -429,41 +462,60 @@ export class Player {
     this.actionPoints = clamp(this.actionPoints + count, 0, 3);
   }
 
-  public createWave() {
-    if (this.wave >= 5) {
-      this.cycleController.spawnBoss(this._stepsCollector ?? (() => {}));
-      return;
+  private initializePyramid(): void {
+    const createNormal = (): Enemy => new (getRandomElement(normalEnemies))();
+    const createElite = (): Enemy => new (getRandomElement(eliteEnemies))();
+
+    const n0 = createNormal();
+    const n1a = createNormal(), n1b = createNormal();
+    const n2a = createNormal(), n2b = createNormal(), n2c = createNormal();
+    const n3a = createNormal(), n3b = createNormal();
+    const e0 = createElite();
+    const e1a = createElite(), e1b = createElite();
+
+    this.faceDownNodes = [
+      { enemy: n0,  blockedBy: new Set(),                 covers: [n1a.ID, n1b.ID],     row: 0 },
+      { enemy: n1a, blockedBy: new Set([n0.ID]),          covers: [n2a.ID, n2b.ID],     row: 1 },
+      { enemy: n1b, blockedBy: new Set([n0.ID]),          covers: [n2b.ID, n2c.ID],     row: 1 },
+      { enemy: n2a, blockedBy: new Set([n1a.ID]),         covers: [n3a.ID],             row: 2 },
+      { enemy: n2b, blockedBy: new Set([n1a.ID, n1b.ID]), covers: [n3a.ID, n3b.ID],     row: 2 },
+      { enemy: n2c, blockedBy: new Set([n1b.ID]),         covers: [n3b.ID],             row: 2 },
+      { enemy: n3a, blockedBy: new Set([n2a.ID, n2b.ID]), covers: [e0.ID],              row: 3 },
+      { enemy: n3b, blockedBy: new Set([n2b.ID, n2c.ID]), covers: [e0.ID],              row: 3 },
+      { enemy: e0,  blockedBy: new Set([n3a.ID, n3b.ID]), covers: [e1a.ID, e1b.ID],     row: 4 },
+      { enemy: e1a, blockedBy: new Set([e0.ID]),          covers: [],                   row: 5 },
+      { enemy: e1b, blockedBy: new Set([e0.ID]),          covers: [],                   row: 5 },
+    ];
+
+    this.checkNewlyUnobstructed();
+  }
+
+  private checkNewlyUnobstructed(): void {
+    const stillFaceDown: FaceDownNode[] = [];
+    for (const node of this.faceDownNodes) {
+      if (node.blockedBy.size === 0) {
+        this.pendingReveal.push({ enemy: node.enemy, covers: node.covers, row: node.row });
+      } else {
+        stillFaceDown.push(node);
+      }
     }
+    this.faceDownNodes = stillFaceDown;
+  }
 
-    if (this.enemies.length > 0) {
-      return;
-    }
-
-    this.enemies = [];
-    const count = [1, 2, 3, 2, 3][this.wave];
-    const isElite = this.wave === 4;
-
-    for (let i = 0; i < count; i++) {
-      const enemyType = getRandomElement(isElite ? eliteEnemies : normalEnemies);
-      const addedEnemy: Enemy = new enemyType();
-      addedEnemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
-      addedEnemy.OnEndCycle.addListener(this.enemyEndCycleHandler.bind(this));
-      this.enemies.push(addedEnemy);
-    }
-
-    for (const enemy of this.enemies) {
+  private revealPendingEnemies(): void {
+    for (const { enemy, covers, row } of this.pendingReveal) {
+      enemy.OnDeath.addListener(this.enemyDeathHandler.bind(this));
+      enemy.OnEndCycle.addListener(this.enemyEndCycleHandler.bind(this));
       enemy.reveal();
-    }
-
-    this.wave++;
-
-    this._stepsCollector?.(
-      this.enemies.map((enemy) => ({
-        type: EDetailedStep.EnemyAppearance,
+      this.enemies.push(enemy);
+      this.enemyMeta.set(enemy.ID, { covers, row });
+      this._stepsCollector?.([{
+        type: EDetailedStep.EnemyReveal,
         playerId: this.ID,
-        enemy: enemy.getPrimitiveStats(),
-      })),
-    );
+        enemy: { ...enemy.getPrimitiveStats(), faceDown: false, covers },
+      }]);
+    }
+    this.pendingReveal = [];
   }
 
   public drawCard(): Card {
@@ -677,9 +729,15 @@ export class Player {
   private enemyDeathHandler({ enemy }: EnemyDeathContext) {
     this.mora += enemy.Mora;
     this.enemies = this.enemies.filter((item) => item !== enemy);
+    this.enemyMeta.delete(enemy.ID);
 
-    if (this.enemies.length === 0) {
-      this.createWave();
+    for (const node of this.faceDownNodes) {
+      node.blockedBy.delete(enemy.ID);
+    }
+    this.checkNewlyUnobstructed();
+
+    if (this.enemies.length === 0 && this.faceDownNodes.length === 0 && this.pendingReveal.length === 0) {
+      this.cycleController.spawnBoss(this._stepsCollector ?? (() => {}));
     }
   }
 
@@ -744,8 +802,8 @@ export class Player {
     const prevStepsCollector = this._stepsCollector;
     this._stepsCollector = (data) => ctx.addToSteps(data);
 
-    if (this.enemies.length === 0) {
-      this.createWave();
+    if (ctx.cycle === 1) {
+      this.revealPendingEnemies();
     }
 
     this.isTurnEnds = false;
@@ -817,6 +875,9 @@ export class Player {
   }
 
   private cycleEndHandler(ctx: CycleEndContext) {
+    const prevStepsCollector = this._stepsCollector;
+    this._stepsCollector = (data) => ctx.addToSteps(data);
+
     for (const enemy of this.enemies) {
       enemy.endCycle({
         enemy,
@@ -825,6 +886,9 @@ export class Player {
       });
     }
 
+    this.revealPendingEnemies();
+
+    this._stepsCollector = prevStepsCollector;
     this.isTookDamageLastTurn = this.isTookDamageThisTurn;
     this.isTookDamageThisTurn = false;
   }

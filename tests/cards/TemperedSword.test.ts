@@ -212,7 +212,6 @@ describe("TemperedSword - Уничтожает 1 щит или наносит 2 
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length).toBeGreaterThan(0);
   });
 
   it("уменьшает AP игрока на 1 и перемещает карту в сброс", async () => {

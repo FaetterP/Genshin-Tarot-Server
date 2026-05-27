@@ -169,8 +169,6 @@ describe("SpearOfWangsheng — наносит 1 пронзающий урон в
     expect(damageIdx).toBeLessThan(deathIdx);
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при отсутствии врага в запросе", async () => {

@@ -180,9 +180,6 @@ describe("KatzleinStylePlus — наносит 2 пронзающих урона
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("isRange: может бить врага в зоне другого игрока", async () => {

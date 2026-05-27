@@ -81,8 +81,6 @@ describe("EdelBladeworkPlus — накладывает Крио и наноси�
     expect(damageIdx).toBeLessThan(deathIdx);
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("щит блокирует урон: EnemyTakeDamage и EnemyBlockDamage присутствуют, HP не меняется", async () => {

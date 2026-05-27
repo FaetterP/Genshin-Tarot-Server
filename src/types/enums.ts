@@ -361,7 +361,7 @@ export enum EDetailedStep {
   EnemyTakeDamage = "EnemyTakeDamage",
   EnemyBlockDamage = "EnemyBlockDamage",
   EnemyDeath = "EnemyDeath",
-  EnemyAppearance = "EnemyAppearance",
+  EnemyReveal = "EnemyReveal",
   PlayerTakeDamage = "PlayerTakeDamage",
   PlayerHeal = "PlayerHeal",
   PlayerStatChange = "PlayerStatChange",

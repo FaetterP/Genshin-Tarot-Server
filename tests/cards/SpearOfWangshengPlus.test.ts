@@ -186,8 +186,6 @@ describe("SpearOfWangshengPlus — игрок получает 1 урон; пр�
     );
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
     expect(response.player.deck.some((c: any) => c.name === ECard.SpearOfWangshengPlus)).toBe(true);
     expect(response.player.hand.some((c: any) => c.name === ECard.SpearOfWangshengPlus)).toBe(false);
     expect(response.player.discard.some((c: any) => c.name === ECard.SpearOfWangshengPlus)).toBe(false);

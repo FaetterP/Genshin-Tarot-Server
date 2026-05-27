@@ -135,9 +135,6 @@ describe("WhisperOfWater — накладывает Гидро и наносит
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
 
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
-
     const damageIdx = response.steps.findIndex((s: any) => s.type === EDetailedStep.EnemyTakeDamage);
     const deathIdx = response.steps.findIndex((s: any) => s.type === EDetailedStep.EnemyDeath);
     expect(damageIdx).toBeLessThan(deathIdx);

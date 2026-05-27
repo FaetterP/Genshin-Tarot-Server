@@ -233,9 +233,6 @@ describe("Demonbane — уничтожает 1 щит врагу или нано
       expect.objectContaining({ type: EDetailedStep.EnemyDeath, enemyId: enemy.id }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(
-      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
-    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

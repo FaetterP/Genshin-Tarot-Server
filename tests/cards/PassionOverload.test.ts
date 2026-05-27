@@ -293,9 +293,6 @@ describe("PassionOverload - Накладывает Пиро и наносит 2 
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(
-      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
-    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

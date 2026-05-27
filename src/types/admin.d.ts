@@ -52,7 +52,6 @@ export type AdminSetStatePlayerPayload = {
   shields?: number;
   energy?: number;
   mora?: number;
-  wave?: number;
   eulaSnowflakes?: number;
   actionPoints?: { normal?: number; extra?: number };
   effects?: EPlayerEffect[];

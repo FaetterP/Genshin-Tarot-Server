@@ -150,9 +150,6 @@ describe("Sharpshooter — наносит 1 пронзающий урон 1 вр
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("isUseAlternative: тратит 1 энергию и накладывает Pyro на врага", async () => {

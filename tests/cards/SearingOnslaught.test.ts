@@ -133,8 +133,7 @@ describe("SearingOnslaught - Накладывает Пиро и наносит 2
         enemyId: enemy.id,
       }),
     );
-    expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length).toBeGreaterThan(0);
+    expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
   });
 
   it("уменьшает AP игрока на 2 и перемещает карту в сброс", async () => {

@@ -218,9 +218,6 @@ describe("NightriderPlus — накладывает Электро и нанос
     expect(damageIdx).toBeLessThan(deathIdx);
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.PlayerStatChange,

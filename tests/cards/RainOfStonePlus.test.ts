@@ -129,9 +129,6 @@ describe("RainOfStonePlus - накладывает Гео и наносит 2 п
       expect.objectContaining({ type: EDetailedStep.EnemyDeath, enemyId: enemy.id }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("isUseAlternative с энергией — даёт +1 AP", async () => {

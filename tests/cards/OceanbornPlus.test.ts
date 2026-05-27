@@ -207,8 +207,6 @@ describe("OceanbornPlus — наносит 2 урона всем врагам в
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
 
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

@@ -186,9 +186,6 @@ describe("StrikeOfFortunePlus - Наносит 3 урона 1 врагу. Есл
       }),
     );
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    expect(
-      response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance).length,
-    ).toBeGreaterThan(0);
   });
 
   it("возвращает ошибку при недостаточном количестве AP", async () => {

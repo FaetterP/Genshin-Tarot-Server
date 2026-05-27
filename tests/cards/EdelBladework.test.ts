@@ -81,8 +81,6 @@ describe("EdelBladework — уничтожает 1 щит или наносит 
     expect(damageIdx).toBeLessThan(deathIdx);
 
     expect(response.player.enemies.some((e: any) => e.id === enemy.id)).toBe(false);
-    const appearanceSteps = response.steps.filter((s: any) => s.type === EDetailedStep.EnemyAppearance);
-    expect(appearanceSteps.length).toBeGreaterThan(0);
   });
 
   it("враг со щитом: убирает 1 щит, не наносит урона", async () => {
