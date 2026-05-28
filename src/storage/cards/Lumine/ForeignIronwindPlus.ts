@@ -32,12 +32,18 @@ export class ForeignIronwindPlus extends Card {
       { type: EDetailedStep.PlayerStatChange, stat: "energy", playerId: ctx.player.ID, delta: 2 },
     ]);
 
-    const attack: Attack = {
-      damage,
-      player: ctx.player,
-    };
+    const attack: Attack = { damage, player: ctx.player };
     target.applyAttack(attack);
-    target.applyElement(new Anemo(), ctx.player);
+
+    if (target.Health > 0) {
+      ctx.addToSteps([{
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Anemo,
+      }]);
+      target.applyElement(new Anemo(), ctx.player);
+    }
+
     ctx.player.addEnergy(2);
   }
 }
