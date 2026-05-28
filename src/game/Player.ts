@@ -651,11 +651,11 @@ export class Player {
     this.deck.push(card);
   }
 
-  public moveCardFromHandToDeck(card: Card, isShuffle: boolean = false) {
+  public moveCardFromHandToDeck(card: Card, isShuffle: boolean = false, revealPosition: boolean = false) {
     if (!this.hand.includes(card)) return;
     this.hand = this.hand.filter((c) => c !== card);
 
-    card.revealDeckPositionToClient = false;
+    card.revealDeckPositionToClient = revealPosition;
 
     if (isShuffle) {
       const sortedExisting = [...this.deck].sort((a, b) => a.deckPosition - b.deckPosition);

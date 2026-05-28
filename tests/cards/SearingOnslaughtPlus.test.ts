@@ -41,7 +41,10 @@ describe("SearingOnslaughtPlus - Накладывает Пиро и наноси
     const [player] = game.players;
     const { admin } = game;
 
-    const enemy = player.enemies[0];
+    await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const allEnemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
+    const enemy = allEnemies.find((e: any) => e.id !== player.enemies[0].id)!;
     await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
 
     const cardId = await ensureCardInHand(player, admin, ECard.SearingOnslaughtPlus);

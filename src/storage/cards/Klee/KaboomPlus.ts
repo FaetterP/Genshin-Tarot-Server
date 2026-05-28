@@ -19,8 +19,9 @@ export class KaboomPlus extends Card {
     }
 
     const target = ctx.enemies[0];
-    const damage = ctx.isUseAlternative && ctx.player.trySpendEnergy(2) ? 4 : 2;
-    ctx.addToSteps([
+    const spentEnergy = ctx.isUseAlternative && ctx.player.trySpendEnergy(2);
+    const damage = spentEnergy ? 4 : 2;
+    const steps: any[] = [
       {
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
@@ -28,7 +29,21 @@ export class KaboomPlus extends Card {
         isPiercing: true,
         element: EElement.Pyro,
       },
-    ]);
+      {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Pyro,
+      },
+    ];
+    if (spentEnergy) {
+      steps.push({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
+        playerId: ctx.player.ID,
+        delta: -2,
+      });
+    }
+    ctx.addToSteps(steps);
     target.applyAttack({
       damage,
       isPiercing: true,

@@ -33,6 +33,11 @@ export class Kaboom extends Card {
         element: EElement.Pyro,
       },
       {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Pyro,
+      },
+      {
         type: EDetailedStep.PlayerStatChange,
         stat: "energy",
         playerId: ctx.player.ID,
