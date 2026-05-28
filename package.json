@@ -25,7 +25,7 @@
   "homepage": "https://github.com/FaetterP/Genshin-Tarot-Server#readme",
   "dependencies": {
     "uuid": "^14.0.0",
-    "ws": "^8.13.0"
+    "ws": "^8.20.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
