@@ -28,6 +28,7 @@ export class Breastplate extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Geo(), ctx.player);
     }
+    ctx.addToSteps([{ type: EDetailedStep.PlayerHeal, playerId: ctx.player.ID, amount: 1 }]);
     ctx.player.addHealth(1);
   }
 }

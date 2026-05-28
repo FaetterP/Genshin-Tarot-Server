@@ -38,7 +38,7 @@ export class MaidsBladework extends Card {
       target.applyAttack({ damage: 2, player: ctx.player });
     }
 
-    if (ctx.isUseAlternative && ctx.player.trySpendActonPoints(1)) {
+    if (ctx.isUseAlternative && target.Health > 0 && ctx.player.trySpendActonPoints(1)) {
       if (target.Shield > 0) {
         ctx.addToSteps([{ type: EDetailedStep.EnemyChangeShield, enemyId: target.ID, delta: -1 }]);
         target.addShields(-1);
