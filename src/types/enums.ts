@@ -271,6 +271,8 @@ export enum EPlayerEffect {
 export enum EEnemyEffect {
   Nightrider = "Nightrider",
   NightriderPlus = "NightriderPlus",
+  HeraldOfFrost = "HeraldOfFrost",
+  HeraldOfFrostPlus = "HeraldOfFrostPlus",
 }
 
 export enum EEnemy {

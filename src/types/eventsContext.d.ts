@@ -45,3 +45,8 @@ export type PlayerEndTurnContext = {
 
   eulaSelectedEnemies?: Enemy[];
 };
+
+export type EnemyTakeDamageContext = {
+  player: Player;
+  enemy: Enemy;
+};

@@ -184,6 +184,19 @@ export abstract class Enemy {
 
     attack.player.useAttackEffects(this);
 
+    const effectsToRemoveOnHit: EnemyEffect[] = [];
+    for (const effect of this.effects) {
+      const shouldRemove = effect.onTakeDamage({ player: attack.player, enemy: this });
+      if (shouldRemove) {
+        attack.player.addSteps([
+          { type: EDetailedStep.EnemyEffectTrigger, enemyId: this.ID, effect: effect.Name, isRemove: true },
+          { type: EDetailedStep.EnemyLoseEffect, enemyId: this.ID, effect: effect.Name },
+        ]);
+        effectsToRemoveOnHit.push(effect);
+      }
+    }
+    this.effects = this.effects.filter((e) => !effectsToRemoveOnHit.includes(e));
+
     if (this.hp <= 0) {
       if (!this.onBeforeDeath(attack.player)) return;
       if (bonus.energyOnKill > 0) {

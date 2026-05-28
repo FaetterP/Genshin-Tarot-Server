@@ -1,7 +1,8 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, EElement, ECardType, EEnemyEffect } from "../../../types/enums";
 import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
+import { HeraldOfFrostPlusEffect } from "../../effects/HeraldOfFrostPlusEffect";
 
 export class HeraldOfFrostPlus extends Card {
   public get Name(): ECard {
@@ -18,10 +19,12 @@ export class HeraldOfFrostPlus extends Card {
     }
 
     const target = ctx.enemies[0];
+    const effect = new HeraldOfFrostPlusEffect();
     ctx.addToSteps([
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Cryo },
+      { type: EDetailedStep.EnemyGetEffect, enemyId: target.ID, effect: EEnemyEffect.HeraldOfFrostPlus },
     ]);
     target.applyElement(new Cryo(), ctx.player);
-    // TODO следующий, кто ударит этого же врага, отрегенит 3 хп и 2 энергии
+    target.addEffect(effect);
   }
 }

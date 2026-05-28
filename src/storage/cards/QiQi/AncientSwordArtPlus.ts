@@ -1,8 +1,5 @@
-﻿import type { DetailedStep } from "../../../types/detailedStep";
-import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
+﻿import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
-import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 
 export class AncientSwordArtPlus extends Card {
@@ -43,7 +40,6 @@ export class AncientSwordArtPlus extends Card {
     }
     if (hasCryo) {
       target.applyAttack({ damage: 5, player: ctx.player });
-      target.applyElement(new Cryo(), ctx.player);
     } else {
       target.applyAttack({ damage: 2, player: ctx.player });
       ctx.player.addEnergy(2);
