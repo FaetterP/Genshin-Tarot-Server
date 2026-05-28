@@ -25,11 +25,13 @@ type FaceDownNode = {
   enemy: Enemy;
   blockedBy: Set<string>;
   covers: string[];
+  isElite: boolean;
 };
 
 type PendingRevealItem = {
   enemy: Enemy;
   covers: string[];
+  isElite: boolean;
 };
 
 export class Player {
@@ -44,6 +46,7 @@ export class Player {
   private pendingReveal: PendingRevealItem[] = [];
   private enemyMeta = new Map<string, {
     covers: string[];
+    isElite: boolean;
     deathHandler: (ctx: EnemyDeathContext) => void;
     endCycleHandler: (ctx: EnemyEndCycleContext) => void;
   }>();
@@ -198,10 +201,10 @@ export class Player {
   public getPrimitiveStats(forAdmin?: boolean): PlayerPrimitive {
     const enemies: PyramidSlot[] = [];
     for (const node of this.faceDownNodes) {
-      enemies.push({ id: node.enemy.ID, faceDown: true, covers: node.covers });
+      enemies.push({ id: node.enemy.ID, faceDown: true, isElite: node.isElite, covers: node.covers });
     }
     for (const item of this.pendingReveal) {
-      enemies.push({ id: item.enemy.ID, faceDown: true, covers: item.covers });
+      enemies.push({ id: item.enemy.ID, faceDown: true, isElite: item.isElite, covers: item.covers });
     }
     for (const enemy of this.enemies) {
       const meta = this.enemyMeta.get(enemy.ID);
@@ -459,17 +462,17 @@ export class Player {
     const e1a = createElite(), e1b = createElite();
 
     this.faceDownNodes = [
-      { enemy: n0,  blockedBy: new Set(),                 covers: [n1a.ID, n1b.ID]     },
-      { enemy: n1a, blockedBy: new Set([n0.ID]),          covers: [n2a.ID, n2b.ID]     },
-      { enemy: n1b, blockedBy: new Set([n0.ID]),          covers: [n2b.ID, n2c.ID]     },
-      { enemy: n2a, blockedBy: new Set([n1a.ID]),         covers: [n3a.ID]             },
-      { enemy: n2b, blockedBy: new Set([n1a.ID, n1b.ID]), covers: [n3a.ID, n3b.ID]     },
-      { enemy: n2c, blockedBy: new Set([n1b.ID]),         covers: [n3b.ID]             },
-      { enemy: n3a, blockedBy: new Set([n2a.ID, n2b.ID]), covers: [e0.ID]              },
-      { enemy: n3b, blockedBy: new Set([n2b.ID, n2c.ID]), covers: [e0.ID]              },
-      { enemy: e0,  blockedBy: new Set([n3a.ID, n3b.ID]), covers: [e1a.ID, e1b.ID]     },
-      { enemy: e1a, blockedBy: new Set([e0.ID]),          covers: []                   },
-      { enemy: e1b, blockedBy: new Set([e0.ID]),          covers: []                   },
+      { enemy: n0,  blockedBy: new Set(),                 covers: [n1a.ID, n1b.ID],  isElite: false },
+      { enemy: n1a, blockedBy: new Set([n0.ID]),          covers: [n2a.ID, n2b.ID],  isElite: false },
+      { enemy: n1b, blockedBy: new Set([n0.ID]),          covers: [n2b.ID, n2c.ID],  isElite: false },
+      { enemy: n2a, blockedBy: new Set([n1a.ID]),         covers: [n3a.ID],          isElite: false },
+      { enemy: n2b, blockedBy: new Set([n1a.ID, n1b.ID]), covers: [n3a.ID, n3b.ID],  isElite: false },
+      { enemy: n2c, blockedBy: new Set([n1b.ID]),         covers: [n3b.ID],          isElite: false },
+      { enemy: n3a, blockedBy: new Set([n2a.ID, n2b.ID]), covers: [e0.ID],           isElite: false },
+      { enemy: n3b, blockedBy: new Set([n2b.ID, n2c.ID]), covers: [e0.ID],           isElite: false },
+      { enemy: e0,  blockedBy: new Set([n3a.ID, n3b.ID]), covers: [e1a.ID, e1b.ID],  isElite: true  },
+      { enemy: e1a, blockedBy: new Set([e0.ID]),          covers: [],                isElite: true  },
+      { enemy: e1b, blockedBy: new Set([e0.ID]),          covers: [],                isElite: true  },
     ];
 
     this.checkNewlyUnobstructed();
@@ -479,7 +482,7 @@ export class Player {
     const stillFaceDown: FaceDownNode[] = [];
     for (const node of this.faceDownNodes) {
       if (node.blockedBy.size === 0) {
-        this.pendingReveal.push({ enemy: node.enemy, covers: node.covers });
+        this.pendingReveal.push({ enemy: node.enemy, covers: node.covers, isElite: node.isElite });
       } else {
         stillFaceDown.push(node);
       }
@@ -488,14 +491,14 @@ export class Player {
   }
 
   private revealPendingEnemies(): void {
-    for (const { enemy, covers } of this.pendingReveal) {
+    for (const { enemy, covers, isElite } of this.pendingReveal) {
       const deathHandler = this.enemyDeathHandler.bind(this);
       const endCycleHandler = this.enemyEndCycleHandler.bind(this);
       enemy.OnDeath.addListener(deathHandler);
       enemy.OnEndCycle.addListener(endCycleHandler);
       enemy.reveal();
       this.enemies.push(enemy);
-      this.enemyMeta.set(enemy.ID, { covers, deathHandler, endCycleHandler });
+      this.enemyMeta.set(enemy.ID, { covers, isElite, deathHandler, endCycleHandler });
       this._stepsCollector?.([{
         type: EDetailedStep.EnemyReveal,
         playerId: this.ID,
@@ -505,7 +508,7 @@ export class Player {
     this.pendingReveal = [];
   }
 
-  private deactivateEnemy(enemy: Enemy): { covers: string[] } | null {
+  private deactivateEnemy(enemy: Enemy): { covers: string[]; isElite: boolean } | null {
     const meta = this.enemyMeta.get(enemy.ID);
     if (meta) {
       enemy.OnDeath.removeListener(meta.deathHandler);
@@ -513,7 +516,7 @@ export class Player {
       this.enemyMeta.delete(enemy.ID);
     }
     this.enemies = this.enemies.filter((e) => e !== enemy);
-    return meta ? { covers: meta.covers } : null;
+    return meta ? { covers: meta.covers, isElite: meta.isElite } : null;
   }
 
   public flipEnemyFaceDown(flipTarget: Enemy, coverTarget: Enemy): void {
@@ -531,16 +534,18 @@ export class Player {
     }
 
     const flipCovers = flipMeta?.covers ?? [];
+    const flipIsElite = flipMeta?.isElite ?? false;
     this.faceDownNodes.push({
       enemy: flipTarget,
       blockedBy: new Set([coverTarget.ID]),
       covers: flipCovers,
+      isElite: flipIsElite,
     });
 
     this._stepsCollector?.([{
       type: EDetailedStep.EnemyFlipFaceDown,
       playerId: this.ID,
-      enemy: { id: flipTarget.ID, faceDown: true as const, covers: flipCovers },
+      enemy: { id: flipTarget.ID, faceDown: true as const, isElite: flipIsElite, covers: flipCovers },
       coveredByEnemyId: coverTarget.ID,
     }]);
   }

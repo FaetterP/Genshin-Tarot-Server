@@ -20,7 +20,7 @@ export type EnemyPrimitive = {
 };
 
 export type PyramidSlot =
-  | { id: string; faceDown: true; covers: string[] }
+  | { id: string; faceDown: true; isElite: boolean; covers: string[] }
   | (EnemyPrimitive & { faceDown: false; covers: string[] });
 
 export type BossPrimitive = EnemyPrimitive & {
