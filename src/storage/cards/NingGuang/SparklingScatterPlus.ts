@@ -1,5 +1,4 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { removeDuplicates } from "../../../utils/arrays";
 import { Geo } from "../../elements/Geo";
@@ -20,27 +19,27 @@ export class SparklingScatterPlus extends Card {
     }
 
     const enemies = removeDuplicates(ctx.enemies);
-    if (enemies.length <= 2) {
-      throw new Error("need 2 enemies");
+    if (enemies.length > 2) {
+      throw new Error("too many enemies");
     }
 
     ctx.addToSteps(
-      [0, 1].map((i) => ({
+      enemies.map((enemy) => ({
         type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemies[i].ID,
+        enemyId: enemy.ID,
         damage: 2,
         isPiercing: true,
         element: EElement.Geo,
       })),
     );
-    for (let i = 0; i < 2; i++) {
-      enemies[i].applyAttack({
+    for (const enemy of enemies) {
+      enemy.applyAttack({
         damage: 2,
         isPiercing: true,
         isRange: true,
         player: ctx.player,
       });
-      enemies[i].applyElement(new Geo(), ctx.player);
+      enemy.applyElement(new Geo(), ctx.player);
     }
   }
 }
