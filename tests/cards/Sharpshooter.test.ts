@@ -157,13 +157,10 @@ describe("Sharpshooter — наносит 1 пронзающий урон 1 вр
     const [player] = game.players;
     const { admin } = game;
 
-    // HilichurlGuard — нет стартового элемента, нет способностей (напр. GiantDendroSlime наносит 2 доп. урона при попадании Pyro)
     await admin.removeEnemy(player.enemies[0].id);
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 1,
-    );
-    const enemy = syncMsg.you.enemies[0];
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 1);
+    const enemy = syncMsg.you.enemies.find((e: any) => !e.faceDown)!;
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { energy: 1 });
 

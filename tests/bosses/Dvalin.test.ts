@@ -70,9 +70,7 @@ async function removePlayerEnemies(
     await admin.removeEnemy(enemy.id);
   }
   if (enemies.length > 0) {
-    await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length === 0,
-    );
+    await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length === 0);
   }
 }
 

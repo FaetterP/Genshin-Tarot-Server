@@ -111,10 +111,8 @@ describe("StellarRestoration — накладывает Электро враг�
     await admin.updateEnemy(enemy1.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const enemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy2 = enemies.find((e) => e.id !== enemy1.id)!;
     await admin.updateEnemy(enemy2.id, { hp: 8, shield: 1, elements: [EElement.Geo] });
 
@@ -133,14 +131,13 @@ describe("StellarRestoration — накладывает Электро враг�
     expect(response.steps).toContainEqual(
       expect.objectContaining({
         type: EDetailedStep.EnemyFlipFaceDown,
-        enemyId: enemy2.id,
+        enemy: expect.objectContaining({ id: enemy2.id }),
         coveredByEnemyId: enemy1.id,
       }),
     );
 
-    // enemy1 остаётся активным (получил Электро), enemy2 уходит под него
-    expect(response.player.enemies.some((e: any) => e.id === enemy1.id)).toBe(true);
-    expect(response.player.enemies.some((e: any) => e.id === enemy2.id)).toBe(false);
+    expect(response.player.enemies.some((e: any) => !e.faceDown && e.id === enemy1.id)).toBe(true);
+    expect(response.player.enemies.some((e: any) => !e.faceDown && e.id === enemy2.id)).toBe(false);
     expect(response.steps).toContainEqual(
       expect.objectContaining({ type: EDetailedStep.PlayerStatChange, stat: "actionPoints", delta: -1 }),
     );
@@ -158,10 +155,8 @@ describe("StellarRestoration — накладывает Электро враг�
     await admin.updateEnemy(enemy1.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const enemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy2 = enemies.find((e) => e.id !== enemy1.id)!;
     await admin.updateEnemy(enemy2.id, { hp: 8, shield: 0, elements: [] });
 
@@ -173,10 +168,8 @@ describe("StellarRestoration — накладывает Электро враг�
     await admin.setLeylines([]);
     const cycle2 = await endTurn(player);
 
-    // enemy1 остаётся активным — enemy2 заблокирован им
-    expect(cycle2.you.enemies.some((e: any) => e.id === enemy1.id)).toBe(true);
-    // enemy2 не раскрывается пока enemy1 жив
-    expect(cycle2.you.enemies.some((e: any) => e.id === enemy2.id)).toBe(false);
+    expect(cycle2.you.enemies.some((e: any) => !e.faceDown && e.id === enemy1.id)).toBe(true);
+    expect(cycle2.you.enemies.some((e: any) => !e.faceDown && e.id === enemy2.id)).toBe(false);
   });
 
   it("возвращает ошибку когда враги не указаны", async () => {

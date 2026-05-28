@@ -152,10 +152,8 @@ describe("FrostgnawPlus — накладывает Крио на всех вра
     await admin.updateEnemy(firstEnemy.id, { hp: 20, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const enemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     await admin.updateEnemy(enemies[0].id, { hp: 20, shield: 0, elements: [] });
     await admin.updateEnemy(enemies[1].id, { hp: 20, shield: 0, elements: [] });
 
@@ -169,7 +167,7 @@ describe("FrostgnawPlus — накладывает Крио на всех вра
     );
     expect(elementSteps.length).toBe(2);
 
-    for (const e of response.player.enemies) {
+    for (const e of response.player.enemies.filter((e: any) => !e.faceDown)) {
       expect(e.elements).toContain(EElement.Cryo);
     }
   });

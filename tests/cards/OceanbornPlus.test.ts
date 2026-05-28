@@ -89,25 +89,18 @@ describe("OceanbornPlus — наносит 2 урона всем врагам в
     await admin.updateEnemy(enemy.id, { hp: 20, shield: 0, elements: [] });
     await admin.updatePlayer(player.playerId, { shield: 0, actionPoints: { normal: 3, extra: 0 } });
 
-    // Add HilichurlBerserk (damage: 3) so the player takes damage at end of cycle 1
     await admin.addEnemy(player.playerId, EEnemy.HilichurlBerserk);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const berserkEnemy = syncMsg.you.enemies.find((e: any) => e.id !== enemy.id);
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const berserkEnemy = syncMsg.you.enemies.find((e: any) => !e.faceDown && e.id !== enemy.id);
     await admin.updateEnemy(berserkEnemy.id, { elements: [] });
-
-    // Cycle 1: end turn — HilichurlBerserk attacks player, isTookDamageThisTurn = true
     const cycle2 = await endTurn(player);
-
-    // Cycle 2: isTookDamageLastTurn = true → card deals 4 damage
     await admin.updatePlayer(player.playerId, { actionPoints: { normal: 3, extra: 0 } });
     const cardId = await ensureCardInHand(player, admin, ECard.OceanbornPlus);
 
     player.send({ action: "game.useCard", cardId });
     const response = await player.waitFor((m: any) => m.action === "game.useCard");
 
-    for (const e of cycle2.you.enemies) {
+    for (const e of cycle2.you.enemies.filter((e: any) => !e.faceDown)) {
       expect(response.steps).toContainEqual(
         expect.objectContaining({
           type: EDetailedStep.EnemyTakeDamage,
@@ -125,10 +118,8 @@ describe("OceanbornPlus — наносит 2 урона всем врагам в
     const { admin } = game;
 
     await admin.addEnemy(player.playerId, EEnemy.SmallDendroSlime);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const enemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
 
     for (const e of enemies) {
       await admin.updateEnemy(e.id, { hp: 10, shield: 0, elements: [] });

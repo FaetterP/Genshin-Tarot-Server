@@ -3,7 +3,7 @@ import { startGameWSS, stopGameWSS, getAllClients, cycleController } from "../..
 import { startAdminWSS, stopAdminWSS } from "../../src/ws/adminWSS";
 import { TaskAwaiter } from "../../src/utils/TaskAwaiter";
 import { ECard, ECharacter, EEnemy, EElement, ELeyline } from "../../src/types/enums";
-import type { CardPrimitive, EnemyPrimitive } from "../../src/types/general";
+import type { CardPrimitive, EnemyPrimitive, PyramidSlot } from "../../src/types/general";
 
 export const TEST_GAME_PORT = 19999;
 export const TEST_ADMIN_PORT = 19998;
@@ -40,7 +40,8 @@ export class GameTestClient {
   }
 
   get enemies(): EnemyPrimitive[] {
-    return this.startCycleData?.you?.enemies ?? [];
+    const all: PyramidSlot[] = this.startCycleData?.you?.enemies ?? [];
+    return all.filter((e): e is EnemyPrimitive & { faceDown: false; covers: string[] } => e.faceDown === false) as EnemyPrimitive[];
   }
 
   findCard(name: ECard): CardPrimitive | undefined {

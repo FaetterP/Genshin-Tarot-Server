@@ -141,10 +141,8 @@ describe("StarfellSword — накладывает Гео и наносит 2 п
     const cardId = await ensureCardInHand(player, admin, ECard.StarfellSword);
 
     await admin.addEnemy(player.playerId, EEnemy.SmallDendroSlime);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const enemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const enemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
 
     for (const e of enemies) {
       await admin.updateEnemy(e.id, { hp: 10, shield: 0, elements: [] });

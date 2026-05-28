@@ -45,12 +45,11 @@ describe("PassionOverload - Накладывает Пиро и наносит 2 
 
     const existingEnemy = player.enemies[0];
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2);
-    const allEnemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const allEnemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy = allEnemies.find((e: any) => e.id !== existingEnemy.id)!;
     await admin.updateEnemy(enemy.id, { hp: 10, shield: 0, elements: [] });
 
-    // добавляем нейтральную карту на вершину колоды
     await admin.addCard(player.playerId, ECard.ForeignRockblade, "deck");
 
     const cardId = await ensureCardInHand(player, admin, ECard.PassionOverload);
@@ -89,14 +88,11 @@ describe("PassionOverload - Накладывает Пиро и наносит 2 
     await admin.updateEnemy(enemy1.id, { hp: 20, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    const syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    const allEnemies: { id: string }[] = syncMsg.you.enemies;
+    const syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    const allEnemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy2 = allEnemies.find((e: any) => e.id !== enemy1.id)!;
     await admin.updateEnemy(enemy2.id, { hp: 20, shield: 0, elements: [] });
 
-    // добавляем карту Беннета на вершину колоды
     await admin.addCard(player.playerId, ECard.StrikeOfFortune, "deck");
 
     const cardId = await ensureCardInHand(player, admin, ECard.PassionOverload);

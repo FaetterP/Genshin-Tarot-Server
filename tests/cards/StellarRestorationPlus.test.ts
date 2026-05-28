@@ -44,18 +44,14 @@ describe("StellarRestorationPlus — накладывает Электро 3 р�
     await admin.updateEnemy(enemy1.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    let syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    let allEnemies: { id: string }[] = syncMsg.you.enemies;
+    let syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    let allEnemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy2 = allEnemies.find((e) => e.id !== enemy1.id)!;
     await admin.updateEnemy(enemy2.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 3,
-    );
-    allEnemies = syncMsg.you.enemies;
+    syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 3);
+    allEnemies = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy3 = allEnemies.find((e) => e.id !== enemy1.id && e.id !== enemy2.id)!;
     await admin.updateEnemy(enemy3.id, { hp: 10, shield: 0, elements: [] });
 
@@ -101,18 +97,14 @@ describe("StellarRestorationPlus — накладывает Электро 3 р�
     await admin.updateEnemy(enemy1.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    let syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 2,
-    );
-    let allEnemies: { id: string }[] = syncMsg.you.enemies;
+    let syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 2);
+    let allEnemies: { id: string }[] = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy2 = allEnemies.find((e) => e.id !== enemy1.id)!;
     await admin.updateEnemy(enemy2.id, { hp: 10, shield: 0, elements: [] });
 
     await admin.addEnemy(player.playerId, EEnemy.HilichurlGuard);
-    syncMsg = await player.waitFor(
-      (m: any) => m.action === "admin.stateSync" && m.you.enemies.length >= 3,
-    );
-    allEnemies = syncMsg.you.enemies;
+    syncMsg = await player.waitFor((m: any) => m.action === "admin.stateSync" && m.you.enemies.filter((e: any) => !e.faceDown).length >= 3);
+    allEnemies = syncMsg.you.enemies.filter((e: any) => !e.faceDown);
     const enemy3 = allEnemies.find((e) => e.id !== enemy1.id && e.id !== enemy2.id)!;
     await admin.updateEnemy(enemy3.id, { hp: 10, shield: 0, elements: [] });
 

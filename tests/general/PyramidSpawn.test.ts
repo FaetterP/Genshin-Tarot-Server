@@ -15,14 +15,12 @@ import {
 
 jest.setTimeout(30000);
 
-// ─────────────────────────────── helpers ────────────────────────────────── //
-
-function faceUpSlots(pyramid: any[][]): any[] {
-  return pyramid.flat().filter((s: any) => !s.faceDown);
+function faceUpSlots(enemies: any[]): any[] {
+  return enemies.filter((s: any) => !s.faceDown);
 }
 
-function faceDownSlots(pyramid: any[][]): any[] {
-  return pyramid.flat().filter((s: any) => s.faceDown);
+function faceDownSlots(enemies: any[]): any[] {
+  return enemies.filter((s: any) => s.faceDown);
 }
 
 async function killEnemy(admin: any, enemyId: string, player: any): Promise<any> {
@@ -39,7 +37,7 @@ async function killFaceUpAndAdvanceCycle(
   player: any,
   admin: any,
 ): Promise<{ endCycle: any; startCycle: any }> {
-  const faceUp = faceUpSlots(player.startCycleData.you.pyramid);
+  const faceUp = faceUpSlots(player.startCycleData.you.enemies);
   for (const slot of faceUp) {
     await killEnemy(admin, slot.id, player);
   }
@@ -50,8 +48,6 @@ async function killFaceUpAndAdvanceCycle(
   player.startCycleData = startCycle;
   return { endCycle, startCycle };
 }
-
-// ──────────────────────────────── tests ─────────────────────────────────── //
 
 describe("Pyramid — структура и механика спавна врагов", () => {
   let game: TestGame;
@@ -72,65 +68,60 @@ describe("Pyramid — структура и механика спавна вра
     game?.cleanup();
   });
 
-  it("pyramid содержит 6 рядов с формой [1, 2, 3, 2, 1, 2] при старте игры", async () => {
-    game = await createTestGame();
-    const [player] = game.players;
-
-    const pyramid: any[][] = player.startCycleData.you.pyramid;
-
-    expect(pyramid).toHaveLength(6);
-    expect(pyramid[0]).toHaveLength(1);
-    expect(pyramid[1]).toHaveLength(2);
-    expect(pyramid[2]).toHaveLength(3);
-    expect(pyramid[3]).toHaveLength(2);
-    expect(pyramid[4]).toHaveLength(1);
-    expect(pyramid[5]).toHaveLength(2);
-  });
-
-  it("ряд 0 открыт при старте, остальные 10 слотов закрыты", async () => {
-    game = await createTestGame();
-    const [player] = game.players;
-
-    const pyramid: any[][] = player.startCycleData.you.pyramid;
-
-    expect(faceUpSlots(pyramid)).toHaveLength(1);
-    expect(faceDownSlots(pyramid)).toHaveLength(10);
-    expect(pyramid[0][0].faceDown).toBe(false);
-    expect(pyramid[1].every((s: any) => s.faceDown)).toBe(true);
-    expect(pyramid[2].every((s: any) => s.faceDown)).toBe(true);
-  });
-
-  it("enemies[] при старте содержит ровно 1 врага — верхний элемент пирамиды", async () => {
+  it("enemies содержит 11 врагов при старте: 1 face-up и 10 face-down", async () => {
     game = await createTestGame();
     const [player] = game.players;
 
     const enemies = player.startCycleData.you.enemies;
-    const topSlot = player.startCycleData.you.pyramid[0][0];
 
-    expect(enemies).toHaveLength(1);
-    expect(enemies[0].id).toBe(topSlot.id);
+    expect(enemies).toHaveLength(11);
+    expect(faceUpSlots(enemies)).toHaveLength(1);
+    expect(faceDownSlots(enemies)).toHaveLength(10);
   });
 
-  it("covers верхнего врага ссылается на ID обоих слотов ряда 1", async () => {
+  it("верхний враг face-up при старте, остальные 10 слотов закрыты", async () => {
     game = await createTestGame();
     const [player] = game.players;
 
-    const pyramid: any[][] = player.startCycleData.you.pyramid;
-    const topEnemy = pyramid[0][0];
-    const row1Ids = pyramid[1].map((s: any) => s.id);
+    const enemies = player.startCycleData.you.enemies;
 
-    expect(topEnemy.covers).toHaveLength(2);
-    expect(topEnemy.covers).toEqual(expect.arrayContaining(row1Ids));
-    expect(row1Ids).toEqual(expect.arrayContaining(topEnemy.covers));
+    expect(faceUpSlots(enemies)).toHaveLength(1);
+    expect(faceDownSlots(enemies)).toHaveLength(10);
+    expect(faceUpSlots(enemies)[0].faceDown).toBe(false);
+    expect(faceDownSlots(enemies).every((s: any) => s.faceDown)).toBe(true);
   });
 
-  it("EnemyReveal × 2 приходит в game.endCycle после убийства ряда 0", async () => {
+  it("верхний face-up враг содержит covers на 2 face-down слота", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+
+    const enemies = player.startCycleData.you.enemies;
+    const topEnemy = faceUpSlots(enemies)[0];
+    const faceDownIds = new Set(faceDownSlots(enemies).map((e: any) => e.id));
+
+    expect(topEnemy.covers).toHaveLength(2);
+    topEnemy.covers.forEach((id: string) => expect(faceDownIds.has(id)).toBe(true));
+  });
+
+  it("covers верхнего врага ссылается на ID обоих ближайших face-down слотов", async () => {
+    game = await createTestGame();
+    const [player] = game.players;
+
+    const enemies = player.startCycleData.you.enemies;
+    const topEnemy = faceUpSlots(enemies)[0];
+    const faceDownIds = faceDownSlots(enemies).map((s: any) => s.id);
+
+    expect(topEnemy.covers).toHaveLength(2);
+    expect(faceDownIds).toEqual(expect.arrayContaining(topEnemy.covers));
+  });
+
+  it("EnemyReveal × 2 приходит в game.endCycle после убийства верхнего врага", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
 
-    const topSlot = player.startCycleData.you.pyramid[0][0];
-    const expectedRow1Ids = new Set<string>(topSlot.covers);
+    const topSlot = faceUpSlots(player.startCycleData.you.enemies)[0];
+    const expectedNextIds = new Set<string>(topSlot.covers);
 
     await killEnemy(admin, topSlot.id, player);
     await admin.setLeylines([]);
@@ -140,7 +131,7 @@ describe("Pyramid — структура и механика спавна вра
 
     const reveals = endCycle.steps.filter((s: any) => s.type === EDetailedStep.EnemyReveal);
     expect(reveals).toHaveLength(2);
-    expect(reveals.every((r: any) => expectedRow1Ids.has(r.enemy.id))).toBe(true);
+    expect(reveals.every((r: any) => expectedNextIds.has(r.enemy.id))).toBe(true);
   });
 
   it("EnemyReveal содержит полные данные врага с faceDown: false и covers", async () => {
@@ -148,7 +139,7 @@ describe("Pyramid — структура и механика спавна вра
     const [player] = game.players;
     const { admin } = game;
 
-    const topSlot = player.startCycleData.you.pyramid[0][0];
+    const topSlot = faceUpSlots(player.startCycleData.you.enemies)[0];
     await killEnemy(admin, topSlot.id, player);
     await admin.setLeylines([]);
 
@@ -163,12 +154,12 @@ describe("Pyramid — структура и механика спавна вра
     expect(typeof reveal.enemy.name).toBe("string");
   });
 
-  it("после раскрытия ряда 1 — pyramid показывает 2 face-up врага, enemies[] имеет 2 элемента", async () => {
+  it("после раскрытия 2 следующих врагов: 2 face-up, 8 face-down, 10 итого", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
 
-    await killEnemy(admin, player.startCycleData.you.pyramid[0][0].id, player);
+    await killEnemy(admin, faceUpSlots(player.startCycleData.you.enemies)[0].id, player);
     await admin.setLeylines([]);
 
     player.send({ action: "game.endTurn" });
@@ -176,28 +167,27 @@ describe("Pyramid — структура и механика спавна вра
     const cycle2 = await player.waitFor((m: any) => m.action === "game.startCycle");
     player.startCycleData = cycle2;
 
-    expect(faceUpSlots(cycle2.you.pyramid)).toHaveLength(2);
-    expect(faceDownSlots(cycle2.you.pyramid)).toHaveLength(8);
-    expect(cycle2.you.enemies).toHaveLength(2);
-    expect(cycle2.you.pyramid.flat()).toHaveLength(10);
+    expect(faceUpSlots(cycle2.you.enemies)).toHaveLength(2);
+    expect(faceDownSlots(cycle2.you.enemies)).toHaveLength(8);
+    expect(cycle2.you.enemies).toHaveLength(10);
   });
 
-  it("убийство одного из двух ряда 1 раскрывает ровно 1 врага из ряда 2", async () => {
+  it("убийство одного из двух раскрытых врагов — раскрывается ровно 1 следующий", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
 
-    // reveal row 1
-    await killEnemy(admin, player.startCycleData.you.pyramid[0][0].id, player);
+    // reveal next 2
+    await killEnemy(admin, faceUpSlots(player.startCycleData.you.enemies)[0].id, player);
     await admin.setLeylines([]);
     player.send({ action: "game.endTurn" });
     await player.waitFor((m: any) => m.action === "game.endCycle");
     const cycle2 = await player.waitFor((m: any) => m.action === "game.startCycle");
     player.startCycleData = cycle2;
 
-    // kill only one of the two row-1 enemies
-    const row1Slot = faceUpSlots(cycle2.you.pyramid)[0];
-    await killEnemy(admin, row1Slot.id, player);
+    // kill only one of the two revealed enemies
+    const slot = faceUpSlots(cycle2.you.enemies)[0];
+    await killEnemy(admin, slot.id, player);
     await admin.setLeylines([]);
     player.send({ action: "game.endTurn" });
     const endCycle3 = await player.waitFor((m: any) => m.action === "game.endCycle");
@@ -206,7 +196,7 @@ describe("Pyramid — структура и механика спавна вра
     expect(reveals).toHaveLength(1);
   });
 
-  it("элитный враг (ряд 4) не открывается пока жив один из двух из ряда 3", async () => {
+  it("элитный враг не открывается пока жив один из двух его блокирующих", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -217,7 +207,7 @@ describe("Pyramid — структура и механика спавна вра
     }
 
     // row 3 is now face-up (2 enemies)
-    const row3Slots = faceUpSlots(player.startCycleData.you.pyramid);
+    const row3Slots = faceUpSlots(player.startCycleData.you.enemies);
     expect(row3Slots).toHaveLength(2);
 
     // kill only one → elite should NOT reveal
@@ -232,7 +222,7 @@ describe("Pyramid — структура и механика спавна вра
     expect(partialReveals).toHaveLength(0);
   });
 
-  it("элитный враг (ряд 4) открывается после гибели обоих из ряда 3", async () => {
+  it("элитный враг открывается после гибели обоих его блокирующих", async () => {
     game = await createTestGame();
     const [player] = game.players;
     const { admin } = game;
@@ -249,8 +239,8 @@ describe("Pyramid — структура и механика спавна вра
     expect(reveals).toHaveLength(1);
 
     // after reveal: 1 face-up elite, 2 face-down elites remain
-    expect(faceUpSlots(player.startCycleData.you.pyramid)).toHaveLength(1);
-    expect(faceDownSlots(player.startCycleData.you.pyramid)).toHaveLength(2);
+    expect(faceUpSlots(player.startCycleData.you.enemies)).toHaveLength(1);
+    expect(faceDownSlots(player.startCycleData.you.enemies)).toHaveLength(2);
   });
 
   it("бос спавнится после гибели всех 11 врагов пирамиды", async () => {
@@ -264,7 +254,7 @@ describe("Pyramid — структура и механика спавна вра
     }
 
     // row 5: 2 elites now face-up
-    const eliteSlots = faceUpSlots(player.startCycleData.you.pyramid);
+    const eliteSlots = faceUpSlots(player.startCycleData.you.enemies);
     expect(eliteSlots).toHaveLength(2);
 
     // kill first elite — boss should not spawn yet
@@ -273,7 +263,6 @@ describe("Pyramid — структура и механика спавна вра
     // kill second elite — boss spawns
     const syncWithBoss = await killEnemy(admin, eliteSlots[1].id, player);
     expect(syncWithBoss.boss).not.toBeNull();
-    expect(syncWithBoss.you.pyramid).toEqual([]);
     expect(syncWithBoss.you.enemies).toEqual([]);
   });
 });
