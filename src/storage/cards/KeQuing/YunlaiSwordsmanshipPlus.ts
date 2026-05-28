@@ -28,6 +28,11 @@ export class YunlaiSwordsmanshipPlus extends Card {
         element: EElement.Electro,
       },
       {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Electro,
+      },
+      {
         type: EDetailedStep.PlayerStatChange,
         stat: "energy",
         playerId: ctx.player.ID,

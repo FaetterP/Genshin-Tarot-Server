@@ -64,6 +64,7 @@ export type DetailedStep =
       isRemove: boolean;
     }
   | { type: EDetailedStep.EnemiesSwap; playerId: string; enemyId1: string; enemyId2: string }
+  | { type: EDetailedStep.EnemyFlipFaceDown; playerId: string; enemy: Extract<PyramidSlot, { faceDown: true }>; coveredByEnemyId: string }
   | { type: EDetailedStep.BossAppearance; boss: BossPrimitive }
   | { type: EDetailedStep.GameWin }
   | { type: EDetailedStep.BossReset; bossId: string; hp: number; shield: number; livesRemaining: number }

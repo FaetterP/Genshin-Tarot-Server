@@ -381,6 +381,7 @@ export enum EDetailedStep {
   EnemyLoseElement = "EnemyLoseElement",
   EnemyEffectTrigger = "EnemyEffectTrigger",
   EnemiesSwap = "EnemiesSwap",
+  EnemyFlipFaceDown = "EnemyFlipFaceDown",
   BossAppearance = "BossAppearance",
   GameWin = "GameWin",
   BossReset = "BossReset",

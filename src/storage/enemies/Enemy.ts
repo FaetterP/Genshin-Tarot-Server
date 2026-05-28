@@ -28,6 +28,7 @@ export abstract class Enemy {
   protected hp: number;
   protected readonly maxHp: number;
   protected shield: number;
+  protected readonly maxShield: number;
   private damage: number;
   private mora: number;
   protected elements: BaseElement[] = [];
@@ -81,6 +82,7 @@ export abstract class Enemy {
     this.hp = hp;
     this.maxHp = hp;
     this.shield = shield;
+    this.maxShield = shield;
     this.damage = damage;
     this.mora = mora;
   }
@@ -235,6 +237,13 @@ export abstract class Enemy {
 
   clearElements() {
     this.elements = [];
+  }
+
+  flipReset() {
+    this.hp = this.maxHp;
+    this.shield = this.maxShield;
+    this.elements = [];
+    this.effects = [];
   }
 
   addShields(count: number) {

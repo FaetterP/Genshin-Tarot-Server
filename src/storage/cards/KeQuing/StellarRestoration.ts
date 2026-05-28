@@ -27,6 +27,11 @@ export class StellarRestoration extends Card {
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
     ]);
     target.applyElement(new Electro(), ctx.player);
-    // TODO
+
+    if (ctx.enemies.length >= 2) {
+      const flipTarget = ctx.enemies[1];
+      const coverOwner = ctx.players.find((p) => p.Enemies.includes(target))!;
+      coverOwner.flipEnemyFaceDown(flipTarget, target);
+    }
   }
 }

@@ -1,4 +1,4 @@
-﻿import { CardUseContext } from "../../../types/functionsContext";
+import { CardUseContext } from "../../../types/functionsContext";
 import { ECard, EDetailedStep, EElement, ECardType } from "../../../types/enums";
 import { Electro } from "../../elements/Electro";
 import { Card } from "../Card";
@@ -17,19 +17,21 @@ export class StellarRestorationPlus extends Card {
       throw new Error("no enemies");
     }
 
-    const target = ctx.enemies[0];
+    const targets = ctx.enemies.slice(0, 3);
     ctx.addToSteps([
-      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
-      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
-      { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro },
+      ...targets.map((t) => ({
+        type: EDetailedStep.EnemyGetElement as const,
+        enemyId: t.ID,
+        element: EElement.Electro,
+      })),
       {
-        type: EDetailedStep.PlayerStatChange,
-        stat: "energy",
+        type: EDetailedStep.PlayerStatChange as const,
+        stat: "energy" as const,
         playerId: ctx.player.ID,
         delta: 2,
       },
     ]);
-    for (let i = 0; i < 3; i++) {
+    for (const target of targets) {
       target.applyElement(new Electro(), ctx.player);
     }
     ctx.player.addEnergy(2);

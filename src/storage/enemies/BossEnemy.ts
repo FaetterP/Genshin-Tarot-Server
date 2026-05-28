@@ -14,7 +14,6 @@ export type LeylineEntry = {
 
 export abstract class BossEnemy extends Enemy {
   private lives: number;
-  private readonly maxShield: number;
   protected readonly leylinePool: LeylineEntry[] = [];
   protected nextRollOverride: number | null = null;
 
@@ -38,7 +37,6 @@ export abstract class BossEnemy extends Enemy {
   constructor(stats: { lives: number; hp: number; shield: number }) {
     super({ hp: stats.hp, damage: 0, shield: stats.shield, mora: 0 });
     this.lives = stats.lives;
-    this.maxShield = stats.shield;
   }
 
   public getCycleLeylines(cycle: number): LeylineEntry[] {

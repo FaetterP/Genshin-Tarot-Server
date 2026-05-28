@@ -39,8 +39,7 @@ export type PlayerPrimitive = {
     extra: number;
     total: number;
   };
-  pyramid: PyramidSlot[][];
-  enemies: EnemyPrimitive[];
+  enemies: PyramidSlot[];
   effects: EPlayerEffect[];
   hand: CardPrimitive[];
   discard: CardPrimitive[];
