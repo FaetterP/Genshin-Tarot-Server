@@ -1,7 +1,6 @@
 import { ElementReactionContext } from "../../types/functionsContext";
-import { Attack } from "../../types/general";
 import { BaseElement } from "./BaseElement";
-import { EElement } from "../../types/enums";
+import { EDetailedStep, EElement } from "../../types/enums";
 
 export class Electro extends BaseElement {
   public get Name() {
@@ -9,10 +8,16 @@ export class Electro extends BaseElement {
   }
 
   reaction(ctx: ElementReactionContext) {
-    const attack: Attack = { damage: 2, isPiercing: true, player: ctx.player };
-
-    ctx.enemy.applyAttack(attack);
-
+    const damage = 2;
+    ctx.player.addSteps([
+      {
+        type: EDetailedStep.EnemyTakeDamage,
+        enemyId: ctx.enemy.ID,
+        damage,
+        isPiercing: true,
+      },
+    ]);
+    ctx.enemy.applyAttack({ damage, isPiercing: true, player: ctx.player });
     ctx.player.addEnergy(1);
   }
 }

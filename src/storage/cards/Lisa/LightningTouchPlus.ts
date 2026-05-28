@@ -33,6 +33,11 @@ export class LightningTouchPlus extends Card {
         playerId: ctx.player.ID,
         cards: [drawn.getPrimitive()],
       },
+      {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Electro,
+      },
     ]);
     target.applyAttack({
       damage: 1,
