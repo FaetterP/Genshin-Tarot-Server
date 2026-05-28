@@ -27,6 +27,11 @@ export class RippleOfFate extends Card {
     const drawn = ctx.player.drawCard();
     ctx.addToSteps([
       {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
+        element: EElement.Hydro,
+      },
+      {
         type: EDetailedStep.EnemyTakeDamage,
         enemyId: target.ID,
         damage: 1,

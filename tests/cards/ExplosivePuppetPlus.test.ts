@@ -64,6 +64,12 @@ describe("ExplosivePuppetPlus — оглушает врага в зоне, в н
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
     expect(updatedEnemy.isStunned).toBe(true);
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyStun,
+        enemyId: enemy.id,
+      }),
+    );
   });
 
   it("уменьшает AP на 1, карта перемещается в сброс", async () => {

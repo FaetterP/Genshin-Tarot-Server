@@ -27,7 +27,7 @@ export class MirrorReflectionsPlus extends Card {
         effect: effect.Name,
       },
     ]);
-    ctx.enemies[0].addStun();
+    ctx.enemies[0].addStun(ctx.player);
     ctx.player.addEffect(effect);
   }
 }

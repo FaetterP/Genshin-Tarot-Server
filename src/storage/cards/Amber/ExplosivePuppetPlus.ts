@@ -31,7 +31,7 @@ export class ExplosivePuppetPlus extends Card {
     ctx.player.addEffect(effect);
 
     if (!(ctx.enemies[0] instanceof BossEnemy)) {
-      ctx.enemies[0].addStun();
+      ctx.enemies[0].addStun(ctx.player);
     }
   }
 }

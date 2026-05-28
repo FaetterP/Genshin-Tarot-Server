@@ -69,4 +69,5 @@ export type DetailedStep =
   | { type: EDetailedStep.GameWin }
   | { type: EDetailedStep.BossReset; bossId: string; hp: number; shield: number; livesRemaining: number }
   | { type: EDetailedStep.BossAnemoImmunity; bossId: string }
-  | { type: EDetailedStep.BossAttack; bossId: string; attackName: EDvalinAttack };
+  | { type: EDetailedStep.BossAttack; bossId: string; attackName: EDvalinAttack }
+  | { type: EDetailedStep.EnemyStun; enemyId: string };

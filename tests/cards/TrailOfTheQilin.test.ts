@@ -63,6 +63,12 @@ describe("TrailOfTheQilin — оглушает врага в зоне, в нач
 
     const updatedEnemy = response.player.enemies.find((e: any) => e.id === enemy.id);
     expect(updatedEnemy.isStunned).toBe(true);
+    expect(response.steps).toContainEqual(
+      expect.objectContaining({
+        type: EDetailedStep.EnemyStun,
+        enemyId: enemy.id,
+      }),
+    );
   });
 
   it("уменьшает AP на 2, карта перемещается в сброс", async () => {

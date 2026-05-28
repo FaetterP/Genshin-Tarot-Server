@@ -36,7 +36,7 @@ export class ZhongLi extends Character {
 
     for (const player of ctx.allPlayers) {
       for (const enemy of player.Enemies) {
-        enemy.addStun();
+        enemy.addStun(player);
       }
     }
   }

@@ -250,8 +250,9 @@ export abstract class Enemy {
     this.shield = Math.max(0, this.shield + count);
   }
 
-  addStun() {
+  addStun(player: Player) {
     this.isStunned = true;
+    player.addSteps([{ type: EDetailedStep.EnemyStun, enemyId: this.ID }]);
   }
 
   reveal() {}
