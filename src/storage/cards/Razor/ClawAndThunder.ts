@@ -28,6 +28,16 @@ export class ClawAndThunder extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Electro(), ctx.player);
     }
-    // TODO
+
+    // TODO: skip if burst was activated this turn
+    if (ctx.player.razorPoints < 3) {
+      ctx.player.razorPoints += 1;
+      ctx.addToSteps([{
+        type: EDetailedStep.PlayerStatChange,
+        stat: "razorPoints",
+        playerId: ctx.player.ID,
+        delta: 1,
+      }]);
+    }
   }
 }

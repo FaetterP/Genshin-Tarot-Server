@@ -23,6 +23,34 @@ export class ClawAndThunderPlus extends Card {
     for (const enemy of ctx.player.Enemies) {
       enemy.applyElement(new Electro(), ctx.player);
     }
-    // TODO
+
+    // TODO: skip if burst was activated this turn
+    if (ctx.player.razorPoints < 3) {
+      ctx.player.razorPoints += 1;
+      ctx.addToSteps([{
+        type: EDetailedStep.PlayerStatChange,
+        stat: "razorPoints",
+        playerId: ctx.player.ID,
+        delta: 1,
+      }]);
+    }
+
+    if (ctx.isUseAlternative && ctx.player.razorPoints > 0) {
+      const points = ctx.player.razorPoints;
+      ctx.player.razorPoints = 0;
+      ctx.addToSteps([{
+        type: EDetailedStep.PlayerStatChange,
+        stat: "razorPoints",
+        playerId: ctx.player.ID,
+        delta: -points,
+      }]);
+      ctx.player.addEnergy(points * 2);
+      ctx.addToSteps([{
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
+        playerId: ctx.player.ID,
+        delta: points * 2,
+      }]);
+    }
   }
 }

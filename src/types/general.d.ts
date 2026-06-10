@@ -47,6 +47,7 @@ export type PlayerPrimitive = {
 
   eulaSnowflakes: number;
   raidenPoints: number;
+  razorPoints: number;
 };
 
 export type Attack = {
