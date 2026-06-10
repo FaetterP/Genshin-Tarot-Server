@@ -22,11 +22,29 @@ export class Origin extends Card {
       throw new Error("no enemies");
     }
 
-    const attack: Attack = { damage: 2, player: ctx.player };
-    ctx.enemies[0].applyAttack(attack);
+    if (ctx.isUseAlternative && ctx.player.Energy < 2) {
+      throw new Error("not enough energy");
+    }
 
-    if (ctx.isUseAlternative && ctx.player.trySpendEnergy(2)) {
+    const target = ctx.enemies[0];
+    ctx.addToSteps([{
+      type: EDetailedStep.EnemyTakeDamage,
+      enemyId: target.ID,
+      damage: 2,
+      isPiercing: false,
+    }]);
+    const attack: Attack = { damage: 2, player: ctx.player };
+    target.applyAttack(attack);
+
+    if (ctx.isUseAlternative) {
+      ctx.player.trySpendEnergy(2);
       ctx.addToSteps([
+        {
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
+          playerId: ctx.player.ID,
+          delta: -2,
+        },
         {
           type: EDetailedStep.PlayerStatChange,
           stat: "actionPoints",

@@ -40,6 +40,9 @@ export class OriginPlus extends Card {
       damage,
       player: ctx.player,
     });
+    if (target.Health > 0) {
+      ctx.addToSteps([{ type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Electro }]);
+    }
     target.applyElement(new Electro(), ctx.player);
   }
 }

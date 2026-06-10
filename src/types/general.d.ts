@@ -46,6 +46,7 @@ export type PlayerPrimitive = {
   deck: CardPrimitive[];
 
   eulaSnowflakes: number;
+  raidenPoints: number;
 };
 
 export type Attack = {

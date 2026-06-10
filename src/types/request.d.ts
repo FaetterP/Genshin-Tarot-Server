@@ -15,6 +15,7 @@ export type GameUseCardRequest = {
   isUseAlternative?: boolean;
   selectedPlayer?: string;
   selectedCard?: string;
+  raidenEnemies?: string[];
 };
 
 export type GameUpgradeCardRequest = {

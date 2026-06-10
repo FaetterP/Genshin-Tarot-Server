@@ -30,6 +30,7 @@ export type PlayerPrimitive = {
   discard: CardPrimitive[];
   deck: CardPrimitive[];
   eulaSnowflakes: number;
+  raidenPoints: number;
 };
 
 export type AdminStateSnapshot = {

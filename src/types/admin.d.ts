@@ -53,6 +53,7 @@ export type AdminSetStatePlayerPayload = {
   energy?: number;
   mora?: number;
   eulaSnowflakes?: number;
+  raidenPoints?: number;
   actionPoints?: { normal?: number; extra?: number };
   effects?: EPlayerEffect[];
   enemies?: AdminSetStateEnemyPayload[];

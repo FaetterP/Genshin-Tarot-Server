@@ -14,7 +14,7 @@ import { Card } from "../../storage/cards/Card";
 import { Enemy } from "../../storage/enemies/Enemy";
 import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
 import { TaskAwaiter } from "../../utils/TaskAwaiter";
-import { ECard, EDetailedStep } from "../../types/enums";
+import { ECard, ECardType, EDetailedStep } from "../../types/enums";
 import {
   GameStartGameResponse,
   GameUpgradeCardResponse,
@@ -55,6 +55,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     isUseAlternative,
     selectedPlayer: selectedPlayerId,
     selectedCard,
+    raidenEnemies: raidenEnemiesId,
   } = payload as GameUseCardRequest;
 
   const card = ws.cycleController.getPlayerCard(cardId, ws.player);
@@ -93,7 +94,39 @@ async function useCard(ws: ExtWebSocket, payload: any) {
       `not enough action points you:${ws.player.ActionPoints.total} need:${card.Cost}`,
     );
 
+  if (raidenEnemiesId?.length) {
+    if (card.Type !== ECardType.Attack)
+      throw new Error("raiden points can only be spent during attack cards");
+    if (ws.player.raidenPoints < raidenEnemiesId.length)
+      throw new Error(`not enough raiden points: have ${ws.player.raidenPoints}, need ${raidenEnemiesId.length}`);
+
+    const raidenTargets = raidenEnemiesId.map((id) => ws.cycleController.getEnemyById(id));
+    for (const t of raidenTargets) {
+      if (!t || !ws.player.Enemies.includes(t))
+        throw new Error("raiden target enemy not in player's zone");
+    }
+  }
+
   ws.player.executeUseCard(card, ctx);
+
+  if (raidenEnemiesId?.length) {
+    ws.player.setStepsCollector((data) => steps.push(...data));
+    for (const enemyId of raidenEnemiesId) {
+      const target = ws.cycleController.getEnemyById(enemyId);
+      ws.player.raidenPoints -= 1;
+      steps.push({
+        type: EDetailedStep.PlayerStatChange,
+        stat: "raidenPoints",
+        playerId: ws.player.ID,
+        delta: -1,
+      });
+      if (target && target.Health > 0) {
+        steps.push({ type: EDetailedStep.EnemyTakeDamage, enemyId: target.ID, damage: 1, isPiercing: true });
+        target.applyAttack({ damage: 1, isPiercing: true, player: ws.player });
+      }
+    }
+    ws.player.setStepsCollector(null);
+  }
 
   sendToAll<GameUseCardResponse>({
     action: "game.useCard",

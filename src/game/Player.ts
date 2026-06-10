@@ -62,6 +62,7 @@ export class Player {
   private characters: Character[] = [];
   private effects: PlayerEffect[] = [];
   public snowflakes: number = 0;
+  public raidenPoints: number = 0;
   private burnsDrawnThisTurn: number = 0;
   private isTookDamageThisTurn: boolean = false;
   private isTookDamageLastTurn: boolean = false;
@@ -230,6 +231,7 @@ export class Player {
       enemies,
       effects,
       eulaSnowflakes: this.snowflakes,
+      raidenPoints: this.raidenPoints,
       characters: this.characters.map((character) => character.Name),
       hand: this.hand.map((card) => card.getPrimitive(forAdmin === true)),
       discard: this.discard.map((card) => card.getPrimitive(forAdmin === true)),
@@ -424,6 +426,7 @@ export class Player {
     mora?: number;
     actionPoints?: { normal?: number; extra?: number };
     eulaSnowflakes?: number;
+    raidenPoints?: number;
     effects?: EPlayerEffect[];
   }) {
     if (stats.hp !== undefined) this.hp = clamp(stats.hp, 0, 12);
@@ -436,6 +439,7 @@ export class Player {
       this.extraActionPoints = clamp(extra ?? 0, 0, 3);
     }
     if (stats.eulaSnowflakes !== undefined) this.snowflakes = Math.max(0, stats.eulaSnowflakes);
+    if (stats.raidenPoints !== undefined) this.raidenPoints = Math.max(0, stats.raidenPoints);
     if (stats.effects !== undefined) {
       this.effects = stats.effects
         .map(createPlayerEffectFromEnum)
