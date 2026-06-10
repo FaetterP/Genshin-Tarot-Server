@@ -1,6 +1,6 @@
 import { CardUseContext } from "../../../types/functionsContext";
-import { Attack } from "../../../types/general";
-import { ECard, EDetailedStep, ECardType } from "../../../types/enums";
+import { ECard, EDetailedStep, ECardType, EElement } from "../../../types/enums";
+import { Cryo } from "../../elements/Cryo";
 import { Card } from "../Card";
 import { RavagingConfessionPlus } from "./RavagingConfessionPlus";
 
@@ -23,20 +23,29 @@ export class RavagingConfession extends Card {
     }
 
     const target = ctx.enemies[0];
+    const zonePlayer = ctx.players.find((p) => p.Enemies.includes(target));
+    if (!zonePlayer) throw new Error("enemy not in any zone");
+
     ctx.addToSteps([
       {
-        type: EDetailedStep.EnemyTakeDamage,
+        type: EDetailedStep.EnemyGetElement,
         enemyId: target.ID,
-        damage: 1,
-        isPiercing: true,
+        element: EElement.Cryo,
       },
     ]);
-    target.applyAttack({
-      damage: 1,
-      isPiercing: true,
-      isRange: true,
-      player: ctx.player,
-    });
-    // TODO
+    target.applyElement(new Cryo(), ctx.player);
+
+    const zoneEnemies = [...zonePlayer.Enemies];
+    for (const enemy of zoneEnemies) {
+      ctx.addToSteps([
+        {
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: enemy.ID,
+          damage: 1,
+          isPiercing: false,
+        },
+      ]);
+      enemy.applyAttack({ damage: 1, isRange: true, player: ctx.player });
+    }
   }
 }

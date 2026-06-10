@@ -34,12 +34,20 @@ export class SpearOfTheChurch extends Card {
     e0.applyAttack({ damage: 1, isPiercing: true, player: ctx.player });
 
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
-      if (ctx.enemies.length <= 2) {
+      if (ctx.enemies.length < 2) {
         throw new Error("need 2 enemies");
       }
       if (ctx.enemies[0] === ctx.enemies[1]) {
         throw new Error("need 2 different enemies");
       }
+      ctx.addToSteps([
+        {
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
+          playerId: ctx.player.ID,
+          delta: -1,
+        },
+      ]);
       const e1 = ctx.enemies[1];
       ctx.addToSteps([
         {
