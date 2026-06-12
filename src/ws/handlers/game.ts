@@ -12,7 +12,7 @@ import { CardUseContext, CharacterUseBurstContext } from "../../types/functionsC
 import { ExtWebSocket } from "../../types/wsTypes";
 import { Card } from "../../storage/cards/Card";
 import { Enemy } from "../../storage/enemies/Enemy";
-import { sendToAll, sendToAllAndWait } from "../../utils/wsUtils";
+import { sendToAll, sendToAllAndWait, sendAndWait, resolveTask } from "../../utils/wsUtils";
 import { TaskAwaiter } from "../../utils/TaskAwaiter";
 import { ECard, ECardType, EDetailedStep } from "../../types/enums";
 import {
@@ -88,6 +88,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     selectedCard,
     addToSteps: (data) => steps.push(...data),
     players: ws.cycleController.getPlayers(),
+    sendAndWait: (payload) => sendAndWait(ws, payload),
   };
   if (ws.player.ActionPoints.total < card.Cost)
     throw new Error(
@@ -107,7 +108,7 @@ async function useCard(ws: ExtWebSocket, payload: any) {
     }
   }
 
-  ws.player.executeUseCard(card, ctx);
+  await ws.player.executeUseCard(card, ctx);
 
   if (raidenEnemiesId?.length) {
     ws.player.setStepsCollector((data) => steps.push(...data));
@@ -281,4 +282,9 @@ async function bossPassiveResponse(ws: ExtWebSocket, payload: any) {
   TaskAwaiter.completeTask(taskId);
 }
 
-export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst, dragonBreathResponse, bossPassiveResponse } };
+async function anemoReactionResponse(_ws: ExtWebSocket, payload: any) {
+  const { taskId, ...rest } = payload as { taskId: string; isHeal: boolean; targetPlayerId?: string };
+  resolveTask(taskId, rest);
+}
+
+export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst, dragonBreathResponse, bossPassiveResponse, anemoReactionResponse } };

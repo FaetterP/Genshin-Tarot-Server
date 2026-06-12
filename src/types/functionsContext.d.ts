@@ -6,6 +6,7 @@ import type { DetailedStep } from "./detailedStep";
 export type ElementReactionContext = {
   player: Player;
   enemy: Enemy;
+  healTarget?: Player;
 };
 
 export type CardUseContext = {
@@ -16,6 +17,7 @@ export type CardUseContext = {
   isUseAlternative?: boolean;
   addToSteps: (data: DetailedStep[]) => void;
   players: Player[];
+  sendAndWait: <T>(payload: any) => Promise<T>;
 };
 
 export type CharacterUseBurstContext = {

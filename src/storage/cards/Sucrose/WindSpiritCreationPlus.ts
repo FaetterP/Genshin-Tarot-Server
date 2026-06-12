@@ -20,18 +20,28 @@ export class WindSpiritCreationPlus extends Card {
     }
 
     const enemies = removeDuplicates(ctx.enemies);
-    if (enemies.length <= 2) {
+    if (enemies.length < 2) {
       throw new Error("need 2 different enemies");
+    }
+    if (enemies.length > 2) {
+      throw new Error("too many enemies");
     }
 
     ctx.addToSteps(
-      [0, 1].map((i) => ({
-        type: EDetailedStep.EnemyTakeDamage,
-        enemyId: enemies[i].ID,
-        damage: 2,
-        isPiercing: true,
-        element: EElement.Anemo,
-      })),
+      [0, 1].flatMap((i) => [
+        {
+          type: EDetailedStep.EnemyTakeDamage,
+          enemyId: enemies[i].ID,
+          damage: 2,
+          isPiercing: true,
+          element: EElement.Anemo,
+        },
+        {
+          type: EDetailedStep.EnemyGetElement,
+          enemyId: enemies[i].ID,
+          element: EElement.Anemo,
+        },
+      ]),
     );
     for (let i = 0; i < 2; i++) {
       enemies[i].applyAttack({

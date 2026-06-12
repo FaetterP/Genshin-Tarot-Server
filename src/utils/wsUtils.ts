@@ -5,16 +5,25 @@ import { TaskAwaiter } from "./TaskAwaiter";
 import { getAllClients, sendResponseToAdmin } from "../ws";
 import { AnyResponse } from "../types/response";
 
-export async function sendAndWait(ws: WebSocket, payload: any) {
+const pendingResponses = new Map<string, (data: any) => void>();
+
+export async function sendAndWait<T = void>(ws: WebSocket, payload: any): Promise<T> {
   const targetPlayerId = (ws as ExtWebSocket).player?.ID;
-  sendResponseToAdmin(payload, "send", targetPlayerId);
-
-  const taskAwaiter = new TaskAwaiter();
   const taskId = `task-${v4()}`;
-  taskAwaiter.addTask(taskId);
-
+  sendResponseToAdmin({ ...payload, taskId }, "send", targetPlayerId);
+  const promise = new Promise<T>((resolve) => {
+    pendingResponses.set(taskId, resolve);
+  });
   ws.send(JSON.stringify({ ...payload, taskId }));
-  await taskAwaiter.done();
+  return promise;
+}
+
+export function resolveTask(taskId: string, data?: any) {
+  const resolve = pendingResponses.get(taskId);
+  if (resolve) {
+    resolve(data);
+    pendingResponses.delete(taskId);
+  }
 }
 
 export async function sendToAllAndWait<T extends AnyResponse>(payload: T) {

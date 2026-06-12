@@ -156,11 +156,11 @@ export class Player {
     return this.lastCard;
   }
 
-  public executeUseCard(card: Card, ctx: CardUseContext): void {
+  public async executeUseCard(card: Card, ctx: CardUseContext): Promise<void> {
     this.setStepsCollector(ctx.addToSteps);
 
     this.currentCardType = card.Type;
-    card.use(ctx);
+    await card.use(ctx);
     this.currentCardType = undefined;
     this.lastCard = card;
 

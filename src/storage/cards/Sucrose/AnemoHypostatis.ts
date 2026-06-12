@@ -18,15 +18,20 @@ export class AnemoHypostatis extends Card {
   }
 
   use(ctx: CardUseContext): void {
-    if (!ctx.enemies?.length) {
-      throw new Error("no enemies");
-    }
+    if (!ctx.enemies?.length) throw new Error("no enemies");
+    if (ctx.enemies.length > 2) throw new Error("need 1-2 enemies");
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
       { type: EDetailedStep.EnemyGetElement, enemyId: target.ID, element: EElement.Anemo },
     ]);
     target.applyElement(new Anemo(), ctx.player);
-    // TODO
+
+    if (ctx.enemies.length === 2) {
+      const flipTarget = ctx.enemies[1];
+      if (flipTarget === target) throw new Error("same enemies");
+      const coverOwner = ctx.players.find((p) => p.Enemies.includes(target))!;
+      coverOwner.flipEnemyFaceDown(flipTarget, target);
+    }
   }
 }

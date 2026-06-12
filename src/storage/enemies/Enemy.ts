@@ -6,6 +6,7 @@ import {
   EnemyEndCycleContext,
   EnemyStartCycleContext,
 } from "../../types/eventsContext";
+import { ElementReactionContext } from "../../types/functionsContext";
 import { v4 } from "uuid";
 import { Attack, EnemyPrimitive } from "../../types/general";
 import { EDetailedStep, EElement, EEnemy, EEnemyEffect } from "../../types/enums";
@@ -220,7 +221,7 @@ export abstract class Enemy {
 
   death() {}
 
-  applyElement(element: BaseElement, player: Player) {
+  applyElement(element: BaseElement, player: Player, extra?: Partial<ElementReactionContext>) {
     if (this.Health <= 0) {
       return;
     }
@@ -236,7 +237,7 @@ export abstract class Enemy {
       this.addShields(-1);
 
       this.elements.forEach((el) => {
-        const ctx = { enemy: this, player };
+        const ctx = { enemy: this, player, ...extra };
         el.reaction(ctx);
       });
 

@@ -22,6 +22,9 @@ export class WindSpiritCreation extends Card {
     if (!ctx.enemies?.length) {
       throw new Error("no enemies");
     }
+    if (ctx.enemies.length > 1) {
+      throw new Error("too many enemies");
+    }
 
     const target = ctx.enemies[0];
     ctx.addToSteps([
@@ -30,6 +33,11 @@ export class WindSpiritCreation extends Card {
         enemyId: target.ID,
         damage: 1,
         isPiercing: true,
+        element: EElement.Anemo,
+      },
+      {
+        type: EDetailedStep.EnemyGetElement,
+        enemyId: target.ID,
         element: EElement.Anemo,
       },
       {

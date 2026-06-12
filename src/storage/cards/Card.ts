@@ -30,5 +30,5 @@ export abstract class Card {
     return base;
   }
 
-  abstract use(ctx: CardUseContext): void;
+  abstract use(ctx: CardUseContext): Promise<void> | void;
 }
