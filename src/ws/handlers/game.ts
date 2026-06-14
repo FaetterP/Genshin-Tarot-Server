@@ -282,9 +282,14 @@ async function bossPassiveResponse(ws: ExtWebSocket, payload: any) {
   TaskAwaiter.completeTask(taskId);
 }
 
-async function anemoReactionResponse(_ws: ExtWebSocket, payload: any) {
+async function anemoReactionResponse(ws: ExtWebSocket, payload: any) {
   const { taskId, ...rest } = payload as { taskId: string; isHeal: boolean; targetPlayerId?: string };
   resolveTask(taskId, rest);
 }
 
-export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst, dragonBreathResponse, bossPassiveResponse, anemoReactionResponse } };
+async function ragingTideSelectResponse(ws: ExtWebSocket, payload: any) {
+  const { taskId, ...rest } = payload as { taskId: string; selectedCards: string[]; enemies: string[] };
+  resolveTask(taskId, rest);
+}
+
+export default { handlers: { startGame, useCard, endTurn, upgradeCard, useBurst, dragonBreathResponse, bossPassiveResponse, anemoReactionResponse, ragingTideSelectResponse } };

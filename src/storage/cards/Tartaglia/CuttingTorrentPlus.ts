@@ -37,6 +37,18 @@ export class CuttingTorrentPlus extends Card {
       player: ctx.player,
     };
     target.applyAttack(attack);
-    if (hasHydro) target.applyElement(new Hydro(), ctx.player);
+    if (hasHydro) {
+      const energyBefore = ctx.player.Energy;
+      target.applyElement(new Hydro(), ctx.player);
+      const energyDelta = ctx.player.Energy - energyBefore;
+      if (energyDelta !== 0) {
+        ctx.addToSteps([{
+          type: EDetailedStep.PlayerStatChange,
+          stat: "energy",
+          playerId: ctx.player.ID,
+          delta: energyDelta,
+        }]);
+      }
+    }
   }
 }

@@ -27,6 +27,12 @@ export class CuttingTorrent extends Card {
     let element: EElement | undefined;
     if (ctx.isUseAlternative && ctx.player.trySpendEnergy(1)) {
       element = EElement.Hydro;
+      ctx.addToSteps([{
+        type: EDetailedStep.PlayerStatChange,
+        stat: "energy",
+        playerId: ctx.player.ID,
+        delta: -1,
+      }]);
     }
     ctx.addToSteps([
       {
